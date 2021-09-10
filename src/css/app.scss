@@ -1,0 +1,13 @@
+// app global css in SCSS form
+.q-card.cursor-pointer {
+  transition: all 0.3s ease-out;
+}
+.q-card.cursor-pointer:hover {
+  box-shadow: 0 1px 0 rgba(220, 220, 220, 0.5);
+  transform: scale(1.05);
+  background: rgba(220, 220, 220, 0.5);
+}
+
+body {
+  color: #202124;
+}

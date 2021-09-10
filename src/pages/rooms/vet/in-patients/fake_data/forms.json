@@ -1,0 +1,360 @@
+[
+  {
+    "id": "001/XING/RI/2021",
+    "created_by": "Dokter1",
+    "patient": "Kucing Meou1",
+    "imageUri": "https://static.toiimg.com/thumb/msid-67586673,width-800,height-600,resizemode-75,imgsize-3918697,pt-32,y_pad-40/67586673.jpg",
+    "start_at": "2021-03-04T08:00:00.000+07:00",
+    "weight": 2.5,
+    "diagnose": "vulnus with purulent discharge",
+    "notes": "observe for diarrhea",
+    "treatment_plan": [
+      "Treatment A BID",
+      "Treatment B PO SID",
+      "Medicine A TOPICAL",
+      "Medicine B PO BID"
+    ],
+    "treatment": {
+      "2021-03-04T00:00:00.000+07:00": {
+        "Treatment A BID": [
+          {
+            "label": "pagi",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "siang",
+            "is_checklist": true,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "sore",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ],
+        "Treatment B PO SID": [
+          {
+            "label": "pagi",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "siang",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "sore",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ],
+        "Medicine A TOPICAL": [
+          {
+            "label": "pagi",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "siang",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "sore",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ],
+        "Medicine B PO BID": [
+          {
+            "label": "pagi",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "siang",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "sore",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ]
+      },
+      "2021-03-05T00:00:00.000+07:00": {
+        "Treatment A BID": [
+          {
+            "label": "pagi",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "siang",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "sore",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ],
+        "Treatment B PO SID": [
+          {
+            "label": "pagi",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "siang",
+            "is_checklist": true,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "sore",
+            "is_checklist": true,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ],
+        "Medicine A TOPICAL": [
+          {
+            "label": "pagi",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "siang",
+            "is_checklist": true,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "sore",
+            "is_checklist": true,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ],
+        "Medicine B PO BID": [
+          {
+            "label": "pagi",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "siang",
+            "is_checklist": true,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "sore",
+            "is_checklist": true,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ]
+      },
+      "2021-03-06T00:00:00.000+07:00": {
+        "Treatment A BID": [
+          {
+            "label": "pagi",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "siang",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "sore",
+            "is_checklist": true,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ],
+        "Treatment B PO SID": [
+          {
+            "label": "pagi",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "siang",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "sore",
+            "is_checklist": true,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ],
+        "Medicine A TOPICAL": [
+          {
+            "label": "pagi",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "siang",
+            "is_checklist": true,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "sore",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ],
+        "Medicine B PO BID": [
+          {
+            "label": "pagi",
+            "is_checklist": true,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "siang",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "sore",
+            "is_checklist": true,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ]
+      },
+      "2021-03-07T00:00:00.000+07:00": {
+        "Treatment A BID": [
+          {
+            "label": "pagi",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "siang",
+            "is_checklist": true,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "sore",
+            "is_checklist": true,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ],
+        "Treatment B PO SID": [
+          {
+            "label": "tidak dilanjutkan",
+            "is_checklist": false,
+            "value": false,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ],
+        "Medicine A TOPICAL": [
+          {
+            "label": "11:00 AM",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "12:00 AM",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          },
+          {
+            "label": "01:00 PM",
+            "is_checklist": true,
+            "value": true,
+            "done_by": "Paramedis1",
+            "note": ""
+          }
+        ],
+        "Medicine B PO BID": []
+      }
+    }
+  }
+]
