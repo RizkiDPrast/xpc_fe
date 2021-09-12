@@ -485,7 +485,8 @@ export const api = {
     getMonthsByUser: id => axios.get(`/commissions/users/${id}/months`),
     getByUser: (id, yearmonth) =>
       axios.get(`/commissions/users/${id}/months/${yearmonth}`),
-    post: model => axios.post("/commissions", model)
+    post: model => axios.post("/commissions", model),
+    postInPatient: model => axios.post("/commissions/inpatient", model)
   },
   formPasien: {
     get: params => axios.get(`FormPatient/`, { params }),

@@ -415,7 +415,8 @@ export default {
       newDate: undefined,
       generatingForm: false,
       tout: undefined,
-      updating: false
+      updating: false,
+      updatingCommission: false
     };
   },
   computed: {
@@ -670,6 +671,19 @@ export default {
       this.t = {};
       this.saveForm();
     },
+    async postInPatientCommission(d, uid){
+      if(this.updatingCommission) return
+      this.updatingCommission = true
+      try {
+        let res = await this.$api.commissions.postInPatient({
+          date: new Date(d),
+          userId: uid
+        })
+      } catch (error) {
+        this.$toastr.error(error)
+      }
+      this.updatingCommission = false
+    },
     updateBool(val, d, t, i) {
       // console.log(val, d, t, i, this.treatment);
       let tgt = this.clone(this.treatment);
@@ -681,6 +695,9 @@ export default {
       });
       this.treatment = tgt;
       this.saveForm();
+      if(val){
+        this.postInPatientCommission(d, this.auth.id)
+      }
     },
     updateNote(val, d, t, i) {
       let tgt = this.clone(this.treatment);

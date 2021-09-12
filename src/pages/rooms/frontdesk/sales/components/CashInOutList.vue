@@ -16,6 +16,17 @@
           icon="las la-plus"
           :disable="isLoading"
           @click="addDialog = true"
+          flat
+        />
+         <q-btn
+          size="sm"
+          icon="las la-plus"
+          label="KASBON"
+          class="q-ml-sm"
+          flat
+          text-color="secondary"
+          :disable="isLoading"
+          @click="addCashAdvanceDialog = true"
         />
       </q-toolbar>
     </q-card-section>
@@ -97,21 +108,25 @@
       </q-list>
     </q-card-section>
     <add-cash-in-out-dialog v-model="addDialog" @added="cashInOutAddedHandle" />
+    <add-cash-advance-dialog v-model="addCashAdvanceDialog" @added="cashInOutAddedHandle" />
   </div>
 </template>
 
 <script>
 import AddCashInOutDialog from "./AddCashInOutDialog";
+import AddCashAdvanceDialog from './AddCashAdvanceDialog'
 export default {
   name: "CashInOutList",
   components: {
-    AddCashInOutDialog
+    AddCashInOutDialog,
+    AddCashAdvanceDialog
   },
   data() {
     return {
       allCurrentDeposit: undefined,
       isLoading: false,
       addDialog: false,
+      addCashAdvanceDialog:false,
       columns: [
         {
           name: "id",

@@ -110,6 +110,8 @@ export default {
     },
     inputFn(val) {
       this.$emit("input", this.multiple ? val : val?.value);
+      this.$emit("selected", this.selected);
+
     }
   }
 };
