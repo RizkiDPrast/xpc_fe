@@ -39,7 +39,7 @@
               outlined
               v-model="modelInput.moneyPerValue"
               name="moneyField"
-              v-validate="'required|min:0'"
+              v-validate="'required|min_value:0'"
               :error="errors.has('moneyField')"
               :error-message="errors.first('moneyField')"
               :readonly="loading"

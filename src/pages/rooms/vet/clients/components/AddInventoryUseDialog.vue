@@ -31,7 +31,7 @@
             label="Qty"
             name="qty"
             min="1"
-            v-validate="'required|min:0'"
+            v-validate="'required|min_value:0'"
             :error="errors.has('qty')"
             :error-message="errors.first('qty')"
           />
@@ -51,7 +51,7 @@
             label="Total Harga"
             v-model="inventoryUseModel.lineCost"
             name="lineCost"
-            v-validate="'required|min:0'"
+            v-validate="'required|min_value:0'"
             :error="errors.has('lineCost')"
             :error-message="errors.first('lineCost')"
           /> -->
@@ -60,7 +60,7 @@
             v-model="inventoryUseModel.unitPrice"
             name="unitPrice"
             disable
-            v-validate="'required|min:0'"
+            v-validate="'required|min_value:0'"
             :error="errors.has('lineCost')"
             :error-message="errors.first('lineCost')"
           />

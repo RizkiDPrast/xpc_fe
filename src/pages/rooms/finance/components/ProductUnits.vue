@@ -84,7 +84,7 @@
             :disable="deleteMode"
             v-model="model.toBaseMultiplier"
             name="toBaseMultiplier"
-            v-validate="'required|decimal|min:0'"
+            v-validate="'required|decimal|min_value:0'"
             :error="errors.has('toBaseMultiplier')"
             :error-message="errors.first('toBaseMultiplier')"
             type="number"

@@ -136,9 +136,9 @@
                         :max="modelInput.maxUnit"
                         v-validate="
                           modelInput.product && modelInput.product !== null
-                            ? 'required|min:0|max:' +
+                            ? 'required|min_value:0|max:' +
                               Math.floor(modelInput.maxUnit || 0)
-                            : 'required|min:0'
+                            : 'required|min_value:0'
                         "
                         :error="errors.has('qty')"
                         :error-message="errors.first('qty')"
@@ -172,7 +172,7 @@
                       label="Unit price"
                       v-model="modelInput.unitPrice"
                       name="unitPrice"
-                      v-validate="'required|min:0'"
+                      v-validate="'required|min_value:0'"
                       :error="errors.has('unitPrice')"
                       :error-message="errors.first('unitPrice')"
                       :disable="!!modelInput.id"

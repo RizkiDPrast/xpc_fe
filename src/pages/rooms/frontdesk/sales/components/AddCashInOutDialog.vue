@@ -10,7 +10,7 @@
             label="Cash in"
             v-model="modelInput.cashIn"
             name="cashIn"
-            v-validate="'required|min:0'"
+            v-validate="'required|min_value:0'"
             :error="errors.has('cashIn')"
             :error-message="errors.first('cashIn')"
             outlined
@@ -20,7 +20,7 @@
             label="Cash out"
             v-model="modelInput.cashOut"
             name="cashOut"
-            v-validate="'required|min:0'"
+            v-validate="'required|min_value:0'"
             :error="errors.has('cashOut')"
             :error-message="errors.first('cashOut')"
             outlined

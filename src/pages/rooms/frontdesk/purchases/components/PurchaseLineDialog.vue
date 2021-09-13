@@ -66,7 +66,7 @@
             label="Qty"
             name="qty"
             min="1"
-            v-validate="'required|min:0'"
+            v-validate="'required|min_value:0'"
             :error="errors.has('qty')"
             :error-message="errors.first('qty')"
             outlined
@@ -76,7 +76,7 @@
             label="Total cost"
             v-model="purchaseLineModel.lineCost"
             name="lineCost"
-            v-validate="'required|min:0'"
+            v-validate="'required|min_value:0'"
             :error="errors.has('lineCost')"
             :error-message="errors.first('lineCost')"
             outlined

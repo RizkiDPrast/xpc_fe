@@ -23,7 +23,7 @@
             label="In"
             v-model="depositModel.credit"
             name="credit"
-            v-validate="'required|min:0'"
+            v-validate="'required|min_value:0'"
             :error="errors.has('credit')"
             :error-message="errors.first('credit')"
             outlined
@@ -33,7 +33,7 @@
             label="Out"
             v-model="depositModel.debit"
             name="debit"
-            v-validate="'required|min:0'"
+            v-validate="'required|min_value:0'"
             :error="errors.has('debit')"
             :error-message="errors.first('debit')"
             outlined

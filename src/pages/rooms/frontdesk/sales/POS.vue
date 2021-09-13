@@ -88,7 +88,7 @@
               autofocus
               name="pettycash"
               v-model="pettycash"
-              v-validate="'required|min:0'"
+              v-validate="'required|min_value:0'"
               :error="errors.has('pettycash')"
               :error-message="errors.first('pettycash')"
               outlined

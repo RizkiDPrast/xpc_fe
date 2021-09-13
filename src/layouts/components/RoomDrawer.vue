@@ -144,6 +144,13 @@ export default {
           caption: "Managing employee's commissions",
           filter: this.isFinance || this.isAdmin
         },
+        {
+          to: "/app/rooms/finance/salaries",
+          label: "Salaries",
+          icon: "las la-hand-holding-usd",
+          caption: "Managing employee's commissions",
+          filter: this.isFinance || this.isAdmin
+        },
         { separator: 1, filter: this.isAdmin },
         { label: "Admin", filter: this.isAdmin },
         {

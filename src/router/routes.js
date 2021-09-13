@@ -134,6 +134,14 @@ const routes = [
               title: "Employee's Commission Management"
             }
           },
+          {
+            path: "finance/salaries",
+            component: () =>
+              import("pages/rooms/finance/salaries/Salaries.vue"),
+            meta: {
+              title: "Employee's Salaries Management"
+            }
+          },
 
           //vet
           {

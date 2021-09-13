@@ -88,8 +88,8 @@ export const utility = {
     let msg = outputArray ? [] : "";
     if (e.response) {
       console.log("errresponse", e.response);
-      if (e.response.data && e.response.data.modelState) {
-        let ms = e.response.data.modelState;
+      if (e.response.data && e.response.data.errors) {
+        let ms = e.response.data.errors;
         var errs = this.errModelState(e);
         for (var err of errs) {
           if (outputArray) {
@@ -118,7 +118,11 @@ export const utility = {
         typeof e.response.data === "string" &&
         e.response.data.length
       ) {
-        msg = e.response.data;
+        msg = e.response.data.substr(0,100);
+        
+        if(e.response.data.length > 100){
+          msg += '...'
+        }
       } else {
         if (outputArray) {
           msg.push(

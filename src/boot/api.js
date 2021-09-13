@@ -546,8 +546,36 @@ export const api = {
     put: model => {
       return axios.put(`inPatientTreatmentBoards`, model);
     },
-    putasd: (id, data) => {
-      return axios.put(`inPatientTreatmentBoards/${id}`, { data });
-    }
-  }
+    // putasd: (id, data) => {
+    //   return axios.put(`inPatientTreatmentBoards/${id}`, { data });
+    // }
+  },
+  salaries: {
+    get: params => {
+      return axios.get(`salaries`, { params });
+    },
+    getOne: id => {
+      return axios.get(`salaries/${id}`);
+    },
+    post: model => {
+      return axios.post("salaries", model);
+    },
+    put: model => {
+      return axios.put(`inPatientTreatmentBoards`, model);
+    },
+
+    getPreSalaryLines: uid => {
+      return axios.get(`salaries/users/${uid}/presalarylines`);
+    },
+    getDefaultLines: uid => {
+      return axios.get(`salaries/users/${uid}/DefaultLines`);
+    },
+    postDefaultLine: (uid,model) => {
+      return axios.post(`salaries/users/${uid}/DefaultLine`,model);
+    },
+    deleteDefaultLine: (uid,id) => {
+      return axios.delete(`salaries/users/${uid}/DefaultLine/${id}`);
+    },
+  
+   }
 };
