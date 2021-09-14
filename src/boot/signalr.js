@@ -9,7 +9,7 @@ import store from "src/store";
 
 // "async" is optional;
 // more info on params: https://quasar.dev/quasar-cli/boot-files
-export default async ({ Vue }) => {
+export default async ({ Vue, store }) => {
   Vue.prototype.$hub = new Hub();
 
   Vue.prototype.$hub.on("hubRoomReceived", (hubRoom, hubUsers) => {
@@ -26,6 +26,10 @@ export default async ({ Vue }) => {
       store.commit("app/hubRoom", hubroom);
     }
   });
+
+  Vue.prototype.$hub.on('boardingCount', (count)=>{
+     store.commit('app/inPatientCount', count || 0)
+  })
 };
 
 class CustomHttpClient extends HttpClient {
@@ -37,7 +41,7 @@ class CustomHttpClient extends HttpClient {
   }
 }
 class Hub {
-  events = ["hubRoomReceived", "clientMoved", "roomSwitched"];
+  events = ["hubRoomReceived", "clientMoved", "roomSwitched", "boardingCount"];
 
   async init() {
     if (this.initializing) return;
@@ -83,6 +87,13 @@ class Hub {
       await this.init();
     }
     await this.connection.invoke("SwitchRoom", toRoom);
+  }
+
+  async updateBoardingCount(val){
+    if (!this.initialized) {
+      await this.init();
+    }
+    await this.connection.invoke("UpdateBoardingCount", val);
   }
 
   // events

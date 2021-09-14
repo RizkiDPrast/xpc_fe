@@ -40,7 +40,14 @@
           />
         </q-toolbar>
       </template>
-      <template #body-cell-clientId="props">
+      
+      <template #body-cell-action="props">
+        <q-td>
+          <patient-to-boarding-btn :patientId="props.row.id" size="sm" round color="accent" flat />  
+        </q-td>
+      </template>
+
+      <template #body-cell-clientid="props">
         <q-td>
           <q-btn
             dense
@@ -68,13 +75,19 @@ export default {
       data: [],
       columns: [
         {
-          name: "clientId",
+          name: "clientid",
           label: "Client",
           field: "client.id",
           align: "left"
         },
+          {
+          name: "action",
+          label: "action",
+          field: "action",
+          align: "left"
+        },
         {
-          name: "animalTypeId",
+          name: "animaltypeid",
           label: "Type",
           field: "animalTypeId",
           align: "left",
@@ -94,7 +107,7 @@ export default {
           format: val => this.getSexType(val)
         },
         {
-          name: "doB",
+          name: "dob",
           field: "doB",
           label: "Age",
           format: (val, row) => row.age
@@ -144,7 +157,7 @@ export default {
 
         this.columns = this.columns.map(x => {
           return Object.assign({}, x, {
-            sortable: dt.sortColumns.indexOf(x.field.toLowerCase()) > -1
+            sortable: dt.sortColumns.indexOf(x.name.toLowerCase()) > -1
           });
         });
 

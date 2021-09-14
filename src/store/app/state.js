@@ -42,6 +42,7 @@ export default function() {
         description: ""
       }
     ],
-    hubRoom: {}
+    hubRoom: {},
+    inPatientCount: 0,
   };
 }

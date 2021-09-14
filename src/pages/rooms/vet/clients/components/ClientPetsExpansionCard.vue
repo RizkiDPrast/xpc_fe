@@ -56,6 +56,8 @@
               @click.native="selected = props.row"
             >
               <q-td key="actions" :props="props">
+                 <patient-to-boarding-btn :patientId="props.row.id" size="sm" round color="accent" flat />  
+                 
                 <patient-btn
                   @click.stop="selected = props.row"
                   icon="las la-pencil-alt"

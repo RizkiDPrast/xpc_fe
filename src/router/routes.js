@@ -168,6 +168,14 @@ const routes = [
             },
             props: true
           },
+          {
+            path: "vet/in-patients",
+            component: () => import("pages/rooms/vet/in-patients/Index.vue"),
+            meta: {
+              title: "Pet Boarding and In-Patient list"
+            },
+            props: true
+          },
 
           //admin
           {

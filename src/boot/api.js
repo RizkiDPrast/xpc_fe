@@ -247,6 +247,11 @@ export const api = {
   },
   onSites: {
     get: () => axios.get("onSites"),
+
+    getBoardingCount: () => axios.get("onSites/boarding/count"),
+    getBoarding: () => axios.get("onSites/boarding"),
+    postBoarding: (pid) => axios.post(`onSites/boarding/${pid}`),
+
     postByClient: clientId => axios.post("/onsites/byClient", clientId),
     postByPatients: patientIds => axios.post("/onsites/byPatients", patientIds),
     put: model => axios.put("/onsites", model),
@@ -577,5 +582,10 @@ export const api = {
       return axios.delete(`salaries/users/${uid}/DefaultLine/${id}`);
     },
   
-   }
+   },
+   finance:{
+     lockMonthlyCommissions(){
+       return axios.post('finances/LockMonthlyCommissions')
+     }
+   },
 };

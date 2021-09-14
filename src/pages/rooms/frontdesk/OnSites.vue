@@ -43,21 +43,7 @@
             </q-toolbar>
             <q-list bordered style="min-height:50px;">
               <q-item v-for="model in roomData(item.id)" :key="model.id">
-                <q-item-section avatar top class="q-pr-xs">
-                  <!-- <q-btn
-                    flat
-                    round
-                    :to="
-                      isVet
-                        ? `vet/signalements/${model.client.id}`
-                        : `/app/rooms/client-pets/${model.client.id}`
-                    "
-                    icon="las la-user-tie"
-                  >
-                    <q-tooltip content-class="bg-secondary">
-                      {{ isVet ? "Go to signalement" : "Edit details" }}
-                    </q-tooltip>
-                  </q-btn> -->
+                <q-item-section avatar top class="q-pr-xs">               
                   <q-btn flat round icon="las la-user-tie">
                     <q-menu anchor="top right">
                       <q-list class="">
@@ -131,21 +117,14 @@
                         model.patients.length
                     "
                     class="q-gutter-xs"
-                  >
-                    <!-- <q-icon name="las la-dog" size="sm" class="q-mr-sm">
-                      <q-badge
-                        floating
-                        color="secondary"
-                        :label="model.patients.length"
-                        style="top:-10px;right:-14px"
-                      />
-                    </q-icon> -->
+                  >              
                     <q-badge
                       v-for="p in model.patients"
                       :key="p.id"
-                      color="secondary"
+                      color="grey-3"
+                      text-color="black"
                     >
-                      {{ getAnimalTypeName(p.animalTypeId) }} {{ p.name }}
+                    <patient-to-boarding-btn :patientId="p.id" size="sm" round color="accent" flat />   {{ getAnimalTypeName(p.animalTypeId) }} {{ p.name }}
                     </q-badge>
                   </q-item-label>
                 </q-item-section>

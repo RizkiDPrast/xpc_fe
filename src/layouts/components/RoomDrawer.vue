@@ -30,7 +30,9 @@
                   :size="miniModel ? 'sm' : 'md'"
                   :name="menu.icon"
                   class="q-mt-xs"
-                />
+                >
+               </q-icon>
+                <q-badge v-if="miniModel && menu.badge" :label="menu.badge" color="warning" class="absolute" style="top:4px;right:2px;" />                
               </q-item-section>
 
               <q-item-section>
@@ -42,8 +44,9 @@
                 </q-item-label>
               </q-item-section>
 
-              <q-item-section side v-if="menu.sideTo">
-                <q-btn round :icon="menu.sideIcon" :to="menu.sideTo" />
+              <q-item-section side v-if="menu.sideTo || menu.badge" :top="!!menu.badge">
+                <q-btn v-if="menu.sideTo" round :icon="menu.sideIcon" :to="menu.sideTo" />
+                <q-badge v-if="menu.badge" :label="menu.badge" color="warning" />
               </q-item-section>
             </q-item>
           </template>
@@ -64,7 +67,15 @@ export default {
   data() {
     return {};
   },
+  mounted(){
+    setTimeout(()=>{
+      this.countBoarding()
+    }) 
+  },
   computed: {
+    inPatientCount(){
+      return this.$store.state.app.inPatientCount
+    },
     miniModel: {
       get() {
         return this.mini;
@@ -81,12 +92,12 @@ export default {
           icon: "las la-home",
           caption: "Registration and queue system"
         },
-        {
-          to: "/app/rooms/clients",
-          label: "Clients",
-          icon: "las la-user",
-          caption: "Client, appointments, pets and pet's signalements"
-        },
+        // {
+        //   to: "/app/rooms/clients",
+        //   label: "Clients",
+        //   icon: "las la-user",
+        //   caption: "Client, appointments, pets and pet's signalements"
+        // },
         {
           to: "/app/rooms/patients",
           label: "Patients",
@@ -119,6 +130,13 @@ export default {
           label: "Clients",
           icon: "las la-id-card",
           caption: "Managing clients, pets and signalements"
+        },
+        {
+          to: "/app/rooms/vet/in-patients",
+          label: "In-Patients and Pet Boarding",
+          icon: "las la-bed",
+          caption: "Managing in-patients and pet boarding",
+          badge: this.inPatientCount,
         },
         { separator: 1 },
         { label: "Human resource" },

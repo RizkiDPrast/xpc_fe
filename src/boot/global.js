@@ -11,6 +11,7 @@ import MyTable from "components/MyTable.vue";
 import AnimalTypesBtn from "components/buttons/AnimalTypesBtn.vue";
 
 import PatientBtn from "pages/components/buttons/PatientBtn";
+import PatientToBoardingBtn from "components/buttons/PatientToBoardingBtn";
 
 import AnimalTypeSelect from "components/AnimalTypeSelect.vue";
 import EdcTypeSelect from "components/EdcTypeSelect.vue";
@@ -60,6 +61,7 @@ export default async (
   Vue.component("animal-types-btn", AnimalTypesBtn);
 
   Vue.component("patient-btn", PatientBtn);
+  Vue.component("patient-to-boarding-btn",PatientToBoardingBtn)
 
   Vue.component("animal-type-select", AnimalTypeSelect);
   Vue.component("edc-type-select", EdcTypeSelect);
@@ -135,6 +137,40 @@ export default async (
       }
     },
     methods: {
+      async countBoarding(){
+        try {
+        let res = await this.$api.onSites.getBoardingCount()
+          this.$store.commit('app/inPatientCount', res.data || 0)
+          this.$hub.updateBoardingCount(res.data || 0)
+        } catch (error){
+          this.$toastr.error(error)
+        }
+      },
+      async confirm(message){
+        return new Promise((resolve)=>{
+          this.$q.dialog({
+            title: 'Confirmation',
+            message,
+            cancel: true,
+            persistent: true,
+            html: true,
+            ok:{
+              label: 'Ok',
+              color:'primary',
+            },
+            cancel:{
+              label: 'Cancel',
+              color: 'grey'
+            }
+          })
+          .onOk(()=>{
+            resolve(true)
+          })
+          .onCancel(()=>{
+            resolve(false)
+          })
+        })
+      },
       today() {
         return utility.formatDate(new Date(), "dddd, DD MMM YYYY");
       },

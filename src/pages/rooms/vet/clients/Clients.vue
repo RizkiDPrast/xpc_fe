@@ -36,6 +36,25 @@
         </q-td>
       </template>
 
+      <template #body-cell-action="props">
+        <td-action
+          :id="props.row.id"
+          :name="
+            props.row.name ||
+              props.row.code ||
+              props.row.displayName ||
+              props.row.userName
+          "
+          @edit="edit"
+          @delete="del"
+        >
+         <q-btn round text-color="positive" size="sm" icon="las la-home" :to="`/app/rooms/client-pets/${props.row.id}`">
+          <q-tooltip content-class="bg-secondary">
+            Add to queue
+          </q-tooltip>
+        </q-btn>
+        </td-action>
+      </template>
       <template #body-cell-phone="props">
         <q-td>
           <template v-if="props.row.waPhone">

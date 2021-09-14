@@ -400,13 +400,23 @@ export default {
         );
       }
 
-      console.log("model", model);
-      console.log("fd", fd);
+
 
       try {
         let res = await this.$api.inPatientTreatmentPlans.postBulk(fd);
 
         this.$emit("update:form", res.data);
+
+
+        //auto add to boarding room
+        try {
+          await this.$api.onSites.postBoarding(this.patientId)
+          this.$toastr.success('Patient was added to boarding room')
+          this.countBoarding()
+        } catch(error){
+          this.$toastr.error(error)
+        }
+
         this.model = false;
       } catch (e) {
         this.$toastr.error(e);

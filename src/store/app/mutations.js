@@ -13,3 +13,7 @@ export function toggleMiniLeft(state) {
 export function hubRoom(state, model) {
   state.hubRoom = JSON.parse(JSON.stringify(model));
 }
+
+export function inPatientCount(state, count){
+  state.inPatientCount = count || 0
+}

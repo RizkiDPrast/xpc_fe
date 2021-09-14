@@ -231,7 +231,6 @@ export default {
     }
   },
   mounted() {
-    console.log("this.sales", this.sales);
   }
 };
 </script>
