@@ -32,7 +32,10 @@ export default class Sale extends UserTracker {
     client,
     salesManager,
 
-    createdByName
+    createdByName,
+    unpaid = 0,
+    saleLineId,
+    saleRef
   } = {}) {
     super();
     this.id = id;
@@ -66,6 +69,9 @@ export default class Sale extends UserTracker {
     this.salesManager = salesManager;
 
     this.createdByName = createdByName;
+    this.unpaid = unpaid;
+    this.saleLineId = saleLineId;
+    this.saleRef = saleRef;
   }
 
   get total() {

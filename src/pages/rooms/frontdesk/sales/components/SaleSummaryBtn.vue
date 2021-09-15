@@ -31,16 +31,7 @@
             <tr v-for="item in edcTypes" :key="item.id">
               <th>Debit Card {{item.label}}</th>
               <td> {{ details.sales.reduce((a,b)=> b.dcEdcType === item.id ? a + b.debitCard : 0 , 0)  | money}} </td>
-            </tr>
-           
-            <tr class="bg-grey-3">
-              <th class="text-bold">Total</th>
-              <td> {{ details.sales.reduce((a,b)=>  a + b.totalPayment , 0)  | money}} </td>
-            </tr>
-             <tr class="bg-grey-3">
-              <th class="text-negative text-bold">Unpaid</th>
-              <td class="text-negative"> {{ details.sales.reduce((a,b)=>  a + b.totalUnpaid , 0)  | money}} </td>
-            </tr>
+            </tr>                      
           </q-markup-table>
           <q-markup-table class="table col-4" bordered dense flat>
             <tr class="text-positive"><th>Expenditure</th><th style="text-align:right!important">Total</th></tr>
@@ -48,22 +39,42 @@
               <th>{{item.note}}</th>
               <td :class="{'text-negative': item.cashIn < item.cashOut}"> {{ item.cashIn - item.cashOut  | money}} </td>
             </tr>        
-             <tr class="bg-grey-3">
-              <th class="text-bold">Total</th>
-              <td class="text-negative"> {{ details.cashInOuts.filter(x=>  x.saleId === null && x.cashOut > 0 && !x.transferToSales && x.cashOut > x.cashIn).reduce((a,b)=>  a + b.cashIn - b.cashOut , 0)  | money}} </td>
-            </tr>    
+            
           </q-markup-table>
           <q-markup-table class="table col-4" bordered dense flat>
             <tr class="text-secondary"><th>Deposit transactions</th><th style="text-align:right!important">Total</th></tr>
             <tr v-for="item in details.depositTransactions" :key="item.id">
               <th>[{{item.depositCode}}] {{item.note}}</th>
               <td :class="{'text-negative': item.credit < item.debit}"> {{ item.credit - item.debit  | money}} </td>
-            </tr>          
-                          <tr class="bg-grey-3">
-              <th class="text-bold">Total</th>
-              <td> {{ details.depositTransactions.reduce((a,b)=>  a + b.credit - b.debit , 0)  | money}} </td>
-            </tr>    
+            </tr>       
           </q-markup-table>
+
+          <!--total -->
+          
+           <q-markup-table class="col-4">
+             <tr class="bg-grey-3">
+              <th class="text-bold">Total</th>
+              <td class=" text-right"> {{ details.sales.reduce((a,b)=>  a + b.totalPayment , 0)  | money}} </td>
+            </tr>
+             <tr class="bg-grey-3">
+              <th class="text-negative text-bold">Unpaid</th>
+              <td class="text-negative text-right"> {{ details.sales.reduce((a,b)=>  a + b.totalUnpaid , 0)  | money}} </td>
+            </tr>
+           </q-markup-table>
+           
+           <q-markup-table class="col-4">
+             <tr class="bg-grey-3">
+              <th class="text-bold">Total</th>
+              <td class="text-negative text-right"> {{ details.cashInOuts.filter(x=>  x.saleId === null && x.cashOut > 0 && !x.transferToSales && x.cashOut > x.cashIn).reduce((a,b)=>  a + b.cashIn - b.cashOut , 0)  | money}} </td>
+            </tr>    
+           </q-markup-table>
+           
+           <q-markup-table class="col-4">
+              <tr class="bg-grey-3">
+              <th class="text-bold">Total</th>
+              <td class="text-right"> {{ details.depositTransactions.reduce((a,b)=>  a + b.credit - b.debit , 0)  | money}} </td>
+            </tr>    
+           </q-markup-table>
 
         </q-card-section>
       </q-card>

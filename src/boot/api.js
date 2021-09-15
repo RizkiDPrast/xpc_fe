@@ -404,6 +404,7 @@ export const api = {
   },
   sales: {
     get: params => axios.get("/sales", { params }),
+    getUnpaid: () => axios.get("/sales/unpaid"),
     getToday: () => {
       let res = axios.get("/sales/today");
       return res;
@@ -413,6 +414,10 @@ export const api = {
     // getOne: (id) => axios.get(`/units/${id}`),
     put: (id, params) => axios.put(`/sales/${id}`, { ...params })
     // delete: (id) => axios.delete(`/units/${id}`)
+  },
+  unfinishedItems:{
+    getUntransferred: ()=> axios.get('UnfinishedItems/untransferred'),
+    getUnpaidSaleLine: ()=> axios.get('UnfinishedItems/unpaidSaleLine'),
   },
   salesManagers:{
     get:params => axios.get('/salesmanagers', {params}),

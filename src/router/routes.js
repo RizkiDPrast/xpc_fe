@@ -110,6 +110,32 @@ const routes = [
             props: false
           },
 
+          {
+            path: "unpaid-receipts",
+            component: () =>
+              import("pages/rooms/frontdesk/extra/UnpaidReceipts.vue"),
+            meta: {
+              title: "Unpaid Receipts"
+            },
+          },
+
+          {
+            path: "untransferred-items",
+            component: () =>
+              import("pages/rooms/frontdesk/extra/UntransferredItems.vue"),
+            meta: {
+              title: "Untransferred Items"
+            },
+          },
+          {
+            path: "unpaid-items",
+            component: () =>
+              import("pages/rooms/frontdesk/extra/UnpaidItems.vue"),
+            meta: {
+              title: "Unpaid Items"
+            },
+          },
+
           //finance
           {
             path: "products",

@@ -23,6 +23,7 @@
               :clickable="$route.path === menu.to ? false : true"
               active-class="bg-white text-primary menu-active"
               :to="menu.to"
+              :class="menu.class"
               v-else
             >
               <q-item-section avatar top>
@@ -121,6 +122,27 @@ export default {
           label: "Stock Opname",
           icon: "las la-clipboard-check",
           caption: "Managing stocks of all inventory-managed products"
+        },
+        { separator: 1 },
+          {
+          to: "/app/rooms/unpaid-receipts",
+          label: "Unpaid Receipts",
+          icon: "las la-dizzy",
+          caption: "List of all unpaid receipts",
+          class: 'text-negative'
+        },
+          {
+          to: "/app/rooms/untransferred-items",
+          label: "Untransferred Items",
+          icon: "las la-people-carry",
+          caption: "Items that has been used but not yet transferred to receipt for sale",
+        },
+        {
+          to: "/app/rooms/unpaid-items",
+          label: "Unpaid Items",
+          icon: "las la-box-open",
+          caption: "List of items from unpaid receipts",
+          class: "text-secondary"
         },
         { separator: 1 },
         // { label: "Veterinarian", filter: this.isVet || this.isAdmin },

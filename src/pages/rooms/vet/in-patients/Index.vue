@@ -54,7 +54,23 @@
                       icon="las la-times"
                       @click="del(model.id)"                   
                       size="sm"
-                    />                  
+                    />   
+                    <q-btn icon="las la-ellipsis-v" size="sm" flat round>
+                       <q-menu>
+                    <q-list>
+                      <q-item
+                        clickable
+                        :to="`/app/rooms/vet/signalements/${model.patient.clientId}/${model.patient.id}`"
+                      >
+                        <q-item-section>
+                          <q-item-label title>
+                            Go to details
+                          </q-item-label>
+                        </q-item-section>
+                      </q-item>                   
+                    </q-list>
+                  </q-menu>
+                    </q-btn>               
                   </div>
                 </q-item-section>
               </q-item>             
