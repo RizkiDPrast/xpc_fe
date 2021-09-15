@@ -42,7 +42,11 @@
               class="cursor-pointer"
               @click.native="selected = props.row"
             >
-              <q-td key="actions">
+              <q-td key="actions" class="text-center">
+                <template v-if="props.row.lockedAt && props.row.lockedAt !== null">
+                  <q-icon name="las la-lock"/>
+                </template>
+                <template v-else >
                 <signalement1-btn
                   @click.stop="selected = props.row"
                   round
@@ -61,6 +65,7 @@
                   :disable="loading"
                   @click.stop="del(props.row.id)"
                 />
+                </template>
               </q-td>
               <q-td key="visitDate">
                 {{ $util.formatDate(props.row.visitDate, "YYYY/MM/DD") }}
@@ -229,7 +234,7 @@ export default {
   },
   computed: {
     newModel() {
-      return { patientId: this.patient.id };
+      return { patientId: this.patient.id, visitDate: new Date() };
     },
     selected: {
       get() {
@@ -277,6 +282,9 @@ export default {
       if (val) {
         this.onRequest();
       }
+    },
+    value(val){
+      this.data = this.data.map(x=> x.id === val.id ? val : x)
     }
   },
   methods: {
@@ -327,7 +335,7 @@ export default {
               this.selected = {};
             }
           } catch (e) {
-            this.$toastr.error(e.message);
+            this.$toastr.error(e);
           } finally {
             this.loading = false;
           }

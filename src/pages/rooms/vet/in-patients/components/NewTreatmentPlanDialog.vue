@@ -410,7 +410,7 @@ export default {
 
         //auto add to boarding room
         try {
-          await this.$api.onSites.postBoarding(this.patientId)
+          await this.$api.onSites.postBoarding(model.patient.id)
           this.$toastr.success('Patient was added to boarding room')
           this.countBoarding()
         } catch(error){

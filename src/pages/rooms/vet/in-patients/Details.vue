@@ -27,6 +27,9 @@
         />
       </template>
     </page-header>
+      <q-toolbar>
+      <q-btn @click="$router.back()" icon="las la-arrow-left" label="Back" rounded flat/>
+    </q-toolbar>
 
     <div
       v-if="loading"
@@ -154,7 +157,7 @@
                   <i>{{ t.description }}</i>
                 </q-tooltip>
               </q-th>
-              <q-th v-if="isVet">
+              <q-th v-if="isVet || isAdmin">
                 <add-plan-btn
                   flat
                   color="primary"
@@ -237,7 +240,7 @@
                 </q-scroll-area>
                 <q-btn-group
                   class="full-width flex-center shadow-0 q-pb-sm"
-                  v-if="isVet"
+                  v-if="isVet || isAdmin"
                 >
                   <q-btn
                     flat
@@ -260,7 +263,7 @@
                 </q-btn-group>
               </q-td>
             </q-tr>
-            <q-tr v-if="isVet">
+            <q-tr v-if="isVet || isAdmin">
               <q-td :colspan="2 + plans.length">
                 <q-btn
                   flat
@@ -276,7 +279,7 @@
       </template>
     </template>
 
-    <q-dialog v-model="addDateDialog" persistent v-if="isVet">
+    <q-dialog v-model="addDateDialog" persistent v-if="(isVet || isAdmin)">
       <q-card>
         <q-toolbar class="bg-purple text-white">
           <q-icon name="las la-bookmark" />
@@ -335,7 +338,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog> -->
-    <q-dialog v-model="newTDialog" persistent v-if="isVet && t">
+    <q-dialog v-model="newTDialog" persistent v-if="(isVet || isAdmin) && t">
       <q-card>
         <q-toolbar class="bg-purple text-white">
           <q-icon name="las la-list-alt" />
@@ -368,8 +371,6 @@
 </template>
 
 <script>
-import users from "./fake_data/users";
-import forms from "./fake_data/forms";
 import Patient from "src/models/Patient";
 import ItemUsageBtn from "../components/ItemUsageBtn";
 import TreatmentPlanBtn from "./components/TreatmentPlanBtn";
@@ -676,7 +677,7 @@ export default {
       this.updatingCommission = true
       try {
         let res = await this.$api.commissions.postInPatient({
-          date: new Date(d),
+          date: new Date(d).toJSON(),
           userId: uid
         })
       } catch (error) {

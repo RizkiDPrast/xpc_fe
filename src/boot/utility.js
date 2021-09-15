@@ -83,7 +83,7 @@ export const utility = {
 
   //get error message
   err(e, outputArray) {
-    // console.log('err util')
+    // console.log('err util', e)
     outputArray = outputArray || false;
     let msg = outputArray ? [] : "";
     if (e.response) {

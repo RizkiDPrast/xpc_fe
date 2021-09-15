@@ -7,6 +7,10 @@
       </q-toolbar-title>
 
       <span v-show="model.id && model.id > 0">
+         <template v-if="model.lockedAt && model.lockedAt !== null">
+                  <q-icon name="las la-lock" class="q-mr-md"/>
+                </template>
+                <template v-else>
         <q-btn
           flat
           round
@@ -22,6 +26,7 @@
           icon="las la-save"
           @click="save"
         />
+                </template>
       </span>
       <action-select
         style="min-width:150px;"
@@ -338,7 +343,7 @@ export default {
 
         this.$toastr.success("Medical record was updated");
         this.isEditing = false;
-        this.$emit("input", JSON.parse(JSON.stringify(m)));
+        this.$emit("input", JSON.parse(JSON.stringify(res.data)));
       } catch (e) {
         this.$toastr.error(e);
       }
