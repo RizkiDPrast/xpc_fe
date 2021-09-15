@@ -170,7 +170,8 @@ export default {
       addClientDialog: false,
       search: "",
       receiptCodePopup: false,
-      loadingClient: false
+      loadingClient: false,
+      loadingUnpaid: false
     };
   },
   components: {
@@ -240,6 +241,29 @@ export default {
       }
       this.loadingClient = false;
     },
+    async fetchUnpaid(clientId){
+      if(this.loadingUnpaid) return;
+      this.loadingUnpaid = true
+      try {
+        let res = await this.$api.sales.getClientUnpaid(clientId)
+        if(res.data && res.data.id && res.data.receiptCode && res.data.total){
+          var sl = new SaleLine({
+            itemName: `[${res.data.receiptCode}] Pelunasan`,
+            qty: 1,
+            unitId: 1,
+            moneyDiscount:0,
+            percentDiscount:0,
+            unitPrice: res.data.total,
+            debtSaleId: res.data.id
+          })
+          this.model.saleLines.push(sl)
+        }
+        
+      } catch (error) {
+        this.$toastr.error(error)
+      }
+      this.loadingUnpaid = false
+    },
     clientUpdated(client) {
       if (client && client !== null) {
         // console.log('client', client.id, client, this.model.clientId)
@@ -252,6 +276,12 @@ export default {
       }
 
       this.clearItems();
+      
+        //check unpaid items
+      if(this.model.clientId){
+        this.fetchUnpaid(this.model.clientId)
+      }
+
       // console.log('client', client.id, client, this.model.clientId)
     },
     openPaymentDialog() {
@@ -295,7 +325,7 @@ export default {
 
       //s1 clear all items that already has itemUsages
       this.model.saleLines = this.model.saleLines.filter(
-        x => !x.itemUsages.length
+        x => !x.itemUsages || !x.itemUsages.length
       );
       for (let val of model) {
         this.model.saleLines.push(new SaleLine(val));

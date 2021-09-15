@@ -17,8 +17,8 @@
       <q-slide-item
         v-for="(item, ix) in model"
         :key="ix"
-        :clickable="!item.itemUsageIds.length"
-        @click.native="item.itemUsageIds.length ? () => {} : itemClick(item)"
+        :clickable="!item.itemUsageIds.length && !item.debtSaleId"
+        @click.native="(item.itemUsageIds.length ||  item.debtSaleId) ? () => {} : itemClick(item)"
         right-color="negative"
         @right="e => deleteHandle(e, item)"
       >
@@ -34,7 +34,7 @@
               :label="item.qty"
               size="lg"
               @click.stop="updateQty(item)"
-              :disable="!!item.itemUsageIds.length"
+              :disable="!!item.itemUsageIds.length ||  !!item.debtSaleId"
             />
           </q-item-section>
           <q-item-section title>

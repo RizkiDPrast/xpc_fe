@@ -224,7 +224,7 @@ export default {
     selectedModel() {
       if (!this.selected.length) return [];
       // set productId to 0 to prevent multiple stock take
-      if (!this.groupSelected)
+      if (!this.groupSelected) {
         return this.selected.map(
           x =>
             new ItemUsage({
@@ -235,6 +235,7 @@ export default {
               itemUsageIds: [x.id]
             })
         );
+      }
       return this.selected
         .map(
           x =>

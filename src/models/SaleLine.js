@@ -20,6 +20,8 @@ export default class SaleLine extends UserTracker {
 
     itemUsageIds = [],
 
+    debtSaleId,
+
     ...params
   } = {}) {
     super(params);
@@ -40,6 +42,8 @@ export default class SaleLine extends UserTracker {
     this.maxUnit = maxUnit;
 
     this.itemUsageIds = itemUsageIds;
+
+    this.debtSaleId= debtSaleId;
   }
 
   get rowTotal() {

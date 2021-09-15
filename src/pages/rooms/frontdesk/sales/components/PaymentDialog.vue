@@ -390,8 +390,8 @@ export default {
     },
     "salesModel.client"(nval) {
       if (!nval || nval === null) return;
-      this.salesModel.clientId = nval.clientId;
-      this.getClientDeposit(nval.clientId);
+      this.salesModel.clientId = nval.id;
+      this.getClientDeposit(nval.id);
     },
     paymentType(nval) {
       if (nval === "cash") {
@@ -482,7 +482,7 @@ export default {
         }
       } catch (e) {
         // console.log('err', e);
-        this.$toastr.error("Saving failed");
+        this.$toastr.error(e);
       }
       this.isLoading = false;
     },
