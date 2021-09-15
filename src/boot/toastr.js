@@ -12,7 +12,7 @@ export default async ({ Vue }) => {
 
   Vue.prototype.$toastr = {
     error(err) {
-      console.error(err);
+      // console.error(err);
       let msg = typeof err === "string" ? err : utility.err(err);
       Notify.create({
         color: "red-5",
