@@ -84,12 +84,19 @@ export default {
           width: "12px",
           align: "center"
         },
-        {
+        ,{
           name: "#",
           label: "#",
           width: "12px",
           align: "center",
           format: (val, row) => this.data.indexOf(row) + 1
+        },
+        {
+          name: "purchaseref",
+          label: "Purchasing ref",
+          width: "25px",
+          align: "center",
+          field: 'purchaseRef'
         },
         {
           name: "product.categoryId",
@@ -109,6 +116,20 @@ export default {
           label: "Product",
           field: row => row.product.name,
           align: "left"
+        },
+        {
+          name: "product.qty",
+          label: "Product Qty",
+          field: row => row.product.qty,
+          align: "center",
+          classes: (row) => row.product.qty < row.product.minimumQty ?  "text-negative" : "text-bold"
+        },    
+        {
+          name: "product.minimumQty",
+          label: "Min Qty",
+          field: row => row.product.minimumQty,
+          align: "center",
+          classes: 'text-green'
         },
         {
           name: "unitId",
@@ -154,13 +175,7 @@ export default {
           field: "unitCost",
           align: "right",
           format: val => this.$options.filters.money(val)
-        },
-        {
-          name: "product.minimumQty",
-          label: "Min Qty",
-          field: row => row.product.minimumQty,
-          align: "right"
-        },
+        },    
         {
           name: "note",
           label: "Note",

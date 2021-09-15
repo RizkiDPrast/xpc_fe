@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isAdmin || isFinance">
     <page-header>
       <template #actions>
         <!-- <q-btn flat round dense icon="las la-ellipsis-v" /> -->
@@ -34,6 +34,18 @@
       @edit="edit"
     >
       <template #actions>
+        <q-btn
+          no-caps
+          rounded
+          @click="outOfStock = !outOfStock"
+          :flat="!outOfStock"
+          :text-color="outOfStock ? 'primary' : 'grey'"
+          :label="outOfStock ? 'Out-of-stock products' : 'Filter out-of-stock products'"          
+        >
+        <q-tooltip content-class="bg-secondary">
+          Filter only stock-managed inventory products having quantity &lt; minimum quantity
+        </q-tooltip>
+        </q-btn>
         <q-radio
           size="sm"
           v-model="discontinued"
@@ -47,19 +59,19 @@
           label="Discontinued products"
         />
       </template>
-      <template #body-cell-qty="props">
+      <template #body-cell-qty="props"  >
         <q-td class="text-center">
           <template v-if="props.row.trackInventory">
-            <div>{{ props.row.qty }}</div>
-            <q-btn
+            <div :class="props.row.qty <= props.row.minimumQty ? 'text-negative' : 'text-bold'">{{ props.row.qty }}</div>
+            <!-- <q-btn
               no-caps
               flat
               size="sm"
               label="Deactivate Tracking"
-              color="negative"
+              color="secondary"
               :loading="submitting"
               @click="updateStatus(props.row.id, false)"
-            />
+            /> -->
           </template>
           <template v-else>
             <q-btn
@@ -67,7 +79,7 @@
               size="sm"
               label="Activate inventory tracking"
               no-caps
-              color="primary"
+              color="primary"              
             >
               <q-popup-edit v-model="newStock">
                 <q-form
@@ -119,6 +131,7 @@ export default {
       loading: false,
       submitting: false,
       discontinued: false,
+      outOfStock:false,
       newStock: 0,
       showCategories: false,
       showUnits: false,
@@ -161,7 +174,25 @@ export default {
           label: "Qty",
           format: (val, row, c) => (row.trackInventory ? val : ""),
           style: "",
+          classes: (row) => row.qty <= row.minimumQty ?  "text-negative" : "text-bold"
+        },
+        {
+          name: "minimumqty",
+          align: "center",
+          field: "minimumQty",
+          label: "Minimum Qty",
+          format: (val, row, c) => (row.trackInventory ? val : ""),
+          style: "",
           sortable: false
+        },
+ {
+          name: "unitId",
+          align: "left",
+          field: "unitId",
+          format: (val, row, c) => this.getUnitName(val),
+          label: "Unit",
+          style: "width:25%",
+          sortable: true
         },
         {
           name: "sellingPrice",
@@ -173,14 +204,14 @@ export default {
           sortable: true
         },
         {
-          name: "unitId",
-          align: "left",
-          field: "unitId",
-          format: (val, row, c) => this.getUnitName(val),
-          label: "Unit",
-          style: "width:25%",
+          name: "purchasingPrice",
+          align: "right",
+          field: "purchasingPrice",
+          label: "Purchasing Price",
+          format: (val, row, c) => Number(val).toLocaleString("id-ID"),
+          style: "width:25%;",
           sortable: true
-        },
+        },        
         {
           name: "categoryId",
           align: "left",
@@ -209,6 +240,9 @@ export default {
   watch: {
     discontinued() {
       this.fetch();
+    },
+    outOfStock(){
+      this.fetch()
     }
   },
   mounted() {
@@ -221,6 +255,13 @@ export default {
       pager = pager?.pagination || this.pager;
 
       try {
+
+        if(this.outOfStock){
+          pager.outOfStock = true
+        } else {
+          pager.outOfStock = undefined
+        }
+        
         var res = await this.$api.products.get(this.discontinued, pager);
         var dt = res.data;
         this.data = dt.rows.map(x => new Product(x));

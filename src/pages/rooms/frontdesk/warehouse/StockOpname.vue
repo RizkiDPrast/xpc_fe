@@ -18,14 +18,19 @@
           @add="add"
           @edit="edit"
           addBtnIcon="las la-save"
-          addBtnClass="text-secondary"
+          :addBtnClass="(isAdmin || isFinance) ? 'text-secondary' : 'hidden'"
         >
           <template #title>
             <q-toolbar-title style="flex:auto;" class="col-8">
-              Stock-managed product
+              Stock-managed products
             </q-toolbar-title>
           </template>
           <template #actions>
+            <q-checkbox v-model="expireSoon" label="Near to Expiry" style="width:200px" >
+              <q-tooltip content-class="bg-secondary">
+                Show available stocks that almost expire (in 7 days)
+              </q-tooltip>
+            </q-checkbox>
             <q-select
               :options="['All', 'Pet shop products', 'Medical products']"
               :disable="loading"
@@ -40,12 +45,11 @@
 
           <template #body-cell-action="props">
             <q-td>
-              <q-btn icon="las la-ellipsis-v" flat round size="sm">
+              <q-btn icon="las la-ellipsis-v" flat round size="sm"  v-if="isAdmin || isFinance" >
                 <q-menu>
                   <q-list>
                     <q-item
                       v-close-popup
-                      v-if="isAdmin || isFinance"
                       clickable
                       @click="
                         $router.push(
@@ -116,6 +120,13 @@ export default {
           align: "center",
           format: (val, row) => this.data.indexOf(row) + 1
         },
+         {
+          name: "purchaseref",
+          label: "Purchasing ref",
+          width: "25px",
+          align: "center",
+          field: 'purchaseRef'
+        },
         {
           name: "product.categoryId",
           label: "Category",
@@ -136,10 +147,25 @@ export default {
           align: "left"
         },
         {
+          name: "product.qty",
+          label: "Product Qty",
+          classes: 'text-bold',
+          field: row => row.product.qty,
+          align: "center",
+          classes: (row) => row.product.qty < row.product.minimumQty ?  "text-negative" : "text-bold"
+        }, 
+        {
+          name: "product.minimumQty",
+          label: "Min Qty",
+          field: row => row.product.minimumQty,
+          align: "center",
+          classes: "text-green"
+        },
+        {
           name: "unitId",
           label: "Unit",
           field: "unitId",
-          align: "left",
+          align: "center",
           format: val => this.getUnitName(val)
         },
         {
@@ -180,12 +206,7 @@ export default {
           align: "right",
           format: val => this.$options.filters.money(val)
         },
-        {
-          name: "product.minimumQty",
-          label: "Min Qty",
-          field: row => row.product.minimumQty,
-          align: "right"
-        },
+       
         {
           name: "note",
           label: "Note",
@@ -213,6 +234,7 @@ export default {
       },
       filter: undefined,
       petShopOnly: "All",
+      expireSoon: false,
       savingOpname: false,
       loading2: false,
       data2: [],
@@ -254,6 +276,9 @@ export default {
   watch: {
     petShopOnly() {
       this.fetch();
+    },
+    expireSoon(){
+      this.fetch()
     }
   },
   methods: {
@@ -300,6 +325,13 @@ export default {
           pager.petShopOnly = false;
         }
       }
+
+      if(this.expireSoon){
+        pager.expireSoon = true;
+      } else {
+        pager.expireSoon = undefined;
+      }
+
       try {
         var res = await this.$api.stocks.get(pager);
         var dt = res.data;
