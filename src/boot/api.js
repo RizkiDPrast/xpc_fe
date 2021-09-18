@@ -159,11 +159,9 @@ export const api = {
         params
       });
     },
-    getByClient: id => {
-      return axios.get("/appointments/ForClient", {
-        params: {
-          id
-        }
+    getByClient: params => {
+      return axios.get("/appointments/ByClient", {
+        params
       });
     },
     getCount: () => {

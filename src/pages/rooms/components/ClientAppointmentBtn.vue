@@ -1,9 +1,17 @@
 <template>
+<div v-if="client.id">
+  <q-btn v-bind="$attrs" @click="model = true">
+  <slot>
+  </slot>
+          <q-tooltip content-class="bg-secondary">
+            Client's Appointments
+          </q-tooltip>
+  </q-btn>
   <q-dialog v-model="model" full-width full-height>
     <q-card>
       <dialog-header
         class="bg-secondary text-white"
-        title="Manage appointments"
+        :title="`Manage appointments for ${client.code} - ${client.name}`"
       />
       <q-scroll-area class="full-width" style="height: calc(100vh - 100px);">
         <q-card-section class="row">
@@ -21,6 +29,12 @@
               @add="add"
               @edit="edit"
             >
+            <template #actions>
+              <q-checkbox label="Include past appointments"
+                v-model="showPast"
+                outlined
+              />
+            </template>
               <template #body-cell-waPhone="props">
                 <q-td>
                   <wa-btn :value="props.row.waPhone" />
@@ -64,10 +78,15 @@
                     label="Appointment type *"
                     dense
                     outlined
+                    name="AppointmentType"
+                    v-validate="'required'"
+                    :error="errors.has('AppointmentType')"
+                    :error-message="errors.first('AppointmentType')"
                   />
                   <client-select
+                    readonly
                     ref="cselect"
-                    v-model="modelInput.clientId"
+                    :value="modelInput.clientId"
                     @selected="selectedClientChange"
                     label="Client"
                     hint="Leave empty if not for registered client"
@@ -170,19 +189,21 @@
       </q-scroll-area>
     </q-card>
   </q-dialog>
+</div>
 </template>
 
 <script>
 import AppointmentTypeSelect from "./AppointmentTypeSelect";
 export default {
-  props: {
-    value: {
-      type: Boolean,
-      default: () => false
-    },
+  name:"ClientAppointmentBtn",
+  props: {   
     date: {
       type: Date,
       default: () => undefined
+    },
+    client: {
+      type: Object,
+      required: true,
     }
   },
   components: {
@@ -192,15 +213,21 @@ export default {
     return {
       loading: false,
       data: [],
+      d1: (new Date()).setDate((new Date).getDate() - 1),
       file: null,
-      modelInput: {},
+      modelInput: {
+        clientId: this.client.id,
+        name: this.client.name,
+        waPhone: this.client.waPhone,
+        otherPhones: this.client.otherPhones,
+      },
       columns: [
         {
           name: "action",
           label: "action",
           field: "action",
           width: "25px",
-          align: "center"
+          align: "center",
         },
         {
           name: "appointmentTypeId",
@@ -231,7 +258,8 @@ export default {
           label: "Due date",
           field: "dueDate",
           align: "left",
-          format: val => this.$util.toDateString(val)
+          format: val => this.$util.toDateString(val),
+          classes: (row)=> new Date(row.dueDate) < new Date(this.d1) ? 'bg-grey-3 text-grey' : 'text-secondary'
         },
         {
           name: "note",
@@ -239,22 +267,21 @@ export default {
           field: "note",
           align: "left"
         },
-        {
-          name: "confirmedByClient",
-          label: "Confirmed by client",
-          field: "confirmedByClient",
-          align: "left"
-        }
       ],
       pager: {
         page: 1,
         rowsPerPage: 15,
-        rowsNumber: 0
+        rowsNumber: 0,
+        sortBy: 'dueDate',
+        descending: false,
       },
-      filter: undefined
+      filter: undefined,
+      model:false,
+      showPast: false
     };
   },
   mounted() {
+     console.log('this.client',this.client)
     this.fetch();
   },
   computed: {
@@ -263,15 +290,7 @@ export default {
         return "Appointment list";
       }
       return `Appointments @${this.$util.toDateString(this.dateModel)}`;
-    },
-    model: {
-      get() {
-        return this.value;
-      },
-      set(val) {
-        this.$emit("input", val);
-      }
-    },
+    },   
     dateModel: {
       get() {
         return this.date;
@@ -285,16 +304,31 @@ export default {
     date(val) {
       this.modelInput.dueDate = new Date(val);
       this.fetch();
+    },
+    client(val){
+      console.log('val',val)
+      this.modelInput.clientId = val.id
+      this.modelInput.name = this.client.name,
+      this.modelInput.otherPhones = val.otherPhones
+      this.modelInput.waPhone = val.waPhone
+
+      this.fetch()
+    },
+    showPast(){
+      this.fetch()
     }
   },
   methods: {
     async save() {
       if (!(await this.$validator.validate())) {
+        this.$toastr.error('Please fix all errors')
         return;
       }
 
       if (this.loading) return;
       this.loading = true;
+
+      this.modelInput.clientId = this.client.id;
       let res;
       try {
         if (this.modelInput.id) {
@@ -328,22 +362,31 @@ export default {
       // console.log("modelInput", this.modelInput);
     },
     async fetch(pager) {
-      console.log("fetching", this.loading);
+      // console.log("fetching", this.loading);
+      if(!this.client.id) return;
       if (this.loading) return;
       this.loading = true;
       pager = pager?.pagination || this.pager;
 
       try {
         pager.date = this.dateModel;
-        var res = await this.$api.appointments.get(pager);
+        pager.clientId = this.client.id;
+
+        if(this.showPast){
+          pager.showPast = true
+        } else {
+          pager.showPast = undefined
+        }
+
+        var res = await this.$api.appointments.getByClient(pager);
         var dt = res.data;
         this.data = dt.rows.map(x => x);
 
-        this.columns = this.columns.map(x => {
-          return Object.assign({}, x, {
-            sortable: dt.sortColumns.indexOf(x.field.toLowerCase()) > -1
-          });
-        });
+        // this.columns = this.columns.map(x => {
+        //   return Object.assign({}, x, {
+        //     sortable: dt.sortColumns.indexOf(x.name.toLowerCase()) > -1
+        //   });
+        // });
 
         this.pager.rowsNumber = dt.rowsNumber;
         this.pager.page = dt.page;
@@ -359,7 +402,12 @@ export default {
       this.$refs.name.focus();
     },
     add() {
-      this.modelInput = {};
+      this.modelInput = {
+        clientId: this.client.id,
+        name: this.client.name,
+        waPhone: this.client.waPhone,
+        otherPhones: this.client.otherPhones
+      };
       this.focus();
     },
     edit(id) {

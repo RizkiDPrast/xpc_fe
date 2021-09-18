@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'customer-select',
+  name: 'client-select',
   inheritAttrs: false,
   props: {
     value: {
@@ -31,7 +31,7 @@ export default {
     }
   },
   mounted () {
-    this.onRequest()
+    this.fetch()
   },
   computed: {
     selected: {
@@ -39,37 +39,46 @@ export default {
         if (!this.value || !this.data.length) {
           return undefined
         }
-        return this.data.find(x => x.value === this.value)
+        return this.data.find(x => x.id === this.value)
       },
       set (val) {
         if (val && val.value) {
-          this.$emit('input', val.value)
+          this.$emit('input', val.id)
           this.$emit('selected', val)
         } else {
           this.$emit('input', undefined)
           this.$emit('selected', {})
         }
       }
-    }
+    },
+    
   },
+  watch:{
+      value(){
+        this.fetch()
+      }
+    },
   methods: {
-    async onRequest (filter) {
+    async fetch (filter) {
       if (this.isLoading) return
       this.isLoading = true
       try {
         const res = await this.$api.selectDatas.clients({ filter: filter || '', take: 10, Id: this.value })
         let data = res.data
         if (Array.isArray(data)) {
-          data = data.map(x => ({ value: x.id, label: `${x.code} - ${x.name}`, id: x.id, phone: x.phone, name: x.name, code: x.code }))
+          data = data.map(x => ({ ... x, value: x.id, label: `${x.code} - ${x.name}`}))
           this.data.splice(0, this.data.length, ...data)
           if (this.value) {
-            this.selected = this.data.find(x => x.value === this.value) || undefined
+            this.selected = this.data.find(x => x.id === this.value) || undefined
           }
         } else {
           if (res.data.id) {
             this.data = [res.data]
-            if (this.id === res.data.id) {
-              this.selected = res.data
+            if (this.value === res.data.id) {
+              res.data.value =res.data.id;
+              res.data.label = `${res.data.code} - ${res.data.name}`
+              this.selected = res.data;
+              this.data = [res.data]
             }
           }
         }
@@ -80,7 +89,7 @@ export default {
     },
     filterFn (val, update) {
       update(() => {
-        this.onRequest(val)
+        this.fetch(val)
       })
     }
   }

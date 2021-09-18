@@ -23,27 +23,20 @@
           rounded
           icon="las la-boxes"
           size="sm"
-          text-color="warning"
+          text-color="primary"
           class="q-mr-sm"
         >
-          <q-tooltip content-class="bg-warning">
+          <q-tooltip content-class="bg-primary">
             Item usage
           </q-tooltip>
         </ItemUsageBtn>
-        <q-btn
+        <client-appointment-btn
+          :client="model" 
           flat
-          v-if="model.id !== 0"
           round
+          color="secondary"
           icon="las la-calendar-alt"
-          size="sm"
-          @click="checkAppointment"
-          class="q-mr-sm"
-          text-color="negative"
-        >
-          <q-tooltip content-class="bg-negative">
-            Client's Appointments
-          </q-tooltip>
-        </q-btn>
+        />
       </q-toolbar>
       <q-card-section>
         <q-form
@@ -285,6 +278,7 @@ import ConsentFormList from "./components/ConsentFormList";
 import ConsentFormDialog from "./components/ConsentFormDialog";
 import BtnMoveClient from "./components/BtnMoveClient";
 import InPatientBoardList from "./components/InPatientBoardList";
+import ClientAppointmentBtn from '../../components/ClientAppointmentBtn.vue';
 export default {
   name: "ClientDetails",
   props: {
@@ -305,7 +299,8 @@ export default {
     ConsentFormDialog,
     BtnMoveClient,
     InPatientBoardList,
-    ItemUsageBtn
+    ItemUsageBtn,
+    ClientAppointmentBtn
   },
   data() {
     return {
@@ -366,14 +361,7 @@ export default {
         : `${cl.phone} ${cl.email}`;
     }
   },
-  methods: {
-    checkAppointment() {
-      this.$dialog.appointmentTableForCustomer(
-        this,
-        this.model.id,
-        this.model.code + " " + this.model.name
-      );
-    },
+  methods: {   
     async reloadClient() {
       try {
         var res = await this.$api.clients.getOne(this.id);
