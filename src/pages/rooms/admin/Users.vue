@@ -23,6 +23,17 @@
           </template>
           <template #body-cell-blockUser="props">
             <q-td>
+              <q-btn flat round size="sm" icon="las la-lock" 
+                v-if="props.row.lockoutEnabled && props.row.lockoutEnd != null"
+                @click="removeLockout(props.row.id)"
+                :loading="removingLockout"
+                color="negative"
+              >
+              <q-tooltip content-class="bg-negative">
+                This user is being locked until {{$util.formatDate(props.row.lockoutEnd, 'DD MMMM YYYY HH:mm:ss  WIB')}}
+                <p> click to remove the lock out now </p> 
+              </q-tooltip>
+              </q-btn>
               <q-badge
                 v-if="!props.row.blockUser"
                 color="positive"
@@ -295,13 +306,32 @@ export default {
         rowsPerPage: 15,
         rowsNumber: 0
       },
-      filter: undefined
+      filter: undefined,
+      removingLockout: false,
+      file: undefined
     };
   },
   mounted() {
     this.fetch();
   },
   methods: {
+    async removeLockout(id){
+      if(!id) return;
+      if(this.removingLockout) return;
+      this.removingLockout = true
+      try {
+        let res = await this.$api.users.removeLockout(id)
+        this.data = this.data.map(x =>{
+          if(x.id === id) {
+            x.lockoutEnd = null;          
+          }
+          return x
+        })
+      } catch (error) {
+        this.$toatr.error(error)
+      }
+      this.removingLockout = false
+    },
     async save() {
       if (!(await this.$validator.validate())) {
         return;

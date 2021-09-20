@@ -380,6 +380,9 @@ export const api = {
     },
     changePassword: model => {
       return axios.put("users/ChangePassword", model);
+    },
+    removeLockout(id){
+      return axios.put(`users/removeLockout/${id}`)
     }
   },
   stocks: {
@@ -592,4 +595,7 @@ export const api = {
        return axios.post('finances/LockMonthlyCommissions')
      }
    },
+   dashboard:{
+     getSalesData: (year) => axios.get('dashboard/SalesData', {params:{year}})
+   }
 };

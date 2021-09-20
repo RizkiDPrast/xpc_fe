@@ -33,6 +33,13 @@ const routes = [
         },
         children: [
           {
+            path: "dashboard",
+            component: () => import("pages/rooms/Dashboard.vue"),
+            meta: {
+              title: "Dashboard"
+            }
+          },
+          {
             path: "calendar",
             component: () => import("pages/rooms/Calendar.vue"),
             meta: {

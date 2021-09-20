@@ -73,7 +73,7 @@ export default {
       var isMonth = this.type === 'month';
 
       return {
-        width: isYear ? '100px' : isMonth ? '150px' : '175px'
+        width: isYear ? '100px' : isMonth ? '175px' : '175px'
       };
     }
   },

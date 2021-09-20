@@ -17,11 +17,13 @@
     "@fullcalendar/vue": "^4.2.2",
     "@microsoft/signalr": "^5.0.8",
     "@quasar/extras": "^1.0.0",
+    "apexcharts": "^3.28.3",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "quasar": "^1.0.0",
     "v-money": "^0.8.1",
-    "vee-validate": "^2.2.13"
+    "vee-validate": "^2.2.13",
+    "vue-apexcharts": "^1.6.2"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",

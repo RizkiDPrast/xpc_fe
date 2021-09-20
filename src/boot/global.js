@@ -134,6 +134,17 @@ export default async (
       },
       categories() {
         return this.$store.state.list.categories;
+      },
+      years(){
+        let td = new Date().getFullYear();
+        let data = [], ty = 2021;
+        for(let i = 0;i < 10;i++){
+          data.push(ty++);
+          if(ty > td){
+            break;
+          }
+        }
+        return data
       }
     },
     methods: {

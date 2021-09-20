@@ -123,6 +123,12 @@ export default {
           icon: "las la-clipboard-check",
           caption: "Managing stocks of all inventory-managed products"
         },
+        {
+          to: "/app/rooms/dashboard",
+          label: "Dashboard",
+          icon: "las la-chart-bar",
+          caption: "Analytical overview"
+        },
         { separator: 1 },
           {
           to: "/app/rooms/unpaid-receipts",
