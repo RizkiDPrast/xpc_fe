@@ -405,7 +405,7 @@ export const api = {
   },
   sales: {
     get: params => axios.get("/sales", { params }),
-    getClientUnpaid: id => axios.get(`/sales/unpaid/client/${id}`),
+    getClientUnpaids: id => axios.get(`/sales/unpaid/client/${id}`),
     getUnpaid: () => axios.get("/sales/unpaid"),
     getToday: () => {
       let res = axios.get("/sales/today");

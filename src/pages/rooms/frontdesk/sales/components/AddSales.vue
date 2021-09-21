@@ -241,28 +241,30 @@ export default {
       }
       this.loadingClient = false;
     },
-    async fetchUnpaid(clientId){
-      if(this.loadingUnpaid) return;
-      this.loadingUnpaid = true
+    async fetchUnpaids(clientId) {
+      if (this.loadingUnpaid) return;
+      this.loadingUnpaid = true;
       try {
-        let res = await this.$api.sales.getClientUnpaid(clientId)
-        if(res.data && res.data.id && res.data.receiptCode && res.data.total){
-          var sl = new SaleLine({
-            itemName: `[${res.data.receiptCode}] Pelunasan`,
-            qty: 1,
-            unitId: 1,
-            moneyDiscount:0,
-            percentDiscount:0,
-            unitPrice: res.data.total,
-            debtSaleId: res.data.id
-          })
-          this.model.saleLines.push(sl)
+        let res = await this.$api.sales.getClientUnpaids(clientId);
+        if (res.data && res.data.length) {
+          for (let i = 0; i < res.data.length; i++) {
+            const debt = res.data[i];
+            var sl = new SaleLine({
+              itemName: `[${debt.receiptCode}] Pelunasan`,
+              qty: 1,
+              unitId: 1,
+              moneyDiscount: 0,
+              percentDiscount: 0,
+              unitPrice: debt.total,
+              debtSaleId: debt.id
+            });
+            this.model.saleLines.push(sl);
+          }
         }
-        
       } catch (error) {
-        this.$toastr.error(error)
+        this.$toastr.error(error);
       }
-      this.loadingUnpaid = false
+      this.loadingUnpaid = false;
     },
     clientUpdated(client) {
       if (client && client !== null) {
@@ -276,10 +278,10 @@ export default {
       }
 
       this.clearItems();
-      
-        //check unpaid items
-      if(this.model.clientId){
-        this.fetchUnpaid(this.model.clientId)
+
+      //check unpaid items
+      if (this.model.clientId) {
+        this.fetchUnpaids(this.model.clientId);
       }
 
       // console.log('client', client.id, client, this.model.clientId)
