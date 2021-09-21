@@ -1,15 +1,42 @@
 <template>
-  <div>
+  <div style="min-height:100px">
     <q-linear-progress v-if="loading" />
     <apexchart v-else :options="options" :series="options.series"></apexchart>
   </div>
 </template>
 <script>
+import { boot } from "quasar/wrappers";
 export default {
-  name: "SparkSalesCard",
+  name: "SparkCard",
+  props: {
+    loading: {
+      type: Boolean,
+      default: () => false
+    },
+    title: {
+      type: String,
+      default: () => ""
+    },
+    subtitle: {
+      type: String,
+      default: () => ""
+    },
+    color: {
+      type: String,
+      default: () => "#DCE6EC"
+    }
+  },
+  watch: {
+    loading(val) {},
+    title(val) {
+      this.options.title.text = val;
+    },
+    subtitle(val) {
+      this.options.subtitle.text = val;
+    }
+  },
   data() {
     return {
-      loading: false,
       options: {
         series: [
           {
@@ -21,28 +48,29 @@ export default {
           height: 160,
           sparkline: {
             enabled: true
-          },
+          }
         },
-        tooltip: {enabled: false},
+        tooltip: { enabled: false },
         stroke: {
           curve: "straight"
         },
         fill: {
-          opacity: 0.3
+          opacity: 0.2
         },
         yaxis: {
           min: 0
         },
-        colors: ["#DCE6EC"],
+        colors: [this.color],
         title: {
-          text: "$424,652",
+          text: this.title,
           offsetX: 0,
           style: {
-            fontSize: "24px"
+            fontSize: "24px",
+            color: this.color
           }
         },
         subtitle: {
-          text: "Sales",
+          text: this.subtitle,
           offsetX: 0,
           style: {
             fontSize: "14px"
@@ -59,6 +87,7 @@ export default {
       }
       return arr;
     }
-  }
+  },
+  mounted() {}
 };
 </script>

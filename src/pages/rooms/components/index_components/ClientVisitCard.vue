@@ -1,16 +1,26 @@
 <template>
-<div>
-  <q-card>
-    <q-toolbar>
-      <q-toolbar-title> </q-toolbar-title>
-      <q-btn flat round size="sm" icon="las la-sync" @click="fetch" />
-      <date-prev-next type="year" v-model="year" />
-    </q-toolbar>
-    <q-card-section>
-      <apexchart :options="options" :series="options.series" />
-    </q-card-section>
-  </q-card>
-</div>
+  <div>
+    <q-card>
+      <q-toolbar>
+        <q-toolbar-title> </q-toolbar-title>
+        <q-btn
+          flat
+          round
+          size="sm"
+          icon="las la-sync"
+          @click="fetch"
+          :disable="loading"
+        />
+        <date-prev-next type="year" v-model="year" />
+      </q-toolbar>
+      <q-card-section style="height:735px">
+        <q-linear-progress v-if="loading" />
+        <q-scroll-area v-else style="width:100%;height:700px">
+          <apexchart :options="options" :series="options.series" />
+        </q-scroll-area>
+      </q-card-section>
+    </q-card>
+  </div>
 </template>
 <script>
 export default {
@@ -22,10 +32,27 @@ export default {
       options: {
         chart: {
           type: "bar",
-          height: 250,
+          height: 500,
           width: "100%",
           stacked: true,
-          foreColor: "#999"
+          foreColor: "#999",      
+          
+        // toolbar: {
+        //     show: true,
+        //      offsetX: 0,
+        //     offsetY: 0,
+        //     tools: {
+        //       download: true,
+        //       selection: true,
+        //       zoom: true,
+        //       zoomin: true,
+        //       zoomout: true,
+        //       pan: true,
+        //       reset: true | '<img src="/static/icons/reset.png" width="20">',
+        //       customIcons: []
+        //     },
+        //     autoselect: 'zoom'
+        //   }              
         },
         plotOptions: {
           bar: {
@@ -39,77 +66,27 @@ export default {
         colors: ["#00C5A4", "#F3F2FC"],
         series: [
           {
-            name: "New visit",
-            data: [
-              20,
-              16,
-              24,
-              28,
-              26,
-              22,
-              15,
-              5,
-              14,
-              16,
-              22,
-              29,
-              24,
-              19,
-              15,
-              10,
-              11,
-              15,
-              19,
-              23
-            ]
+            name: "New Visit",
+            data: [0, 20, 16, 24, 28, 26, 22, 15, 5, 14, 16, 23]
           },
           {
-            name: "All visit",
-            data: [
-              20,
-              16,
-              24,
-              28,
-              26,
-              22,
-              15,
-              5,
-              14,
-              16,
-              22,
-              29,
-              24,
-              19,
-              15,
-              10,
-              11,
-              15,
-              19,
-              23
-            ]
+            name: "Regular visit",
+            data: [0, 0, 0, 20, 16, 24, 28, 26, 22, 15, 5, 14]
           }
         ],
         labels: [
-          15,
-          16,
-          17,
-          18,
-          19,
-          20,
-          21,
-          22,
-          23,
-          24,
-          25,
-          26,
-          27,
-          28,
-          29,
-          30,
-          1,
-          2,
-          3,
-          4
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec"
         ],
         xaxis: {
           axisBorder: {
@@ -122,11 +99,11 @@ export default {
             show: false
           },
           labels: {
-            show: false,
+            show: true,
             style: {
               fontSize: "14px"
             }
-          }
+          },
         },
         grid: {
           xaxis: {
@@ -145,7 +122,7 @@ export default {
             show: false
           },
           labels: {
-            show: false
+            show: true
           }
         },
         legend: {
@@ -159,17 +136,68 @@ export default {
           align: "left"
         },
         subtitle: {
-          text: "Total and new client"
+          text: "New visits and Regular visits"
         },
         tooltip: {
           shared: true,
           intersect: false
-        }
+        },
       }
     };
   },
+  computed: {
+    months() {
+      let arr = [];
+
+      for (let i = 0; i < 12; i++) {
+        let d = new Date(
+          `2021-${(i + 1).toString().padStart(2, "0")}-01T00:00:00`
+        )
+          .toString()
+          .split(" ")[1];
+        arr.push(d);
+      }
+      return arr;
+    }
+  },
+  watch: {
+    year() {
+      this.fetch();
+    }
+  },
+  mounted() {
+    this.fetch();
+  },
   methods: {
-    fetch() {}
+    async fetch() {
+      if (!this.year) return;
+      if (this.loading) return;
+      this.loading = true;
+      try {
+        let res = await this.$api.dashboard.getVisitData(
+          this.year.getFullYear()
+        );
+        console.log("res.data", res.data);
+        let dt = res.data;
+        this.options.series[0].data = this.months.map((x, i) => {
+          let f = dt.find(y => y.month === i + 1);
+          if (f) {
+            return f.newClient;
+          }
+          return 0;
+        });
+        this.options.series[1].data = this.months.map((x, i) => {
+          let f = dt.find(y => y.month === i + 1);
+          if (f) {
+            return f.newClient > f.count ? 0 : f.count - f.newClient;
+          }
+          return 0;
+        });
+      } catch (error) {
+        this.$toastr.error(error);
+      }
+      this.loading = false;
+    }
   }
 };
 </script>

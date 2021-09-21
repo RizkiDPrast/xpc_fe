@@ -128,7 +128,6 @@ export default {
         )
           .toString()
           .split(" ")[1];
-        console.log("asdasd", i, d);
         arr.push(d);
       }
       console.log("arr", arr);
@@ -150,7 +149,6 @@ export default {
         let res = await this.$api.dashboard.getSalesData(
           this.year.getFullYear()
         );
-        console.log("res.data", res.data);
 
         this.options.xaxis.categories = this.months;
         let sales = res.data.sales;
@@ -179,7 +177,6 @@ export default {
           return -dt.totalCashOut;
         });
 
-        console.log(this.series);
       } catch (error) {
         this.$toastr.error(error);
       }

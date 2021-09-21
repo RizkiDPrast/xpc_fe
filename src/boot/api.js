@@ -596,6 +596,9 @@ export const api = {
      }
    },
    dashboard:{
-     getSalesData: (year) => axios.get('dashboard/SalesData', {params:{year}})
+     getSalesData: (year) => axios.get('dashboard/SalesData', {params:{year}}),
+     getVisitData: (year) => axios.get('dashboard/ClientVisits', {params:{year}}),
+     getInsightData: (date) => axios.get('dashboard/Insight', {params:{date}}),
+     getTopCategoriesData: (date) => axios.get('dashboard/TopCategories', {params:{date}}),
    }
 };

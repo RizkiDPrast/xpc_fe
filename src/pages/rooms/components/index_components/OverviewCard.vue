@@ -10,24 +10,36 @@
     </q-toolbar>
 
     <q-card-section class="row q-col-gutter-md">
-      <SparkSalesCard class="col-sm-12 col-md-6"/>
-      <SparkSalesCard class="col-sm-12 col-md-6"/>
-      <SparkSalesCard class="col-sm-12 col-md-6"/>
-      <SparkSalesCard class="col-sm-12 col-md-6"/>
+      <SparkCard color="#0068b9" :loading="loading" :title="sales.title" :subtitle="sales.subtitle" class="col-sm-12 col-md-6"/>
+      <SparkCard color="#ff8697" :loading="loading" :title="unpaids.title" :subtitle="unpaids.subtitle" class="col-sm-12 col-md-6"/>
+      <SparkCard color="#e7c95f" :loading="loading" :title="purchases.title" :subtitle="purchases.subtitle" class="col-sm-12 col-md-6"/>
+      <SparkCard  :loading="loading" :title="cashOuts.title" :subtitle="cashOuts.subtitle" class="col-sm-12 col-md-6"/>
     </q-card-section>
   </q-card>
 </div>
 </template>
 <script>
 import DatePrevNext from "src/components/DatePrevNext.vue";
-import SparkSalesCard from './SparkSalesCard.vue'
+import SparkCard from './SparkCard.vue'
 export default {
-  components: { DatePrevNext,SparkSalesCard },
+  components: { DatePrevNext,SparkCard },
   name: "OverviewCards",
   data() {
     return {     
       month: new Date(),
-      loading: false
+      loading: false,
+      sales:{
+        subtitle: 'Sales',
+      },
+      unpaids:{
+        subtitle: 'Unpaid',
+      },
+      purchases:{
+        subtitle: 'Purchases',
+      },
+      cashOuts:{
+        subtitle: 'CashOuts',
+      }
     };
   },
   mounted() {
@@ -43,58 +55,40 @@ export default {
         )
           .toString()
           .split(" ")[1];
-        console.log("asdasd", i, d);
         arr.push(d);
       }
-      console.log("arr", arr);
 
       return arr;
     }
   },
   watch: {
-    year() {
+    month() {
       this.fetch();
     }
   },
   methods: {
     async fetch() {
-      if (!this.year) return;
+      if (!this.month) return;
       if (this.loading) return;
       this.loading = true;
       try {
-        let res = await this.$api.dashboard.getSalesData(
-          this.year.getFullYear()
+        let res = await this.$api.dashboard.getInsightData(
+          this.month
         );
-        console.log("res.data", res.data);
 
-        // this.options.xaxis.categories = this.months;
-        // let sales = res.data.sales;
-        // this.series[0].data = this.months.map((x, i) => {
-        //   let dt = sales.find(s => s.month === i + 1);
-        //   if (!dt) return 0;
-        //   return dt.totalSales;
-        // });
-        // this.series[1].data = this.months.map((x, i) => {
-        //   let dt = sales.find(s => s.month === i + 1);
-        //   if (!dt) return 0;
-        //   return dt.totalRevenue;
-        // });
+        let dt = res.data;
+        this.sales.title = this.$options.filters.money(dt.sales?.total)
+        this.sales.subtitle = `Sales (${dt.sales?.count || 0})`
 
-        // let purchases = res.data.purchases;
-        // this.series[2].data = this.months.map((x, i) => {
-        //   let dt = purchases.find(s => s.month === i + 1);
-        //   if (!dt) return 0;
-        //   return dt.totalPurchase;
-        // });
+        this.unpaids.title = this.$options.filters.money(dt.unpaids?.total)
+        this.unpaids.subtitle = `Unpaids (${dt.unpaids?.count || 0})`
 
-        // let cashOuts = res.data.cashOuts;
-        // this.series[3].data = this.months.map((x, i) => {
-        //   let dt = cashOuts.find(s => s.month === i + 1);
-        //   if (!dt) return 0;
-        //   return -dt.totalCashOut;
-        // });
+        this.purchases.title = this.$options.filters.money(dt.purchases?.total)
+        this.purchases.subtitle = `Purchases (${dt.purchases?.count || 0})`
 
-        console.log(this.series);
+        this.cashOuts.title = this.$options.filters.money(dt.cashOuts?.total)
+        this.cashOuts.subtitle = `Cash outs (${dt.cashOuts?.count || 0})`
+
       } catch (error) {
         this.$toastr.error(error);
       }
