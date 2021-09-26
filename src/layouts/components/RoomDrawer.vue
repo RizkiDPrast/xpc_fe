@@ -86,7 +86,14 @@ export default {
       }
     },
     menus() {
-      var arr = [
+      var arr = [        
+        {
+          to: "/app/rooms/dashboard",
+          label: "Dashboard",
+          icon: "las la-chart-bar",
+          caption: "Analytical overview",
+          class: 'text-warning'
+        },
         {
           to: "/app/rooms/on-sites",
           label: "Queue",
@@ -99,6 +106,12 @@ export default {
         //   icon: "las la-user",
         //   caption: "Client, appointments, pets and pet's signalements"
         // },
+        {
+          to: "/app/rooms/vet/clients",
+          label: "Clients",
+          icon: "las la-id-card",
+          caption: "Managing clients, pets and signalements"
+        },
         {
           to: "/app/rooms/patients",
           label: "Patients",
@@ -122,12 +135,6 @@ export default {
           label: "Stock Opname",
           icon: "las la-clipboard-check",
           caption: "Managing stocks of all inventory-managed products"
-        },
-        {
-          to: "/app/rooms/dashboard",
-          label: "Dashboard",
-          icon: "las la-chart-bar",
-          caption: "Analytical overview"
         },
         { separator: 1 },
           {
@@ -153,12 +160,12 @@ export default {
         { separator: 1 },
         // { label: "Veterinarian", filter: this.isVet || this.isAdmin },
         { label: "Veterinarian" },
-        {
-          to: "/app/rooms/vet/clients",
-          label: "Clients",
-          icon: "las la-id-card",
-          caption: "Managing clients, pets and signalements"
-        },
+        // {
+        //   to: "/app/rooms/vet/clients",
+        //   label: "Clients",
+        //   icon: "las la-id-card",
+        //   caption: "Managing clients, pets and signalements"
+        // },
         {
           to: "/app/rooms/vet/in-patients",
           label: "In-Patients and Pet Boarding",
@@ -205,6 +212,14 @@ export default {
           icon: "las la-user-tie",
           caption: "Managing app user",
           filter: this.isAdmin
+        },
+        {
+          to: "/app/rooms/utilities",
+          label: "Utilities",
+          icon: "las la-database",
+          caption: "Database management",
+          filter: this.isAdmin,
+          class: "bg-yellow-3 text-secondary"
         }
       ];
 

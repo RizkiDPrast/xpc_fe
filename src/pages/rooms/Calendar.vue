@@ -13,6 +13,15 @@
             Manage appointment types
           </q-tooltip>
         </q-btn>
+        
+        <q-btn flat 
+          icon="las la-arrow-left"
+          @click="$router.back()"
+        >
+        <q-tooltip>
+          Back
+        </q-tooltip>
+        </q-btn>
       </template>
     </page-header>
     <div class="row full-width">

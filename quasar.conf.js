@@ -100,7 +100,12 @@ module.exports = function(/* ctx */) {
           changeOrigin: true,
           secure: false,
           ws: true
-        }
+        },
+        "/Files": {
+          target: "http://localhost:5000",
+          changeOrigin: true,
+          secure: false
+        },
         // "/sockjs-node": {
         //   target: "ws://localhost:5000",
         //   changeOrigin: true,

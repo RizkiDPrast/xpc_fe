@@ -218,6 +218,13 @@ const routes = [
               title: "User management"
             }
           },
+          {
+            path: "utilities",
+            component: () => import("pages/rooms/admin/Utility.vue"),
+            meta: {
+              title: "Database Management"
+            }
+          },
 
           //
           {
