@@ -219,7 +219,7 @@ export default {
           icon: "las la-database",
           caption: "Database management",
           filter: this.isAdmin,
-          class: "bg-yellow-3 text-secondary"
+          class: "text-secondary"
         }
       ];
 

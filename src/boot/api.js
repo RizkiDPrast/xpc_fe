@@ -603,6 +603,23 @@ export const api = {
    },
    database:{
      importClients: (fd, config) => axios.post('imports/clients', fd, config),
-     importProducts: (fd, config) => axios.post('imports/products', fd, config)
+     importProducts: (fd, config) => axios.post('imports/products', fd, config),
+   },
+   server:{
+     backupDb: async ()=> {
+        let res = await axios.get('/server/backupDatabase', {responseType: 'blob'})
+        // let url = URL.createObjectURL(new Blob([res.data]))
+        let url = URL.createObjectURL(res.data)
+        let a = document.createElement('a');
+        a.target = '_blank';
+        a.setAttribute('download', `${new Date().toJSON().split('T')[0]}_XINGAPP_DB_BACKUP.sql`)
+        a.href = url;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        return response();
+     },
+     restoreDb: (fd) => axios.post('/server/RestoreDatabase', fd),
+     truncateDb: ()=> axios.delete('/server/TruncateDb')
    }
 };

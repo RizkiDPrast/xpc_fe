@@ -157,7 +157,18 @@ export default async (
           this.$toastr.error(error)
         }
       },
-      async confirm(message){
+      async confirm(message, opt){
+        opt = opt || {}
+        opt = Object.assign({}, {
+          ok: {
+            label: 'Ok',
+            color: 'primary'
+          },
+          cancel: {
+            label: 'Cancel',
+            color: 'grey'
+          }
+        }, opt)
         return new Promise((resolve)=>{
           this.$q.dialog({
             title: 'Confirmation',
@@ -165,14 +176,7 @@ export default async (
             cancel: true,
             persistent: true,
             html: true,
-            ok:{
-              label: 'Ok',
-              color:'primary',
-            },
-            cancel:{
-              label: 'Cancel',
-              color: 'grey'
-            }
+            ...opt
           })
           .onOk(()=>{
             resolve(true)
