@@ -7,7 +7,7 @@
         </q-toolbar-title>
       </q-toolbar>
       <q-card-section>
-        <q-form @submit="save" class="q-col-gutter-md full-width">
+        <q-form @submit.prevent="save" class="q-col-gutter-md full-width">
           <div
             v-if="
               modelInput.avatar &&
@@ -162,7 +162,11 @@ export default {
     }
   },
   methods: {
-    async save() {
+    async save(e) {
+      if (e && e.preventDefault) {
+        e.preventDefault();
+      }
+
       if (!(await this.$validator.validate())) {
         return;
       }
@@ -176,10 +180,12 @@ export default {
         this.$toastr.success("Record was updated");
         if (this.modelInput && this.modelInput !== null) {
           this.$store.commit("logout");
-          this.$router.replace("/login");
+          this.$router.replace("/app/rooms");
         } else {
           this.$store.commit("login", this.modelInput);
         }
+
+        location.reload();
 
         this.modelInput = {};
         this.loading = false;

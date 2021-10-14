@@ -1,7 +1,14 @@
 // import { UserType } from 'src/models'
 
 export default {
-  roles: ["Admin", "Finance", "Veterinarian", "Paramedic", "Groomer"],
+  roles: [
+    "Admin",
+    "Finance",
+    "Veterinarian",
+    "FrontDesk",
+    "Paramedic",
+    "Groomer"
+  ],
   animalTypes: [],
   appointmentTypes: [],
   units: [],

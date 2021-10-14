@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page key="calendar">
     <page-header>
       <template #actions>
         <q-btn
@@ -13,14 +13,11 @@
             Manage appointment types
           </q-tooltip>
         </q-btn>
-        
-        <q-btn flat 
-          icon="las la-arrow-left"
-          @click="$router.back()"
-        >
-        <q-tooltip>
-          Back
-        </q-tooltip>
+
+        <q-btn flat icon="las la-arrow-left" @click="$router.back()">
+          <q-tooltip>
+            Back
+          </q-tooltip>
         </q-btn>
       </template>
     </page-header>
