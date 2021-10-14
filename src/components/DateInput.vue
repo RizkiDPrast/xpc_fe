@@ -4,7 +4,6 @@
     readonly
     :value="$util.formatDate(value, 'YYYY/MM/DD')"
     mask="date"
-    :rules="['date']"
     v-bind="$attrs"
     v-on="$listeners"
   >

@@ -37,14 +37,11 @@
 
           <date-input
             label="Expired at"
-            class="q-mt-sm"
+            class="q-mt-sm q-mb-md"
             dense
             outlined
             v-model="purchaseLineModel.expDate"
             name="expDate"
-            v-validate="''"
-            :error="errors.has('productId')"
-            :error-message="errors.first('productId')"
           />
 
           <unit-select

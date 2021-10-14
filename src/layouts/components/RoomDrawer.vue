@@ -32,8 +32,14 @@
                   :name="menu.icon"
                   class="q-mt-xs"
                 >
-               </q-icon>
-                <q-badge v-if="miniModel && menu.badge" :label="menu.badge" color="warning" class="absolute" style="top:4px;right:2px;" />                
+                </q-icon>
+                <q-badge
+                  v-if="miniModel && menu.badge"
+                  :label="menu.badge"
+                  color="warning"
+                  class="absolute"
+                  style="top:4px;right:2px;"
+                />
               </q-item-section>
 
               <q-item-section>
@@ -45,9 +51,22 @@
                 </q-item-label>
               </q-item-section>
 
-              <q-item-section side v-if="menu.sideTo || menu.badge" :top="!!menu.badge">
-                <q-btn v-if="menu.sideTo" round :icon="menu.sideIcon" :to="menu.sideTo" />
-                <q-badge v-if="menu.badge" :label="menu.badge" color="warning" />
+              <q-item-section
+                side
+                v-if="menu.sideTo || menu.badge"
+                :top="!!menu.badge"
+              >
+                <q-btn
+                  v-if="menu.sideTo"
+                  round
+                  :icon="menu.sideIcon"
+                  :to="menu.sideTo"
+                />
+                <q-badge
+                  v-if="menu.badge"
+                  :label="menu.badge"
+                  color="warning"
+                />
               </q-item-section>
             </q-item>
           </template>
@@ -68,14 +87,14 @@ export default {
   data() {
     return {};
   },
-  mounted(){
-    setTimeout(()=>{
-      this.countBoarding()
-    }) 
+  mounted() {
+    setTimeout(() => {
+      this.countBoarding();
+    });
   },
   computed: {
-    inPatientCount(){
-      return this.$store.state.app.inPatientCount
+    inPatientCount() {
+      return this.$store.state.app.inPatientCount;
     },
     miniModel: {
       get() {
@@ -86,13 +105,13 @@ export default {
       }
     },
     menus() {
-      var arr = [        
+      var arr = [
         {
           to: "/app/rooms/dashboard",
           label: "Dashboard",
           icon: "las la-chart-bar",
           caption: "Analytical overview",
-          class: 'text-warning'
+          class: "text-warning"
         },
         {
           to: "/app/rooms/on-sites",
@@ -134,21 +153,23 @@ export default {
           to: "/app/rooms/stock-opname",
           label: "Stock Opname",
           icon: "las la-clipboard-check",
-          caption: "Managing stocks of all inventory-managed products"
+          caption: "Managing stocks of all inventory-managed products",
+          filter: this.isFinance || this.isAdmin
         },
         { separator: 1 },
-          {
+        {
           to: "/app/rooms/unpaid-receipts",
           label: "Unpaid Receipts",
           icon: "las la-dizzy",
           caption: "List of all unpaid receipts",
-          class: 'text-negative'
+          class: "text-negative"
         },
-          {
+        {
           to: "/app/rooms/untransferred-items",
           label: "Untransferred Items",
           icon: "las la-people-carry",
-          caption: "Items that has been used but not yet transferred to receipt for sale",
+          caption:
+            "Items that has been used but not yet transferred to receipt for sale"
         },
         {
           to: "/app/rooms/unpaid-items",
@@ -171,7 +192,7 @@ export default {
           label: "In-Patients and Pet Boarding",
           icon: "las la-bed",
           caption: "Managing in-patients and pet boarding",
-          badge: this.inPatientCount,
+          badge: this.inPatientCount
         },
         { separator: 1 },
         { label: "Human resource" },

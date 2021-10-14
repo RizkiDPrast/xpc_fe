@@ -248,7 +248,7 @@ export const api = {
 
     getBoardingCount: () => axios.get("onSites/boarding/count"),
     getBoarding: () => axios.get("onSites/boarding"),
-    postBoarding: (pid) => axios.post(`onSites/boarding/${pid}`),
+    postBoarding: pid => axios.post(`onSites/boarding/${pid}`),
 
     postByClient: clientId => axios.post("/onsites/byClient", clientId),
     postByPatients: patientIds => axios.post("/onsites/byPatients", patientIds),
@@ -381,8 +381,8 @@ export const api = {
     changePassword: model => {
       return axios.put("users/ChangePassword", model);
     },
-    removeLockout(id){
-      return axios.put(`users/removeLockout/${id}`)
+    removeLockout(id) {
+      return axios.put(`users/removeLockout/${id}`);
     }
   },
   stocks: {
@@ -417,13 +417,13 @@ export const api = {
     put: (id, params) => axios.put(`/sales/${id}`, { ...params })
     // delete: (id) => axios.delete(`/units/${id}`)
   },
-  unfinishedItems:{
-    getUntransferred: ()=> axios.get('UnfinishedItems/untransferred'),
-    getUnpaidSaleLine: ()=> axios.get('UnfinishedItems/unpaidSaleLine'),
+  unfinishedItems: {
+    getUntransferred: () => axios.get("UnfinishedItems/untransferred"),
+    getUnpaidSaleLine: () => axios.get("UnfinishedItems/unpaidSaleLine")
   },
-  salesManagers:{
-    get:params => axios.get('/salesmanagers', {params}),
-    getDetails: (id) => axios.get(`/salesmanagers/${id}`) 
+  salesManagers: {
+    get: params => axios.get("/salesmanagers", { params }),
+    getDetails: id => axios.get(`/salesmanagers/${id}`)
   },
   saleLines: {
     getBySales: salesId => axios.get("/saleLines", { params: { salesId } })
@@ -498,7 +498,8 @@ export const api = {
     getByUser: (id, yearmonth) =>
       axios.get(`/commissions/users/${id}/months/${yearmonth}`),
     post: model => axios.post("/commissions", model),
-    postInPatient: ({date, userId}) => axios.post(`/commissions/inpatient/${userId}`, `"${date}"`)
+    postInPatient: ({ date, userId }) =>
+      axios.post(`/commissions/inpatient/${userId}`, `"${date}"`)
   },
   formPasien: {
     get: params => axios.get(`FormPatient/`, { params }),
@@ -557,7 +558,7 @@ export const api = {
     },
     put: model => {
       return axios.put(`inPatientTreatmentBoards`, model);
-    },
+    }
     // putasd: (id, data) => {
     //   return axios.put(`inPatientTreatmentBoards/${id}`, { data });
     // }
@@ -582,44 +583,52 @@ export const api = {
     getDefaultLines: uid => {
       return axios.get(`salaries/users/${uid}/DefaultLines`);
     },
-    postDefaultLine: (uid,model) => {
-      return axios.post(`salaries/users/${uid}/DefaultLine`,model);
+    postDefaultLine: (uid, model) => {
+      return axios.post(`salaries/users/${uid}/DefaultLine`, model);
     },
-    deleteDefaultLine: (uid,id) => {
+    deleteDefaultLine: (uid, id) => {
       return axios.delete(`salaries/users/${uid}/DefaultLine/${id}`);
+    }
+  },
+  finance: {
+    lockMonthlyCommissions() {
+      return axios.post("finances/LockMonthlyCommissions");
+    }
+  },
+  dashboard: {
+    getSalesData: year =>
+      axios.get("dashboard/SalesData", { params: { year } }),
+    getVisitData: year =>
+      axios.get("dashboard/ClientVisits", { params: { year } }),
+    getInsightData: date =>
+      axios.get("dashboard/Insight", { params: { date } }),
+    getTopCategoriesData: date =>
+      axios.get("dashboard/TopCategories", { params: { date } })
+  },
+  database: {
+    importClients: (fd, config) => axios.post("imports/clients", fd, config),
+    importProducts: (fd, config) => axios.post("imports/products", fd, config)
+  },
+  server: {
+    backupDb: async () => {
+      let res = await axios.get("/server/backupDatabase", {
+        responseType: "blob"
+      });
+      // let url = URL.createObjectURL(new Blob([res.data]))
+      let url = URL.createObjectURL(res.data);
+      let a = document.createElement("a");
+      a.target = "_blank";
+      a.setAttribute(
+        "download",
+        `${new Date().toJSON().split("T")[0]}_XINGAPP_DB_BACKUP.sql`
+      );
+      a.href = url;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      return response();
     },
-  
-   },
-   finance:{
-     lockMonthlyCommissions(){
-       return axios.post('finances/LockMonthlyCommissions')
-     }
-   },
-   dashboard:{
-     getSalesData: (year) => axios.get('dashboard/SalesData', {params:{year}}),
-     getVisitData: (year) => axios.get('dashboard/ClientVisits', {params:{year}}),
-     getInsightData: (date) => axios.get('dashboard/Insight', {params:{date}}),
-     getTopCategoriesData: (date) => axios.get('dashboard/TopCategories', {params:{date}}),
-   },
-   database:{
-     importClients: (fd, config) => axios.post('imports/clients', fd, config),
-     importProducts: (fd, config) => axios.post('imports/products', fd, config),
-   },
-   server:{
-     backupDb: async ()=> {
-        let res = await axios.get('/server/backupDatabase', {responseType: 'blob'})
-        // let url = URL.createObjectURL(new Blob([res.data]))
-        let url = URL.createObjectURL(res.data)
-        let a = document.createElement('a');
-        a.target = '_blank';
-        a.setAttribute('download', `${new Date().toJSON().split('T')[0]}_XINGAPP_DB_BACKUP.sql`)
-        a.href = url;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        return response();
-     },
-     restoreDb: (fd) => axios.post('/server/RestoreDatabase', fd),
-     truncateDb: ()=> axios.delete('/server/TruncateDb')
-   }
+    restoreDb: fd => axios.post("/server/RestoreDatabase", fd),
+    truncateDb: () => axios.delete("/server/TruncateDb")
+  }
 };

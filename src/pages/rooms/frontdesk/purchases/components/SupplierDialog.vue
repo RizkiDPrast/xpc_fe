@@ -58,6 +58,7 @@
 
                   <q-input
                     v-model="modelInput.email"
+                    clearable
                     name="email"
                     class=""
                     v-validate="'email'"

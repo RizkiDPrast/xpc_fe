@@ -7,7 +7,6 @@
       </q-toolbar-title>
       {{ today() }}
 
-
       <SaleSummaryBtn />
 
       <q-btn
@@ -19,7 +18,6 @@
         text-color="negative"
         :loading="closing"
       />
-
     </q-toolbar>
     <div class="row">
       <div class="col-sm-12 col-md-4 q-pa-sm">
@@ -157,7 +155,7 @@ export default {
 
         this.$toastr.success("Daily Sale has been closed");
       } catch (e) {
-        this.$toastr.error(e.message);
+        this.$toastr.error(e);
       }
       this.closing = false;
     },
@@ -172,9 +170,9 @@ export default {
       this.cashInOuts = model;
     },
     salesClosed() {
-      this.$refs.sales.close();
-      this.$refs.depositTodayList.close();
-      this.$refs.cashInOutList.close();
+      this.$refs.sales?.close();
+      this.$refs.depositTodayList?.close();
+      this.$refs.cashInOutList?.close();
     }
   },
   components: {
