@@ -2,7 +2,7 @@
   <q-card>
     <q-toolbar>
       <q-toolbar-title> </q-toolbar-title>
-      <q-btn flat round icon="las la-print" @click="print" />
+      <q-btn flat round icon="las la-print" @click="printHtml(content)" />
     </q-toolbar>
     <div class="full-width">
       <!-- {{ value }} -->
@@ -311,16 +311,7 @@ export default {
     //   this.model = JSON.parse(JSON.stringify(val));
     // }
   },
-  methods: {
-    print() {
-      var w = window.open("", "_blank", "toolbar=0,location=0,menubar=0");
-      w.document.write(this.content);
-      w.document.close();
-      w.focus();
-      w.print();
-      // w.close();
-    }
-  }
+  methods: {}
 };
 </script>
 

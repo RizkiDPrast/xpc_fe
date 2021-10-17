@@ -1,8 +1,14 @@
 <template>
-  <div class="full-width">
-    <!-- {{ value }} -->
-    <div v-html="content"></div>
-  </div>
+  <q-card>
+    <q-toolbar>
+      <q-toolbar-title> </q-toolbar-title>
+      <q-btn flat round icon="las la-print" @click="printHtml(content)" />
+    </q-toolbar>
+    <div class="full-width">
+      <!-- {{ value }} -->
+      <div v-html="content"></div>
+    </div>
+  </q-card>
 </template>
 <script>
 export default {

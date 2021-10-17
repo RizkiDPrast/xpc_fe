@@ -61,7 +61,7 @@ export default async (
   Vue.component("animal-types-btn", AnimalTypesBtn);
 
   Vue.component("patient-btn", PatientBtn);
-  Vue.component("patient-to-boarding-btn",PatientToBoardingBtn)
+  Vue.component("patient-to-boarding-btn", PatientToBoardingBtn);
 
   Vue.component("animal-type-select", AnimalTypeSelect);
   Vue.component("edc-type-select", EdcTypeSelect);
@@ -135,56 +135,70 @@ export default async (
       categories() {
         return this.$store.state.list.categories;
       },
-      years(){
+      years() {
         let td = new Date().getFullYear();
-        let data = [], ty = 2021;
-        for(let i = 0;i < 10;i++){
+        let data = [],
+          ty = 2021;
+        for (let i = 0; i < 10; i++) {
           data.push(ty++);
-          if(ty > td){
+          if (ty > td) {
             break;
           }
         }
-        return data
+        return data;
       }
     },
     methods: {
-      async countBoarding(){
+      printHtml(htmlContent) {
+        var w = window.open("", "_blank", "toolbar=0,location=0,menubar=0");
+        w.document.write(htmlContent);
+        w.document.close();
+        w.focus();
+        w.print();
+        // w.close();
+      },
+      async countBoarding() {
         try {
-        let res = await this.$api.onSites.getBoardingCount()
-          this.$store.commit('app/inPatientCount', res.data || 0)
-          this.$hub.updateBoardingCount(res.data || 0)
-        } catch (error){
-          this.$toastr.error(error)
+          let res = await this.$api.onSites.getBoardingCount();
+          this.$store.commit("app/inPatientCount", res.data || 0);
+          this.$hub.updateBoardingCount(res.data || 0);
+        } catch (error) {
+          this.$toastr.error(error);
         }
       },
-      async confirm(message, opt){
-        opt = opt || {}
-        opt = Object.assign({}, {
-          ok: {
-            label: 'Ok',
-            color: 'primary'
+      async confirm(message, opt) {
+        opt = opt || {};
+        opt = Object.assign(
+          {},
+          {
+            ok: {
+              label: "Ok",
+              color: "primary"
+            },
+            cancel: {
+              label: "Cancel",
+              color: "grey"
+            }
           },
-          cancel: {
-            label: 'Cancel',
-            color: 'grey'
-          }
-        }, opt)
-        return new Promise((resolve)=>{
-          this.$q.dialog({
-            title: 'Confirmation',
-            message,
-            cancel: true,
-            persistent: true,
-            html: true,
-            ...opt
-          })
-          .onOk(()=>{
-            resolve(true)
-          })
-          .onCancel(()=>{
-            resolve(false)
-          })
-        })
+          opt
+        );
+        return new Promise(resolve => {
+          this.$q
+            .dialog({
+              title: "Confirmation",
+              message,
+              cancel: true,
+              persistent: true,
+              html: true,
+              ...opt
+            })
+            .onOk(() => {
+              resolve(true);
+            })
+            .onCancel(() => {
+              resolve(false);
+            });
+        });
       },
       today() {
         return utility.formatDate(new Date(), "dddd, DD MMM YYYY");

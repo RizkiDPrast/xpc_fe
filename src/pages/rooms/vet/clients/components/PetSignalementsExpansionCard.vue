@@ -43,28 +43,30 @@
               @click.native="selected = props.row"
             >
               <q-td key="actions" class="text-center">
-                <template v-if="props.row.lockedAt && props.row.lockedAt !== null">
-                  <q-icon name="las la-lock"/>
+                <template
+                  v-if="props.row.lockedAt && props.row.lockedAt !== null"
+                >
+                  <q-icon name="las la-lock" />
                 </template>
-                <template v-else >
-                <signalement1-btn
-                  @click.stop="selected = props.row"
-                  round
-                  flat
-                  icon="las la-pencil-alt"
-                  :value="props.row"
-                  @input="signalementUpdated"
-                  color="positive"
-                />
-                <q-btn
-                  round
-                  flat
-                  icon="las la-trash"
-                  title="Delete"
-                  color="negative"
-                  :disable="loading"
-                  @click.stop="del(props.row.id)"
-                />
+                <template v-else>
+                  <signalement1-btn
+                    @click.stop="selected = props.row"
+                    round
+                    flat
+                    icon="las la-pencil-alt"
+                    :value="props.row"
+                    @input="signalementUpdated"
+                    color="positive"
+                  />
+                  <q-btn
+                    round
+                    flat
+                    icon="las la-trash"
+                    title="Delete"
+                    color="negative"
+                    :disable="loading"
+                    @click.stop="del(props.row.id)"
+                  />
                 </template>
               </q-td>
               <q-td key="visitDate">
@@ -106,6 +108,7 @@
                             props.row.actionString
                           )
                         "
+                        v-close-popup
                       >
                         <q-item-section>
                           <q-item-label title>
@@ -283,8 +286,8 @@ export default {
         this.onRequest();
       }
     },
-    value(val){
-      this.data = this.data.map(x=> x.id === val.id ? val : x)
+    value(val) {
+      this.data = this.data.map(x => (x.id === val.id ? val : x));
     }
   },
   methods: {
