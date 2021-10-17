@@ -168,7 +168,7 @@ export default {
         }
         this.$toastr.success("Record was updated");
         this.loading = false;
-        this.fetch();
+        this.refresh();
       } catch (error) {
         this.loading = false;
         this.$toastr.error(error);
