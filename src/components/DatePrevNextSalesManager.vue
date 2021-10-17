@@ -16,7 +16,7 @@
         size="xs"
         icon="las la-chevron-left"
         @click="prev"
-        :disable="!data.length  || model.ix >= len - 1"
+        :disable="!data.length || model.ix >= len - 1"
       />
     </template>
     <template #append>
@@ -33,69 +33,70 @@
 </template>
 <script>
 export default {
-  name: 'DatePrevNextSalesmanager',
-  props: {
-  },
+  name: "DatePrevNextSalesmanager",
+  props: {},
   data() {
     return {
       tout: undefined,
       data: [],
       details: {},
       model: {},
-      type: 'day',
-      loading:false,
+      type: "day",
+      loading: false,
       loadingDetails: false
     };
   },
-  computed:{
-    len(){
-      return this.data.length
+  computed: {
+    len() {
+      return this.data.length;
     },
-    label(){
-      if(!this.model || !this.model.id){
-        return '-'
+    label() {
+      if (!this.model || !this.model.id) {
+        return "-";
       }
-      return this.$util.formatDate(this.model.createdAt, 'MMM, DD YYYY')
+      return this.$util.formatDate(this.model.createdAt, "MMM, DD YYYY");
     }
   },
-  mounted(){
-    this.fetch()
+  mounted() {
+    this.fetch();
   },
   methods: {
-    async fetchDetails(){
-    if(this.loadingDetails) return;
+    async fetchDetails() {
+      if (this.loadingDetails) return;
       this.loadingDetails = true;
-      this.$emit('loading', true)
+      this.$emit("loading", true);
       try {
-          let res = await this.$api.salesManagers.getDetails(this.model.id)
-          this.details = res.data;
-          this.$emit('detail-fetched', this.details)
-        
+        let res = await this.$api.salesManagers.getDetails(this.model.id);
+        this.details = res.data;
+        this.$emit("detail-fetched", this.details);
       } catch (error) {
-        this.$toastr.error(error)
+        this.$toastr.error(error);
       }
       this.loadingDetails = false;
-      this.$emit('loading', false)
+      this.$emit("loading", false);
     },
-    async fetch(){
-      if(this.loading) return;
+    async fetch() {
+      if (this.loading) return;
       this.loading = true;
       try {
-          let res = await this.$api.salesManagers.get({perPage:50, page:1})
-          this.data = res.data.map((x,i)=> ({ix:i, createdAt: new Date(x.createdAt), ...x }))
-          if(this.data.length){
-            this.model = this.data[0]
-            this.fetchDetails()
-          }
+        let res = await this.$api.salesManagers.get({ perPage: 50, page: 1 });
+        this.data = res.data.map((x, i) => ({
+          ix: i,
+          createdAt: new Date(x.createdAt),
+          ...x
+        }));
+        if (this.data.length) {
+          this.fetchDetails();
+        }
       } catch (error) {
-        this.$toastr.error(error)
+        this.$toastr.error(error);
       }
       this.loading = false;
     },
     prev() {
       let to = this.model.ix + 1;
-      if(to >= this.len) return;
-      this.model = this.data[to]
+      if (to >= this.len) return;
+      this.model = this.data[to];
 
       if (this.tout) {
         clearTimeout(this.tout);
@@ -106,8 +107,8 @@ export default {
     },
     next() {
       let to = this.model.ix - 1;
-      if(to < 0) return;
-      this.model = this.data[to]
+      if (to < 0) return;
+      this.model = this.data[to];
 
       if (this.tout) {
         clearTimeout(this.tout);
@@ -115,7 +116,7 @@ export default {
       this.tout = setTimeout(() => {
         this.fetchDetails();
       }, 500);
-    },
+    }
   },
   destroyed() {
     clearTimeout(this.tout);
