@@ -10,7 +10,7 @@
       </q-card-section>
       <q-card-section v-else class="row q-col-gutter-sm">
         <div class="col-sm-12 col-md-6">
-          <q-scroll-area style="width: 100%; height: 600px;" class="q-pr-md">
+          <q-scroll-area style="width: 100%; height: 800px;" class="q-pr-md">
             <keep-alive>
               <component
                 :is="formType"
@@ -23,7 +23,7 @@
           </q-scroll-area>
         </div>
         <div class="col-sm-12 col-md-6">
-          <q-scroll-area style="width: 100%; height: 600px;" class="q-pr-md">
+          <q-scroll-area style="width: 100%; height: 800px;" class="q-pr-md">
             <keep-alive>
               <component :is="`${formType}Preview`" :value="dataPrev" />
             </keep-alive>

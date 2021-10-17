@@ -86,13 +86,13 @@
           >
           </q-btn>
         </div> -->
-        <div style="position:absolute;left:0px;bottom:0;z-index:100">
+        <!-- <div style="position:absolute;left:0px;bottom:0;z-index:100">
           <q-checkbox
             color="positive"
             v-model="model.isTracked"
             :label="model.isTracked ? 'tracked' : 'Track receipt?'"
           />
-        </div>
+        </div> -->
 
         <q-popup-edit v-model="receiptCodePopup" title="Update receipt code">
           <q-input clearable v-model="model.receiptCode" dense autofocus />

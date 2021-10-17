@@ -123,7 +123,7 @@ const routes = [
               import("pages/rooms/frontdesk/extra/UnpaidReceipts.vue"),
             meta: {
               title: "Unpaid Receipts"
-            },
+            }
           },
 
           {
@@ -132,16 +132,24 @@ const routes = [
               import("pages/rooms/frontdesk/extra/UntransferredItems.vue"),
             meta: {
               title: "Untransferred Items"
-            },
+            }
           },
           {
-            path: "unpaid-items",
+            path: "all-client-deposits",
             component: () =>
-              import("pages/rooms/frontdesk/extra/UnpaidItems.vue"),
+              import("pages/rooms/frontdesk/extra/AllClientDeposits.vue"),
             meta: {
-              title: "Unpaid Items"
-            },
+              title: "All Client Deposits"
+            }
           },
+          // {
+          //   path: "unpaid-items",
+          //   component: () =>
+          //     import("pages/rooms/frontdesk/extra/UnpaidItems.vue"),
+          //   meta: {
+          //     title: "Unpaid Items"
+          //   },
+          // },
 
           //finance
           {

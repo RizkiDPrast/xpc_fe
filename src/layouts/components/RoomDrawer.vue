@@ -171,13 +171,22 @@ export default {
           caption:
             "Items that has been used but not yet transferred to receipt for sale"
         },
+
         {
-          to: "/app/rooms/unpaid-items",
-          label: "Unpaid Items",
-          icon: "las la-box-open",
-          caption: "List of items from unpaid receipts",
-          class: "text-secondary"
+          to: "/app/rooms/all-client-deposits",
+          label: "All client deposits",
+          icon: "las la-coins",
+          caption: "Remaining deposits from all clients"
         },
+
+        // // following is not used
+        // {
+        //   to: "/app/rooms/unpaid-items",
+        //   label: "Unpaid Items",
+        //   icon: "las la-box-open",
+        //   caption: "List of items from unpaid receipts",
+        //   class: "text-secondary"
+        // },
         { separator: 1 },
         // { label: "Veterinarian", filter: this.isVet || this.isAdmin },
         { label: "Veterinarian" },
