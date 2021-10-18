@@ -66,6 +66,7 @@ export default {
       this.loadingDetails = true;
       this.$emit("loading", true);
       try {
+        console.log(this.model);
         let res = await this.$api.salesManagers.getDetails(this.model.id);
         this.details = res.data;
         this.$emit("detail-fetched", this.details);
@@ -86,6 +87,7 @@ export default {
           ...x
         }));
         if (this.data.length) {
+          this.model = this.data[0];
           this.fetchDetails();
         }
       } catch (error) {

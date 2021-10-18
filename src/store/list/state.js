@@ -33,7 +33,10 @@ export default {
     // { value: 0, label: 'NA' },
     { value: "BCA", label: "BCA", id: 1 },
     { value: "MANDIRI", label: "MANDIRI", id: 2 },
-    { value: "BNI", label: "BNI", id: 3 }
+    { value: "BNI", label: "BNI", id: 3 },
+    { value: "BRI", label: "BRI", id: 4 },
+    { value: "CIMB", label: "CIMB", id: 5 },
+    { value: "PERMATA", label: "PERMATA", id: 6 }
   ],
   insentiveTypes: [
     { label: "PerQuantity", value: "PerQuantity", id: 1 },
