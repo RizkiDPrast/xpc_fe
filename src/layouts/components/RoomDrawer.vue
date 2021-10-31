@@ -111,7 +111,8 @@ export default {
           label: "Dashboard",
           icon: "las la-chart-bar",
           caption: "Analytical overview",
-          class: "text-warning"
+          class: "text-warning",
+          filter: this.isFinance || this.isAdmin
         },
         {
           to: "/app/rooms/on-sites",

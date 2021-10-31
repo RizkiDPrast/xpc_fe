@@ -23,6 +23,9 @@
               :class="{ selected: selected && props.row.id === selected.id }"
               @click="selected = props.row"
             >
+              <q-badge v-if="props.row.locked" color="negative" class="q-mr-lg">
+                <q-icon name="las la-lock" />
+              </q-badge>
               {{ props.row.label }}
             </q-td>
           </template>
@@ -31,6 +34,9 @@
     </div>
     <div class="col-sm-12 col-md-7 q-pa-sm">
       <q-card v-if="selected && user" class="q-pt-lg">
+        <q-badge v-if="selected.locked" color="negative" class="q-mr-lg">
+          <q-icon name="las la-lock" class="q-mr-sm" /> Locked
+        </q-badge>
         <q-toolbar>
           <q-toolbar-title class="text-center">
             <p>
@@ -46,14 +52,13 @@
         <q-markup-table flat dense>
           <tr>
             <th>Date</th>
-            <th v-for="item in types" :key="item.id">{{ item.code }}</th>
+            <th v-for="item in types" :key="item.code">{{ item.code }}</th>
           </tr>
           <tr v-for="date in dates" :key="date.toString()">
             <td class="text-center">
               {{ $util.formatDate(date, "DD-MM-YYYY") }}
             </td>
             <td class="text-center" v-for="type in types" :key="type.id">
-              <!-- {{ getValue(date, type.code) }} -->
               <q-input
                 dense
                 outlined
@@ -63,7 +68,21 @@
                 :value="getValue(date, type.code)"
                 @input="val => setValue(val, date, type.code)"
                 debounce="500"
+                bottom-slots
+                :disable="selected.locked"
               >
+                <template #hint v-if="getMoneyPerValue(date, type.code) > 0">
+                  <div>
+                    {{ getMoneyPerValue(date, type.code) | money }}/ point
+                  </div>
+                </template>
+                <!-- <template #hint>
+                  <div v-if="!checkLocked(date, type.code)">
+                    <q-badge color="negative">
+                      unclosed
+                    </q-badge>
+                  </div>
+                </template> -->
                 <!-- <q-popup-edit
                   v-model="
                     model[
@@ -242,6 +261,9 @@ export default {
           }
         }
 
+        //sorting here
+        types = types.sort((a, b) => (a.code > b.code ? 1 : -1));
+
         this.types = types;
 
         var d1 = new Date(data.d1);
@@ -263,6 +285,24 @@ export default {
         this.$toastr.error(e);
       }
       this.loading = false;
+    },
+    checkLocked(date, type) {
+      if (!this.values.length) return "NA";
+      let v = this.values.find(
+        x =>
+          x.type === type && this.$util.getDateDiff(date, x.date, "days") === 0
+      );
+      if (v && v.lockedAt && v.lockedAt !== null) return true;
+      return false;
+    },
+    getMoneyPerValue(date, type) {
+      if (!this.values.length) return 0;
+      let v = this.values.find(
+        x =>
+          x.type === type && this.$util.getDateDiff(date, x.date, "days") === 0
+      );
+      if (v) return v.moneyPerValue;
+      return 0;
     },
     getValue(date, type) {
       if (!this.values.length) return 0;
@@ -286,7 +326,20 @@ export default {
           value: Number(val),
           moneyPerValue: type.moneyPerValue
         });
-        this.values.push(res.data);
+        console.log(res.data);
+        var exists = this.values.find(
+          x =>
+            x.type === res.data.type &&
+            new Date(x.date).toDateString() ===
+              new Date(res.data.date).toDateString()
+        );
+        console.log(exists);
+        if (exists) {
+          exists.value = res.data.value;
+          console.log("ok", exists);
+        } else {
+          this.values.push(res.data);
+        }
         this.$toastr.success("Value was updated");
       } catch (error) {
         this.$toastr.error(error);

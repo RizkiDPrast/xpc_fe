@@ -27,8 +27,14 @@
         />
       </template>
     </page-header>
-      <q-toolbar>
-      <q-btn @click="$router.back()" icon="las la-arrow-left" label="Back" rounded flat/>
+    <q-toolbar>
+      <q-btn
+        @click="$router.back()"
+        icon="las la-arrow-left"
+        label="Back"
+        rounded
+        flat
+      />
     </q-toolbar>
 
     <div
@@ -279,7 +285,7 @@
       </template>
     </template>
 
-    <q-dialog v-model="addDateDialog" persistent v-if="(isVet || isAdmin)">
+    <q-dialog v-model="addDateDialog" persistent v-if="isVet || isAdmin">
       <q-card>
         <q-toolbar class="bg-purple text-white">
           <q-icon name="las la-bookmark" />
@@ -666,26 +672,32 @@ export default {
       } else {
         this.newM.is_checklist = false;
       }
+      console.log("add()", this.d, this.t, tgt);
+      if (!tgt[this.d][this.t.name] || tgt[this.d][this.t.name] == null) {
+        tgt[this.d][this.t.name] = [];
+      }
       tgt[this.d][this.t.name].push(Object.assign({}, this.newM));
       this.treatment = tgt;
       this.d = undefined;
       this.t = {};
       this.saveForm();
     },
-    async postInPatientCommission(d, uid){
-      if(this.updatingCommission) return
-      this.updatingCommission = true
+    async postInPatientCommission(d, uid) {
+      if (this.updatingCommission) return;
+      this.updatingCommission = true;
       try {
         let res = await this.$api.commissions.postInPatient({
           date: new Date(d).toJSON(),
           userId: uid
-        })
+        });
+        this.updatingCommission = false;
       } catch (error) {
-        this.$toastr.error(error)
+        this.$toastr.error(error);
+        this.updatingCommission = false;
+        throw error;
       }
-      this.updatingCommission = false
     },
-    updateBool(val, d, t, i) {
+    async updateBool(val, d, t, i) {
       // console.log(val, d, t, i, this.treatment);
       let tgt = this.clone(this.treatment);
       tgt[d][t.name][i] = Object.assign({}, tgt[d][t.name][i], {
@@ -695,9 +707,20 @@ export default {
         note: ""
       });
       this.treatment = tgt;
-      this.saveForm();
-      if(val){
-        this.postInPatientCommission(d, this.auth.id)
+      if (val) {
+        try {
+          await this.postInPatientCommission(d, this.auth.id);
+          this.saveForm();
+        } catch (error) {
+          tgt[d][t.name][i] = Object.assign({}, tgt[d][t.name][i], {
+            value: !val,
+            done_by: this.auth.displayName || this.auth.userName,
+            done_by_avatar: this.auth.avatar?.fileUri,
+            note: ""
+          });
+        }
+      } else {
+        this.saveForm();
       }
     },
     updateNote(val, d, t, i) {

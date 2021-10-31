@@ -43,7 +43,7 @@
             </q-toolbar>
             <q-list bordered style="min-height:50px;">
               <q-item v-for="model in roomData(item.id)" :key="model.id">
-                <q-item-section avatar top class="q-pr-xs">               
+                <q-item-section avatar top class="q-pr-xs">
                   <q-btn flat round icon="las la-user-tie">
                     <q-menu anchor="top right">
                       <q-list class="">
@@ -105,7 +105,10 @@
                 </q-item-section>
                 <q-item-section>
                   <q-item-label>
-                    {{ model.client.code }} - {{ model.client.name }}
+                    <q-badge v-if="data && data !== null && data.length">{{
+                      data.indexOf(model) + 1
+                    }}</q-badge>
+                    - {{ model.client.code }} - {{ model.client.name }}
                   </q-item-label>
                   <q-item-label caption>
                     remark: {{ model.remark || "-" }}
@@ -117,14 +120,21 @@
                         model.patients.length
                     "
                     class="q-gutter-xs"
-                  >              
+                  >
                     <q-badge
                       v-for="p in model.patients"
                       :key="p.id"
                       color="grey-3"
                       text-color="black"
                     >
-                    <patient-to-boarding-btn :patientId="p.id" size="sm" round color="accent" flat />   {{ getAnimalTypeName(p.animalTypeId) }} {{ p.name }}
+                      <patient-to-boarding-btn
+                        :patientId="p.id"
+                        size="sm"
+                        round
+                        color="accent"
+                        flat
+                      />
+                      {{ getAnimalTypeName(p.animalTypeId) }} {{ p.name }}
                     </q-badge>
                   </q-item-label>
                 </q-item-section>

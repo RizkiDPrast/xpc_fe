@@ -28,7 +28,7 @@ module.exports = function(/* ctx */) {
       "vee-validate",
       "global",
       "signalr",
-      "chart" 
+      "chart"
     ],
 
     // https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -87,6 +87,7 @@ module.exports = function(/* ctx */) {
         "/api": {
           // target: "https://localhost:5001",
           target: "http://localhost:5000",
+          // target: "http://192.168.0.119",
           changeOrigin: true,
           secure: false
         },
@@ -105,7 +106,7 @@ module.exports = function(/* ctx */) {
           target: "http://localhost:5000",
           changeOrigin: true,
           secure: false
-        },
+        }
         // "/sockjs-node": {
         //   target: "ws://localhost:5000",
         //   changeOrigin: true,

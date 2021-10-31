@@ -40,11 +40,16 @@
           @click="outOfStock = !outOfStock"
           :flat="!outOfStock"
           :text-color="outOfStock ? 'primary' : 'grey'"
-          :label="outOfStock ? 'Out-of-stock products' : 'Filter out-of-stock products'"          
+          :label="
+            outOfStock
+              ? 'Out-of-stock products'
+              : 'Filter out-of-stock products'
+          "
         >
-        <q-tooltip content-class="bg-secondary">
-          Filter only stock-managed inventory products having quantity &lt; minimum quantity
-        </q-tooltip>
+          <q-tooltip content-class="bg-secondary">
+            Filter only stock-managed inventory products having quantity &lt;
+            minimum quantity
+          </q-tooltip>
         </q-btn>
         <q-radio
           size="sm"
@@ -59,10 +64,18 @@
           label="Discontinued products"
         />
       </template>
-      <template #body-cell-qty="props"  >
+      <template #body-cell-qty="props">
         <q-td class="text-center">
           <template v-if="props.row.trackInventory">
-            <div :class="props.row.qty <= props.row.minimumQty ? 'text-negative' : 'text-bold'">{{ props.row.qty }}</div>
+            <div
+              :class="
+                props.row.qty <= props.row.minimumQty
+                  ? 'text-negative'
+                  : 'text-bold'
+              "
+            >
+              {{ props.row.qty }}
+            </div>
             <!-- <q-btn
               no-caps
               flat
@@ -79,7 +92,7 @@
               size="sm"
               label="Activate inventory tracking"
               no-caps
-              color="primary"              
+              color="primary"
             >
               <q-popup-edit v-model="newStock">
                 <q-form
@@ -131,7 +144,7 @@ export default {
       loading: false,
       submitting: false,
       discontinued: false,
-      outOfStock:false,
+      outOfStock: false,
       newStock: 0,
       showCategories: false,
       showUnits: false,
@@ -174,7 +187,8 @@ export default {
           label: "Qty",
           format: (val, row, c) => (row.trackInventory ? val : ""),
           style: "",
-          classes: (row) => row.qty <= row.minimumQty ?  "text-negative" : "text-bold"
+          classes: row =>
+            row.qty <= row.minimumQty ? "text-negative" : "text-bold"
         },
         {
           name: "minimumqty",
@@ -185,7 +199,7 @@ export default {
           style: "",
           sortable: false
         },
- {
+        {
           name: "unitId",
           align: "left",
           field: "unitId",
@@ -211,7 +225,7 @@ export default {
           format: (val, row, c) => Number(val).toLocaleString("id-ID"),
           style: "width:25%;",
           sortable: true
-        },        
+        },
         {
           name: "categoryId",
           align: "left",
@@ -241,8 +255,8 @@ export default {
     discontinued() {
       this.fetch();
     },
-    outOfStock(){
-      this.fetch()
+    outOfStock() {
+      this.fetch();
     }
   },
   mounted() {
@@ -255,13 +269,12 @@ export default {
       pager = pager?.pagination || this.pager;
 
       try {
-
-        if(this.outOfStock){
-          pager.outOfStock = true
+        if (this.outOfStock) {
+          pager.outOfStock = true;
         } else {
-          pager.outOfStock = undefined
+          pager.outOfStock = undefined;
         }
-        
+
         var res = await this.$api.products.get(this.discontinued, pager);
         var dt = res.data;
         this.data = dt.rows.map(x => new Product(x));
@@ -295,7 +308,7 @@ export default {
       this.loading = true;
 
       try {
-        var res = await this.products.delete(id);
+        var res = await this.$api.products.delete(id);
         if (res.status < 300) {
           this.data = this.data.filter(val => val.id !== id);
           this.$toastr.success("Record was deleted");

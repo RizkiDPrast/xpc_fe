@@ -1,8 +1,14 @@
 <template>
   <q-page>
-    <page-header >
+    <page-header>
       <template #actions>
-        <LockMonthlyCommissionBtn label="Monthly Commission" icon="las la-lock" text-color="negative" flat rounded no-caps />
+        <LockMonthlyCommissionBtn
+          icon="las la-lock"
+          text-color="negative"
+          flat
+          rounded
+          no-caps
+        />
         <user-default-salary-lines-btn />
       </template>
     </page-header>
@@ -23,7 +29,7 @@
           @row-click="rowClick"
         >
           <template #body-cell-avatar="props">
-            <q-td :class="{selected: props.row.id === modelInput.id}">
+            <q-td :class="{ selected: props.row.id === modelInput.id }">
               <user-avatar :value="props.row" size="sm" />
             </q-td>
           </template>
@@ -80,7 +86,11 @@
               <q-card flat bordered class="q-mt-sm">
                 <q-card-section>
                   <q-markup-table flat class="my-table">
-                    <tr><td style="width:10%"></td><td style="width:50%"></td><td style="width:40%"></td></tr>
+                    <tr>
+                      <td style="width:10%"></td>
+                      <td style="width:50%"></td>
+                      <td style="width:40%"></td>
+                    </tr>
                     <tr class="bg-grey-3">
                       <th colspan="2">Earnings</th>
                       <td>
@@ -91,7 +101,7 @@
                           dense
                           icon="las la-plus"
                           @save="addEarning"
-                            v-if="newRecord"
+                          v-if="newRecord"
                           title="Add Earning"
                         />
                       </td>
@@ -102,34 +112,34 @@
                       )"
                       :key="item.id"
                     >
-                    <td>
-                      <div class="inline-flex">
-                      <q-btn
-                          flat
-                          round
-                          dense
-                          size="sm"
-                          icon="las la-trash"
-                          text-color="negative"
-                          @click="deleteLine(item.id)"
-                          v-if="newRecord"
-                        />
-                        <salary-line-btn
-                          flat
-                          round
-                          dense
-                          size="sm"
-                          icon="las la-pencil-alt"
-                          text-color="warning"
-                          @save="updateEarning"
-                          :line="item"
-                          v-if="newRecord"
+                      <td>
+                        <div class="inline-flex">
+                          <q-btn
+                            flat
+                            round
+                            dense
+                            size="sm"
+                            icon="las la-trash"
+                            text-color="negative"
+                            @click="deleteLine(item.id)"
+                            v-if="newRecord"
+                          />
+                          <salary-line-btn
+                            flat
+                            round
+                            dense
+                            size="sm"
+                            icon="las la-pencil-alt"
+                            text-color="warning"
+                            @save="updateEarning"
+                            :line="item"
+                            v-if="newRecord"
                             title="Edit Earning"
-                        />
-                      </div>
-                        </td>
+                          />
+                        </div>
+                      </td>
                       <th class="q-pl-sm">
-                        {{item.description}}
+                        {{ item.description }}
                       </th>
                       <td>{{ item.value | money }}</td>
                     </tr>
@@ -139,7 +149,7 @@
                     <tr class="bg-grey-3 q-mt-sm">
                       <th colspan="2">Deductions</th>
                       <td>
-                         <salary-line-btn
+                        <salary-line-btn
                           flat
                           round
                           size="sm"
@@ -147,46 +157,45 @@
                           icon="las la-plus"
                           @save="addDeduction"
                           v-if="newRecord"
-                                                    title="Add Deduction"
+                          title="Add Deduction"
                         />
                       </td>
                     </tr>
-                     <tr
+                    <tr
                       v-for="item in modelInput.salaryLines.filter(
                         x => x.value < 0
                       )"
                       :key="item.id"
                     >
-                    <td>
-                      <div class="inline-flex">
-                      <q-btn
-                          flat
-                          round
-                          dense
-                          size="sm"
-                          icon="las la-trash"
-                          text-color="negative"
-                          @click="deleteLine(item.id)"
-                          v-if="newRecord"
-                        />
-                        <salary-line-btn
-                        deduction
-                          flat
-                          round
-                          dense
-                          size="sm"
-                          icon="las la-pencil-alt"
-                          text-color="warning"
-                          @save="updateDeduction"
-                          :line="item"
-                          v-if="newRecord"
-                                                    title="Update Deduction"
-                        />
+                      <td>
+                        <div class="inline-flex">
+                          <q-btn
+                            flat
+                            round
+                            dense
+                            size="sm"
+                            icon="las la-trash"
+                            text-color="negative"
+                            @click="deleteLine(item.id)"
+                            v-if="newRecord"
+                          />
+                          <salary-line-btn
+                            deduction
+                            flat
+                            round
+                            dense
+                            size="sm"
+                            icon="las la-pencil-alt"
+                            text-color="warning"
+                            @save="updateDeduction"
+                            :line="item"
+                            v-if="newRecord"
+                            title="Update Deduction"
+                          />
                         </div>
-                        
-                    </td>
+                      </td>
                       <th class="q-pl-sm">
-                        {{item.description}}
+                        {{ item.description }}
                       </th>
                       <td>{{ -item.value | money }}</td>
                     </tr>
@@ -218,7 +227,9 @@
                 dense
                 class="q-mb-sm text-bold"
                 :error="netSalary < 0"
-                :error-message="netSalary < 0 ? 'Net salary must be greater than 0' : ''"
+                :error-message="
+                  netSalary < 0 ? 'Net salary must be greater than 0' : ''
+                "
               />
 
               <q-btn
@@ -243,10 +254,14 @@
 
 <script>
 import SalaryLineBtn from "./components/SalaryLineBtn.vue";
-import UserDefaultSalaryLinesBtn from './components/UserDefaultSalaryLinesBtn.vue';
-import LockMonthlyCommissionBtn from '../components/LockMonthlyCommissionBtn.vue'
+import UserDefaultSalaryLinesBtn from "./components/UserDefaultSalaryLinesBtn.vue";
+import LockMonthlyCommissionBtn from "../components/LockMonthlyCommissionBtn.vue";
 export default {
-  components: { SalaryLineBtn, UserDefaultSalaryLinesBtn, LockMonthlyCommissionBtn},
+  components: {
+    SalaryLineBtn,
+    UserDefaultSalaryLinesBtn,
+    LockMonthlyCommissionBtn
+  },
   name: "Salaries",
   data() {
     return {
@@ -268,13 +283,13 @@ export default {
           label: "Avatar",
           field: row => row.user.avatar,
           align: "center"
-        },  
+        },
         {
           name: "code",
           label: "Code",
           field: "code",
           align: "left",
-          classes : "text-bold",
+          classes: "text-bold"
         },
         {
           name: "createdat",
@@ -301,7 +316,7 @@ export default {
           label: "Deductions",
           field: "deductions",
           align: "right",
-          classes : "text-negative",
+          classes: "text-negative",
           format: val => this.$options.filters.money(-val)
         },
         {
@@ -309,7 +324,7 @@ export default {
           label: "Net Salary",
           field: "netSalary",
           align: "right",
-          classes : "text-bold",
+          classes: "text-bold",
           format: val => this.$options.filters.money(val)
         }
       ],
@@ -326,96 +341,105 @@ export default {
   mounted() {
     this.fetch();
   },
-  computed:{
-    totEarnings(){
-      return this.modelInput.salaryLines.filter(x=> x.value >= 0).reduce((a,b) => a + b.value, 0)
+  computed: {
+    totEarnings() {
+      return this.modelInput.salaryLines
+        .filter(x => x.value >= 0)
+        .reduce((a, b) => a + b.value, 0);
     },
-    totDeductions(){
-      return this.modelInput.salaryLines.filter(x=> x.value < 0).reduce((a,b) => a + -b.value, 0)
+    totDeductions() {
+      return this.modelInput.salaryLines
+        .filter(x => x.value < 0)
+        .reduce((a, b) => a + -b.value, 0);
     },
-    netSalary(){
-      return this.modelInput.salaryLines.reduce((a,b)=> a + b.value,0)
+    netSalary() {
+      return this.modelInput.salaryLines.reduce((a, b) => a + b.value, 0);
     },
-    newRecord(){
-      return !(this.modelInput.id > 0)
+    newRecord() {
+      return !(this.modelInput.id > 0);
     }
   },
-  watch:{
-    'modelInput.userId'(val){
-      this.modelInput.salaryLines = [];     
-      this.mid = 0; 
-      this.fetchPreSalaryLines()
-    },
+  watch: {
+    "modelInput.userId"(val) {
+      this.modelInput.salaryLines = [];
+      this.mid = 0;
+      this.fetchPreSalaryLines();
+    }
   },
   methods: {
-    async fetchPreSalaryLines(){
-      if(!this.modelInput.userId) return;
-      if(this.loadingPreSalaryLines) return;
-      this.loadingPreSalaryLines = true 
+    async fetchPreSalaryLines() {
+      if (!this.modelInput.userId) return;
+      if (this.loadingPreSalaryLines) return;
+      this.loadingPreSalaryLines = true;
       try {
-        let res = await this.$api.salaries.getPreSalaryLines(this.modelInput.userId)
-        this.modelInput.salaryLines = res.data.map(x=> Object.assign({},x, {id: --this.mid}))                
+        let res = await this.$api.salaries.getPreSalaryLines(
+          this.modelInput.userId
+        );
+        this.modelInput.salaryLines = res.data.map(x =>
+          Object.assign({}, x, { id: --this.mid })
+        );
       } catch (error) {
-        this.$toastr.error(error)
+        this.$toastr.error(error);
       }
-      this.loadingPreSalaryLines = false 
+      this.loadingPreSalaryLines = false;
     },
-    addEarning(model){
+    addEarning(model) {
       this.mid--;
-      model.id = this.mid
-      this.modelInput.salaryLines.push(model)
+      model.id = this.mid;
+      this.modelInput.salaryLines.push(model);
     },
-    addDeduction(model){
+    addDeduction(model) {
       this.mid--;
-      model.id = this.mid
-      model.value = -model.value
-      this.modelInput.salaryLines.push(model)
+      model.id = this.mid;
+      model.value = -model.value;
+      this.modelInput.salaryLines.push(model);
     },
-    updateEarning(model){
-      let m = this.modelInput.salaryLines.find(x => x.id === model.id)
-      m.description = model.description
-      m.value = model.value
+    updateEarning(model) {
+      let m = this.modelInput.salaryLines.find(x => x.id === model.id);
+      m.description = model.description;
+      m.value = model.value;
     },
-    updateDeduction(model){
-      let m = this.modelInput.salaryLines.find(x => x.id === model.id)
-      m.description = model.description
-      m.value = -model.value
+    updateDeduction(model) {
+      let m = this.modelInput.salaryLines.find(x => x.id === model.id);
+      m.description = model.description;
+      m.value = -model.value;
     },
-    deleteLine(id){
-      this.modelInput.salaryLines = this.modelInput.salaryLines.filter(x => x.id !== id)
+    deleteLine(id) {
+      this.modelInput.salaryLines = this.modelInput.salaryLines.filter(
+        x => x.id !== id
+      );
     },
     async save() {
       if (!(await this.$validator.validateAll())) {
-        this.$toastr.error("Please correct the form")
-       return;
-      }
-      if(this.netSalary < 0){
-        this.$toastr.error("Please correct the form")
+        this.$toastr.error("Please correct the form");
         return;
       }
-      
-      if(!this.modelInput.salaryLines.length){
-        this.$toastr.error("Please add at least 1 salary component")
+      if (this.netSalary < 0) {
+        this.$toastr.error("Please correct the form");
+        return;
+      }
+
+      if (!this.modelInput.salaryLines.length) {
+        this.$toastr.error("Please add at least 1 salary component");
         return;
       }
 
       if (this.loading) return;
       this.loading = true;
-      
+
       let res;
-      if(!this.modelInput.code || this.modelInput.code === null){
-        this.modelInput.code = '-'
+      if (!this.modelInput.code || this.modelInput.code === null) {
+        this.modelInput.code = "-";
       }
-      let obj = JSON.parse(JSON.stringify(this.modelInput))
+      let obj = JSON.parse(JSON.stringify(this.modelInput));
       try {
         if (obj.id) {
           this.$toastr.error("Updating was not allowed");
           return;
         } else {
-            
-      for(let line of obj.salaryLines){
-        line.id = 0;
-      }
+          for (let line of obj.salaryLines) {
+            line.id = 0;
+          }
           res = await this.$api.salaries.post(obj);
         }
         this.$toastr.success("Record was updated");
@@ -425,7 +449,7 @@ export default {
       } catch (error) {
         this.$toastr.error(error);
         this.loading = false;
-      }      
+      }
     },
     async fetch(pager) {
       if (this.loading) return;
@@ -457,10 +481,10 @@ export default {
       this.$refs.code.focus();
     },
     add() {
-      this.modelInput = {id:0, createdAt: new Date(),salaryLines:[]};
+      this.modelInput = { id: 0, createdAt: new Date(), salaryLines: [] };
       this.focus();
     },
-    rowClick(ev,row){
+    rowClick(ev, row) {
       let t = this.data.find(x => x.id === row.id);
       if (!t) {
         throw "Could not find details record. Please refresh table";

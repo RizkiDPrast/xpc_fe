@@ -133,11 +133,19 @@
                         label="Qty"
                         name="qty"
                         min="1"
-                        :max="modelInput.maxUnit"
+                        :max="
+                          modelInput.trackInventory
+                            ? modelInput.maxUnit
+                            : 1000000
+                        "
                         v-validate="
                           modelInput.product && modelInput.product !== null
-                            ? 'required|min_value:0|max:' +
-                              Math.floor(modelInput.maxUnit || 0)
+                            ? 'required|min_value:0|max_value:' +
+                              Math.floor(
+                                (modelInput.trackInventory
+                                  ? modelInput.maxUnit
+                                  : 1000000) || 0
+                              )
                             : 'required|min_value:0'
                         "
                         :error="errors.has('qty')"
@@ -158,9 +166,11 @@
                         :disable="!!modelInput.id"
                         @input="unitInput"
                         :hint="
-                          `max: ${modelInput.maxUnit} ${getUnitName(
-                            modelInput.unitId
-                          )}`
+                          !!modelInput.trackInventory
+                            ? `max: ${modelInput.maxUnit} ${getUnitName(
+                                modelInput.unitId
+                              )}`
+                            : ''
                         "
                       >
                       </unit-select>
@@ -396,6 +406,7 @@ export default {
         this.modelInput.category = val.categoryName;
         this.modelInput.unitId = val.unitId;
         this.modelInput.unitPrice = val.sellingPrice;
+        this.modelInput.trackInventory = val.trackInventory;
       } else {
         this.modelInput.product = {};
         this.modelInput.maxUnit = 0;
@@ -403,6 +414,7 @@ export default {
         this.modelInput.unitId = null;
         val.unitId = null;
         this.modelInput.unitPrice = 0;
+        this.modelInput.trackInventory = false;
       }
 
       if (Array.isArray(val.productUnits)) {

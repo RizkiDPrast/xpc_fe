@@ -19,6 +19,7 @@ export default class ItemUsage extends UserTracker {
     transferedToReceipt,
 
     itemUsageIds = [], // for saleLines
+    trackInventory,
     ...params
   } = {}) {
     super(params);
@@ -37,6 +38,8 @@ export default class ItemUsage extends UserTracker {
     this.transferedToReceipt = transferedToReceipt;
 
     this.itemUsageIds = itemUsageIds;
+
+    this.trackInventory = trackInventory;
   }
 
   get lineTotal() {
