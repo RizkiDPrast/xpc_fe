@@ -147,10 +147,10 @@
             />
           </q-card-section>
         </q-card>
-        <q-markup-table v-else>
+        <q-markup-table v-else class="table-ranap">
           <thead>
             <q-tr>
-              <q-th>Date</q-th>
+              <q-th><div>Date</div></q-th>
               <q-th>Day</q-th>
               <q-th
                 style="width:300px"
@@ -166,7 +166,7 @@
               <q-th v-if="isVet || isAdmin">
                 <add-plan-btn
                   flat
-                  color="primary"
+                  color="white"
                   icon="las la-plus"
                   label="Add"
                   @plan-added="planAdded"
@@ -270,7 +270,7 @@
               </q-td>
             </q-tr>
             <q-tr v-if="isVet || isAdmin">
-              <q-td :colspan="2 + plans.length">
+              <q-td :colspan="2 + plans.length" class="text-center">
                 <q-btn
                   flat
                   no-caps
@@ -772,4 +772,32 @@ export default {
   overflow-wrap: break-word
   overflow: hidden
   white-space: pre-wrap
+</style>
+
+<style lang="scss" scoped>
+.table-ranap {
+  max-height: calc(100vh - 50px);
+}
+.table-ranap tr > th:not(first-child) {
+  position: sticky !important;
+  top: 0;
+  background-color: $primary !important;
+  color: white !important;
+  opacity: 1;
+  z-index: 1;
+}
+
+.table-ranap tr > td:first-child,
+.table-ranap tr > th:first-child {
+  background-color: $primary;
+  position: sticky;
+  left: 0;
+  opacity: 1;
+  z-index: 1;
+  color: white;
+}
+
+.table-ranap tbody > tr:nth-child(2n - 2) {
+  background-color: #1976d21a !important;
+}
 </style>
