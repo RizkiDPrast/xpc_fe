@@ -83,6 +83,7 @@
                 />
 
                 <user-select
+                  readonly
                   label="Treated by"
                   :roleNames="['veterinarian']"
                   v-model="model.treatedBy"
@@ -90,6 +91,7 @@
                   dense
                   outlined
                   class="col-12"
+                  hint="Please input from medical record"
                 />
               </div>
             </q-scroll-area>
@@ -157,7 +159,7 @@ export default {
           m.pulse = Number(m.pulse);
         }
         var res = isEditing
-          ? await this.$api.signalements.put(m)
+          ? await this.$api.signalements.putVisit(m)
           : await this.$api.signalements.post(m);
         if (res.status < 300) {
           this.$toastr.success("Record was updated");

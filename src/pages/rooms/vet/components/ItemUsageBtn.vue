@@ -132,7 +132,8 @@
                         v-model="modelInput.qty"
                         label="Qty"
                         name="qty"
-                        min="1"
+                        min="0"
+                        step="0.05"
                         :max="
                           modelInput.trackInventory
                             ? modelInput.maxUnit

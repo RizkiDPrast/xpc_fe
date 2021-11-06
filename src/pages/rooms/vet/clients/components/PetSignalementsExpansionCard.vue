@@ -40,7 +40,7 @@
                 selected: props.row.id === selected.id
               }"
               class="cursor-pointer"
-              @click.native="selected = props.row"
+              @click.native="selected = Object.assign({}, props.row)"
             >
               <q-td key="actions" class="text-center">
                 <template
@@ -293,9 +293,11 @@ export default {
   methods: {
     signalementAdded(model) {
       this.data.push(model);
+      this.selected = model;
     },
     signalementUpdated(model) {
       this.data = this.data.map(x => (x.id === model.id ? model : x));
+      this.selected = model;
     },
     async onRequest() {
       if (this.patient.id === 0) {
@@ -305,10 +307,20 @@ export default {
       this.loading = true;
       try {
         const res = await this.$api.signalements.get(this.patient.id);
-        let data = res.data;
-        data = data.map(x => x);
+        let data = res.data.map(x => x);
+        data.sort((a, b) =>
+          a.visitDate > b.visitDate
+            ? -1
+            : a.visitDate < b.visitDate
+            ? 1
+            : a.id >= b.id
+            ? -1
+            : 1
+        );
+        console.log(data.map(x => x.id));
         if (data.length > 0) {
-          this.selected = data[0];
+          this.selected = Object.assign({}, data[0]);
+          console.log("id", this.selected.id, data[0], data);
         } else {
           this.selected = {};
         }
@@ -351,7 +363,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 tr.selected td
-  background-color: #8080801a;
+  background-color: #8080801;
 .table {
   min-height:225px;
 }

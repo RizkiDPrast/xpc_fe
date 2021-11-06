@@ -31,7 +31,7 @@
           </q-tooltip>
         </ItemUsageBtn>
         <client-appointment-btn
-          :client="model" 
+          :client="model"
           flat
           round
           color="secondary"
@@ -238,6 +238,9 @@
             @new-form-added="newFormAdded"
           />
         </div>
+        <div>
+          {{ selectedSignalement }}
+        </div>
       </div>
     </div>
 
@@ -278,7 +281,7 @@ import ConsentFormList from "./components/ConsentFormList";
 import ConsentFormDialog from "./components/ConsentFormDialog";
 import BtnMoveClient from "./components/BtnMoveClient";
 import InPatientBoardList from "./components/InPatientBoardList";
-import ClientAppointmentBtn from '../../components/ClientAppointmentBtn.vue';
+import ClientAppointmentBtn from "../../components/ClientAppointmentBtn.vue";
 export default {
   name: "ClientDetails",
   props: {
@@ -361,7 +364,7 @@ export default {
         : `${cl.phone} ${cl.email}`;
     }
   },
-  methods: {   
+  methods: {
     async reloadClient() {
       try {
         var res = await this.$api.clients.getOne(this.id);

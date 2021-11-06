@@ -18,7 +18,11 @@
         v-for="(item, ix) in model"
         :key="ix"
         :clickable="!item.itemUsageIds.length && !item.debtSaleId"
-        @click.native="(item.itemUsageIds.length ||  item.debtSaleId) ? () => {} : itemClick(item)"
+        @click.native="
+          item.itemUsageIds.length || item.debtSaleId
+            ? () => {}
+            : itemClick(item)
+        "
         right-color="negative"
         @right="e => deleteHandle(e, item)"
       >
@@ -34,7 +38,7 @@
               :label="item.qty"
               size="lg"
               @click.stop="updateQty(item)"
-              :disable="!!item.itemUsageIds.length ||  !!item.debtSaleId"
+              :disable="!!item.itemUsageIds.length || !!item.debtSaleId"
             />
           </q-item-section>
           <q-item-section title>
@@ -189,7 +193,7 @@ export default {
       this.dialogOpen = true;
     },
     updateQty(item) {
-      let nval = item.qty + 1 * this.factor;
+      let nval = item.qty + 0.5 * this.factor;
       if (nval < 1) {
         return;
       }

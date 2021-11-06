@@ -7,26 +7,26 @@
       </q-toolbar-title>
 
       <span v-show="model.id && model.id > 0">
-         <template v-if="model.lockedAt && model.lockedAt !== null">
-                  <q-icon name="las la-lock" class="q-mr-md"/>
-                </template>
-                <template v-else>
-        <q-btn
-          flat
-          round
-          text-color="primary"
-          :icon="isEditing ? 'las la-undo' : 'las la-pencil-alt'"
-          @click="toggleEdit"
-        />
-        <q-btn
-          round
-          flat
-          text-color="primary"
-          v-show="isEditing"
-          icon="las la-save"
-          @click="save"
-        />
-                </template>
+        <template v-if="model.lockedAt && model.lockedAt !== null">
+          <q-icon name="las la-lock" class="q-mr-md" />
+        </template>
+        <template v-else>
+          <q-btn
+            flat
+            round
+            text-color="primary"
+            :icon="isEditing ? 'las la-undo' : 'las la-pencil-alt'"
+            @click="toggleEdit"
+          />
+          <q-btn
+            round
+            flat
+            text-color="primary"
+            v-show="isEditing"
+            icon="las la-save"
+            @click="save"
+          />
+        </template>
       </span>
       <action-select
         style="min-width:150px;"
@@ -332,7 +332,7 @@ export default {
           a.signalementId = this.value.id;
         }
 
-        var res = await this.$api.signalements.put(m);
+        var res = await this.$api.signalements.putSignalement(m);
         if (
           res.data.formPasien !== null &&
           res.data.formPasien &&
@@ -348,18 +348,18 @@ export default {
         this.$toastr.error(e);
       }
     },
-    uploaded({ files }) {
-      if (!this.justUploaded.find(x => x === this.model.id)) {
-        this.justUploaded.push(this.model.id);
-      }
-      var file = files[0];
-      this.model.fileName = file.name;
-      this.model.fileSize = file.size;
-      this.model.fileType = file.type;
-      this.model.fileUri = JSON.parse(file.xhr.response).fileUri;
-      this.$emit("input", this.model);
-      this.$toastr.success("File was uploaded");
-    },
+    // uploaded({ files }) {
+    //   if (!this.justUploaded.find(x => x === this.model.id)) {
+    //     this.justUploaded.push(this.model.id);
+    //   }
+    //   var file = files[0];
+    //   this.model.fileName = file.name;
+    //   this.model.fileSize = file.size;
+    //   this.model.fileType = file.type;
+    //   this.model.fileUri = JSON.parse(file.xhr.response).fileUri;
+    //   this.$emit("input", this.model);
+    //   this.$toastr.success("File was uploaded");
+    // },
     toggleEdit() {
       this.isEditing = !this.isEditing;
       if (this.isEditing) {

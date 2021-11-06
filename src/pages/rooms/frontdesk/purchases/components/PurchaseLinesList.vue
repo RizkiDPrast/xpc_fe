@@ -39,8 +39,14 @@
             {{ i + 1 }}
           </q-td>
           <q-td>
-            <q-item-label class="">
+            <q-item-label class="" v-if="item.itemName">
               {{ item.itemName }}
+            </q-item-label>
+            <q-item-label
+              class=""
+              v-else-if="item.product && item.product !== null"
+            >
+              {{ item.product.sku }} - {{ item.product.name }}
             </q-item-label>
             <q-item-label caption class="text-grey text-italic">
               {{ item.qty }} * {{ item.unitCost | money }} /

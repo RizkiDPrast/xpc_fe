@@ -142,7 +142,7 @@
         >
           <q-popup-edit v-model="discPopup">
             <money-field
-              label="Discount B$"
+              label="Discount Rp"
               stack-label
               v-model="salesModel.moneyDiscount"
               autofocus
@@ -445,6 +445,14 @@ export default {
         this.salesModel.cardSurcharge =
           Number(this.ccSurcharge) + Number(this.dcSurcharge);
 
+        this.salesModel.moneyDiscount = Number(
+          this.salesModel.moneyDiscount || 0
+        );
+        this.salesModel.percentDiscount = Number(
+          this.salesModel.percentDiscount || 0
+        );
+        this.salesModel.tax = Number(this.salesModel.tax || 0);
+
         if (this.isLoading) return;
         this.isLoading = true;
 
@@ -464,6 +472,7 @@ export default {
         if (postModel.clientId < 1) {
           postModel.clientId = undefined;
         }
+
         var res = await this.$api.sales.post(postModel);
         if (res.status < 300) {
           this.$emit("sales-saved", new Sale(res.data));
