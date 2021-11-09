@@ -238,9 +238,7 @@
             @new-form-added="newFormAdded"
           />
         </div>
-        <div>
-          {{ selectedSignalement }}
-        </div>
+        <div></div>
       </div>
     </div>
 
