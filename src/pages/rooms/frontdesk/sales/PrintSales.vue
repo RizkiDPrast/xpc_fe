@@ -1,22 +1,22 @@
 <template>
   <q-card
     :style="receiptPaperStyle"
-    v-if="sales && sales.id && sales.saleLines && sales.saleLines.length"
+    v-if="model && model.id && model.saleLines && model.saleLines.length"
   >
     <receipt-header />
     <q-card-section
       class="row no-padding"
       style="padding-left:12px!important;padding-right:12px!important"
     >
-      Date: {{ $util.formatDate(sales.createdAt, "DD MMM YY hh:mm") }}
+      Date: {{ $util.formatDate(model.createdAt, "DD MMM YY hh:mm") }}
     </q-card-section>
     <q-card-section
       class="row no-padding"
       style="padding-left:12px!important;padding-right:12px!important"
     >
-      {{ sales.receiptCode }}
+      {{ model.receiptCode }}
       <q-space />
-      {{ sales.createdByName }}
+      {{ model.createdByName }}
     </q-card-section>
     <hr />
     <q-card-section class="full-width no-padding">
@@ -28,7 +28,7 @@
         >
           <q-item-section>
             <q-item-label>
-              {{ item.itemName }}
+              {{ item.itemName.replace("[null]", "") }}
             </q-item-label>
             <q-item-label caption :style="subtitleStyle">
               {{ item.qty }} *
@@ -44,17 +44,17 @@
               </template>
             </q-item-label>
           </q-item-section>
-          <q-item-section side class="text-right">
+          <q-item-section side class="text-right text-bold" style="color:black">
             {{ item.rowTotal | money({ style: undefined }) }}
           </q-item-section>
         </q-item>
       </q-list>
     </q-card-section>
     <hr />
-    <div class="q-ml-md" v-if="sales.client">
+    <div class="q-ml-md" v-if="model.client">
       Member:<br />
-      {{ sales.client.code }} -
-      {{ sales.client.name }}
+      {{ model.client.code }} -
+      {{ model.client.name }}
     </div>
     <q-card-section>
       <q-markup-table flat dense style="overflow:hidden;">
@@ -63,39 +63,39 @@
             SubTotal
           </th>
           <td style="width:40%" class="text-right">
-            {{ sales.subTotal | money }}
+            {{ model.subTotal | money }}
           </td>
         </tr>
-        <tr v-if="sales.discountPercent > 0">
+        <tr v-if="model.discountPercent > 0">
           <th style="width:60%;font-weight: unset" class="text-right">
-            % Discount {{ sales.discountPercent }} %
+            % Discount {{ model.discountPercent }} %
           </th>
           <td style="width:40%" class="text-right">
-            {{ sales.discountPercentMoneyValue | money }}
+            {{ model.discountPercentMoneyValue | money }}
           </td>
         </tr>
-        <tr v-if="sales.discount > 0">
+        <tr v-if="model.discount > 0">
           <th style="width:60%;font-weight: unset" class="text-right">
             Discount
           </th>
           <td style="width:40%" class="text-right">
-            {{ sales.moneyDiscount | money }}
+            {{ model.moneyDiscount | money }}
           </td>
         </tr>
-        <tr v-if="sales.tax > 0">
+        <tr v-if="model.tax > 0">
           <th style="width:60%;font-weight: unset" class="text-right">
-            Tax {{ sales.tax }} %
+            Tax {{ model.tax }} %
           </th>
           <td style="width:40%" class="text-right">
-            {{ sales.taxMoneyValue | money }}
+            {{ model.taxMoneyValue | money }}
           </td>
         </tr>
-        <tr v-if="sales.cardSurcharge > 0">
+        <tr v-if="model.cardSurcharge > 0">
           <th style="width:60%;font-weight: unset" class="text-right">
             Card surcharge
           </th>
           <td style="width:40%" class="text-right">
-            {{ sales.cardSurcharge | money }}
+            {{ model.cardSurcharge | money }}
           </td>
         </tr>
         <tr class="">
@@ -106,54 +106,54 @@
             style="width:40%;font-weight: bold;border-top:.5px solid"
             class="text-right text-bold"
           >
-            {{ sales.grandTotal | money }}
+            {{ model.grandTotal | money }}
           </td>
         </tr>
-        <tr v-if="sales.cash > 0">
+        <tr v-if="model.cash > 0">
           <th style="width:60%;font-weight: unset" class="text-right">Cash</th>
           <td style="width:40%" class="text-right">
-            {{ sales.cash | money }}
+            {{ model.cash | money }}
           </td>
         </tr>
-        <tr v-if="sales.transfer > 0">
+        <tr v-if="model.transfer > 0">
           <th style="width:60%;font-weight: unset" class="text-right">
             Transfer
           </th>
           <td style="width:40%" class="text-right">
-            {{ sales.transfer | money }}
+            {{ model.transfer | money }}
           </td>
         </tr>
-        <tr v-if="sales.creditCard > 0">
+        <tr v-if="model.creditCard > 0">
           <th style="width:60%;font-weight: unset" class="text-right">
             CC
-            <span class="text-bold" v-if="sales.ccEdcType !== 0">
-              {{ getEdcTypeName(sales.ccEdcType) }}
+            <span class="text-bold" v-if="model.ccEdcType !== 0">
+              {{ getEdcTypeName(model.ccEdcType) }}
             </span>
           </th>
           <td style="width:40%" class="text-right">
-            {{ sales.creditCard | money }}
+            {{ model.creditCard | money }}
           </td>
         </tr>
-        <tr v-if="sales.debitCard > 0">
+        <tr v-if="model.debitCard > 0">
           <th style="width:60%;font-weight: unset" class="text-right">
             DC
-            <span class="text-bold" v-if="sales.dcEdcType !== 0">
-              {{ getEdcTypeName(sales.dcEdcType) }}
+            <span class="text-bold" v-if="model.dcEdcType !== 0">
+              {{ getEdcTypeName(model.dcEdcType) }}
             </span>
           </th>
           <td style="width:40%" class="text-right">
-            {{ sales.debitCard | money }}
+            {{ model.debitCard | money }}
           </td>
         </tr>
-        <tr v-if="sales.deposit > 0">
+        <tr v-if="model.deposit > 0">
           <th style="width:60%;font-weight: unset" class="text-right">
             Deposit
           </th>
           <td style="width:40%" class="text-right">
-            {{ sales.deposit | money }}
+            {{ model.deposit | money }}
           </td>
         </tr>
-        <tr v-if="sales.cash === 0 && sales.card === 0 && sales.deposit === 0">
+        <tr v-if="model.cash === 0 && model.card === 0 && model.deposit === 0">
           <th style="width:60%;font-weight: unset" class="text-right">
             Payment
           </th>
@@ -166,13 +166,13 @@
             Change
           </th>
           <td style="width:40%;" class="text-right">
-            {{ sales.change | money }}
+            {{ model.change | money }}
           </td>
         </tr>
       </q-markup-table>
     </q-card-section>
     <q-card-section class="text-center">
-      {{ sales.note }}
+      {{ model.note }}
     </q-card-section>
     <q-card-section
       class="text-italic text-center"
@@ -195,7 +195,11 @@ export default {
   props: {
     sales: {
       type: Sale,
-      required: true
+      default: () => new Sale()
+    },
+    id: {
+      type: String,
+      default: () => undefined
     }
   },
   data() {
@@ -212,7 +216,9 @@ export default {
       footNotes: "--Terima kasih--",
       animalTypes: [],
       to: undefined,
-      toTime: 3000
+      toTime: 3000,
+      fetching: false,
+      model: this.sales
     };
   },
   computed: {
@@ -220,10 +226,10 @@ export default {
       return this.$store.state.list.edcTypes;
     },
     groupedSalesItems() {
-      if (!this.sales.saleLines || !this.sales.saleLines.length) {
+      if (!this.model.saleLines || !this.model.saleLines.length) {
         return [];
       }
-      var arr = this.sales.saleLines.reduce((a, b) => {
+      var arr = this.model.saleLines.reduce((a, b) => {
         if (!b.productId || b.productId === 0) {
           a.push(b);
         } else {
@@ -254,24 +260,43 @@ export default {
       this.to = setTimeout(() => {
         this.$router.back();
       }, this.toTime + this.groupedSalesItems.length * 200);
+    },
+    print() {
+      if (window.matchMedia) {
+        var mediaQueryList = window.matchMedia("print");
+        mediaQueryList.addListener(function(mql) {
+          if (mql.matches) {
+            // beforePrint();
+          } else {
+            this.afterPrint();
+          }
+        });
+      }
+
+      window.onafterprint = this.afterPrintFirefox;
+      setTimeout(() => {
+        window.print();
+      }, 200);
+    },
+    async fetch() {
+      if (this.fetching) return;
+      this.fetching = true;
+      try {
+        var res = await this.$api.sales.getOne(this.id);
+        this.model = new Sale(res.data);
+        this.printSalesProtocol(this.model.id);
+      } catch (error) {
+        alert(error);
+      }
+      this.fetching = false;
     }
   },
   mounted() {
-    if (window.matchMedia) {
-      var mediaQueryList = window.matchMedia("print");
-      mediaQueryList.addListener(function(mql) {
-        if (mql.matches) {
-          // beforePrint();
-        } else {
-          this.afterPrint();
-        }
-      });
+    if (this.id) {
+      this.fetch();
+    } else {
+      this.print();
     }
-
-    window.onafterprint = this.afterPrintFirefox;
-    setTimeout(() => {
-      window.print();
-    }, 200);
   },
   beforeMount() {
     if (this.to) {
@@ -288,7 +313,11 @@ hr
   height: 1px!important
   width:  90%
 table th
-  font-size:  10px
+  font-size:  12px
 table td
   padding-right: 0!important
+
+*
+  font-fontFamily: 'Roboto', monospace
+  font-weight: bold
 </style>

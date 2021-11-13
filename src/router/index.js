@@ -29,6 +29,16 @@ export default function({ store, ssrContext }) {
   });
 
   Router.beforeEach(async (to, from, next) => {
+    if (to.path) {
+      var path = to.path.toLowerCase();
+      if (
+        path.indexOf("printsales") > -1 ||
+        path.indexOf("printdeposit") > -1
+      ) {
+        next();
+        return;
+      }
+    }
     // first load redirect to login. initLoadScript in Login page
     if (!store.state.app.loaded) {
       if (to.path !== "/") {

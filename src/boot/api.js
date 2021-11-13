@@ -406,6 +406,7 @@ export const api = {
   },
   sales: {
     get: params => axios.get("/sales", { params }),
+    getOne: id => axios.get("/sales/" + id),
     getClientUnpaids: id => axios.get(`/sales/unpaid/client/${id}`),
     getUnpaid: () => axios.get("/sales/unpaid"),
     getToday: () => {
@@ -442,6 +443,7 @@ export const api = {
   },
   deposits: {
     get: params => axios.get("/depositTransactions", { params }),
+    getOne: id => axios.get("/depositTransactions/" + id),
     getToday: () => {
       let res = axios.get("/depositTransactions/today");
       return res;

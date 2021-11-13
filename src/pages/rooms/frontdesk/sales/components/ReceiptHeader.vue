@@ -5,7 +5,8 @@
       Jl. Tole Iskandar No.33, Tirtajaya, Kec. Sukmajaya, Kota Depok, Jawa Barat
       16412
     </p>
-    <span> <span class="las la-phone q-ml-md" /> </span>
+    <!-- <span> <span class="las la-phone q-ml-md" /> 085782481186</span> -->
+    <span> Phone: 085782481186</span>
   </q-card-section>
 </template>
 

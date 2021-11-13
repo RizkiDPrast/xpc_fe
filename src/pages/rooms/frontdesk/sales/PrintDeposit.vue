@@ -1,23 +1,20 @@
 <template>
-  <q-card
-    :style="receiptPaperStyle"
-    v-if="depositTransaction && depositTransaction.id"
-  >
+  <q-card :style="receiptPaperStyle" v-if="model && model.id">
     <receipt-header />
     <q-card-section
       class="row no-padding"
       style="padding-left:12px!important;padding-right:12px!important"
     >
       Date:
-      {{ $util.formatDate(depositTransaction.createdAt, "DD MMM YY hh:mm") }}
+      {{ $util.formatDate(model.createdAt, "DD MMM YY hh:mm") }}
     </q-card-section>
     <q-card-section
       class="row no-padding"
       style="padding-left:12px!important;padding-right:12px!important"
     >
-      {{ depositTransaction.depositCode }}
+      {{ model.depositCode }}
       <q-space />
-      {{ depositTransaction.createdByName }}
+      {{ model.createdByName }}
     </q-card-section>
     <hr />
     <q-card-section class="full-width no-padding">
@@ -28,20 +25,28 @@
               Name
             </q-item-label>
           </q-item-section>
-          <q-item-section side class="text-right">
+          <q-item-section side class="text-right" style="color:black">
             Credit | Debit
           </q-item-section>
         </q-item>
         <q-item class="full-width" dense>
           <q-item-section>
-            <q-item-label>
-              {{ depositTransaction.clientName }}
+            <q-item-label v-if="model.clientName && model.clientName.length">
+              {{ model.clientName }}
+            </q-item-label>
+            <q-item-label v-else-if="model.client && model.client.name">
+              {{ model.client.code }} - {{ model.client.name }}
             </q-item-label>
           </q-item-section>
-          <q-item-section side top style="margin-top:4px;" class="text-right">
-            {{ depositTransaction.credit | money({ prefix: "" }) }}
+          <q-item-section
+            side
+            top
+            style="margin-top:4px;color:black"
+            class="text-right"
+          >
+            {{ model.credit | money({ prefix: "" }) }}
             |
-            {{ depositTransaction.debit | money({ prefix: "" }) }}
+            {{ model.debit | money({ prefix: "" }) }}
           </q-item-section>
         </q-item>
       </q-list>
@@ -54,13 +59,13 @@
             SubTotal
           </th>
           <td style="width:40%" class="text-right">
-            {{ (depositTransaction.credit - depositTransaction.debit) | money }}
+            {{ (model.credit - model.debit) | money }}
           </td>
         </tr>
       </q-markup-table>
     </q-card-section>
     <q-card-section class="text-center">
-      {{ depositTransaction.note }}
+      {{ model.note }}
     </q-card-section>
     <hr />
   </q-card>
@@ -78,6 +83,10 @@ export default {
     depositTransaction: {
       type: DepositTransaction,
       default: () => undefined
+    },
+    id: {
+      type: String,
+      default: () => undefined
     }
   },
   data() {
@@ -93,7 +102,9 @@ export default {
       },
       animalTypes: [],
       to: undefined,
-      toTime: 3000
+      toTime: 3000,
+      fetching: false,
+      model: this.depositTransaction
     };
   },
   computed: {
@@ -110,25 +121,44 @@ export default {
       this.to = setTimeout(() => {
         this.$router.back();
       }, this.toTime);
+    },
+    print() {
+      if (window.matchMedia) {
+        var mediaQueryList = window.matchMedia("print");
+        mediaQueryList.addListener(function(mql) {
+          if (mql.matches) {
+            // beforePrint();
+          } else {
+            if (this.afterPrint) {
+              this.afterPrint();
+            }
+          }
+        });
+      }
+      window.onafterprint = this.afterPrintFirefox;
+      setTimeout(() => {
+        window.print();
+      }, 200);
+    },
+    async fetch() {
+      if (this.fetching) return;
+      this.fetching = true;
+      try {
+        var res = await this.$api.deposits.getOne(this.id);
+        this.model = new DepositTransaction(res.data);
+        this.printDepositProtocol(this.model.id);
+      } catch (error) {
+        alert(error);
+      }
+      this.fetching = false;
     }
   },
   mounted() {
-    if (window.matchMedia) {
-      var mediaQueryList = window.matchMedia("print");
-      mediaQueryList.addListener(function(mql) {
-        if (mql.matches) {
-          // beforePrint();
-        } else {
-          if (this.afterPrint) {
-            this.afterPrint();
-          }
-        }
-      });
+    if (this.id) {
+      this.fetch();
+    } else {
+      this.print();
     }
-    window.onafterprint = this.afterPrintFirefox;
-    setTimeout(() => {
-      window.print();
-    }, 200);
   },
   beforeMount() {
     if (this.to) {
@@ -148,4 +178,7 @@ table th
   font-size:  10px
 table td
   padding-right: 0!important
+*
+  font-fontFamily: 'Roboto', monospace
+  font-weight: bold
 </style>

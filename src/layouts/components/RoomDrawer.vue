@@ -90,7 +90,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.countBoarding();
-    });
+    }, 3000);
   },
   computed: {
     inPatientCount() {
@@ -233,6 +233,13 @@ export default {
           label: "Salaries",
           icon: "las la-hand-holding-usd",
           caption: "Managing employee's commissions",
+          filter: this.isFinance || this.isAdmin
+        },
+        {
+          to: "/app/rooms/finance/reports",
+          label: "Reports",
+          icon: "las la-book",
+          caption: "Client visits, profit report",
           filter: this.isFinance || this.isAdmin
         },
         { separator: 1, filter: this.isAdmin },

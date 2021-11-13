@@ -5,13 +5,13 @@ const routes = [
     children: [{ path: "", component: () => import("pages/Login.vue") }]
   },
   {
-    path: "/printSales",
+    path: "/printSales/:id?",
     component: () => import("pages/rooms/frontdesk/sales/PrintSales.vue"),
     name: "printSales",
     props: true
   },
   {
-    path: "/printDeposit",
+    path: "/printDeposit/:id?",
     component: () => import("pages/rooms/frontdesk/sales/printDeposit.vue"),
     name: "printDeposit",
     props: true
@@ -181,6 +181,13 @@ const routes = [
               import("pages/rooms/finance/salaries/Salaries.vue"),
             meta: {
               title: "Employee's Salaries Management"
+            }
+          },
+          {
+            path: "finance/reports",
+            component: () => import("pages/rooms/finance/reports/Index.vue"),
+            meta: {
+              title: "Reports"
             }
           },
 

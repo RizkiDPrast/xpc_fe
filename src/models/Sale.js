@@ -1,3 +1,4 @@
+import SaleLine from "./SaleLine";
 import UserTracker from "./UserTracker";
 
 export default class Sale extends UserTracker {
@@ -64,7 +65,10 @@ export default class Sale extends UserTracker {
     this.note = note;
     this.isPrinted = isPrinted;
 
-    this.saleLines = saleLines;
+    this.saleLines =
+      saleLines && saleLines != null && saleLines.length
+        ? saleLines.map(x => new SaleLine(x))
+        : [];
     this.client = client;
     this.salesManager = salesManager;
 

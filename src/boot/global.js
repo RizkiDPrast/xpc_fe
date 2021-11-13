@@ -296,6 +296,21 @@ export default async (
           return "-";
         }
         return str;
+      },
+      printSalesProtocol(id) {
+        var host = `${location.protocol}//${location.host}`;
+        this.printViaCustomProtocol(`${host}/printSales/${id}`);
+      },
+      printDepositProtocol(id) {
+        var host = `${location.protocol}//${location.host}`;
+        this.printViaCustomProtocol(`${host}/printDeposit/${id}`);
+      },
+      printViaCustomProtocol(url, protocol) {
+        protocol = protocol || "posprinter://";
+        var n = window.open(`${protocol}${url}`, "__blank");
+        setTimeout(() => {
+          n.close();
+        }, 1000);
       }
     },
     mounted() {}
