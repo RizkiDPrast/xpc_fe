@@ -43,6 +43,7 @@
       </template>
       <q-form @submit="onSubmit" v-else class="row q-col-gutter-xs">
         <date-input
+          readonly
           v-model="model.purchaseDate"
           name="purchaseDate"
           label="Purchasing date"
