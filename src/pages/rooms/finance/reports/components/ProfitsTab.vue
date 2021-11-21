@@ -1,5 +1,5 @@
 <template>
-  <q-tab-panel>
+  <div>
     Profits
-  </q-tab-panel>
+  </div>
 </template>

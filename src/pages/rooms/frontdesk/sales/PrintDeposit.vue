@@ -146,7 +146,8 @@ export default {
       try {
         var res = await this.$api.deposits.getOne(this.id);
         this.model = new DepositTransaction(res.data);
-        this.printDepositProtocol(this.model.id);
+        // this.printDepositProtocol(this.model.id);
+        window.PRINT_READY = true;
       } catch (error) {
         alert(error);
       }
@@ -179,6 +180,6 @@ table th
 table td
   padding-right: 0!important
 *
-  font-fontFamily: 'Roboto', monospace
+  font-family: system-ui, sans-serif
   font-weight: bold
 </style>

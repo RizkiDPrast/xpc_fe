@@ -10,8 +10,8 @@ export default function() {
     defaultCurrency: "IDR", // 'IDR' 'BND'
     defaultLocale: "id-ID", // 'id-ID' 'ms-BN',
 
-    autoPrintDepositOnSave: false,
-    autoPrintSalesOnSave: false,
+    autoPrintDepositOnSave: true,
+    autoPrintSalesOnSave: true,
     defaultPettyCash: 500000
   };
 }

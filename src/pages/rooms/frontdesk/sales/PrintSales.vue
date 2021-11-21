@@ -21,33 +21,45 @@
     <hr />
     <q-card-section class="full-width no-padding">
       <q-list class="no-padding">
-        <q-item
-          v-for="item in groupedSalesItems"
-          :key="item.id"
-          class="full-width"
-        >
-          <q-item-section>
-            <q-item-label>
-              {{ item.itemName.replace("[null]", "") }}
-            </q-item-label>
-            <q-item-label caption :style="subtitleStyle">
-              {{ item.qty }} *
-              {{ item.unitPrice | money({ style: undefined }) }}
-              / {{ getUnitName(item.unitId) }}
-              <template v-if="item.hasDiscount">
-                <span v-if="item.percentDiscount" class="text-red">
-                  - {{ item.percentDiscount }}%</span
-                >
-                <span v-if="item.moneyDiscount" class="text-red">
-                  - {{ item.moneyDiscount | money({ style: undefined }) }}
-                </span>
-              </template>
-            </q-item-label>
-          </q-item-section>
-          <q-item-section side class="text-right text-bold" style="color:black">
-            {{ item.rowTotal | money({ style: undefined }) }}
-          </q-item-section>
-        </q-item>
+        <span v-for="i in 1" :key="i">
+          <q-item
+            v-for="item in groupedSalesItems"
+            :key="item.id"
+            class="full-width"
+          >
+            <q-item-section>
+              <q-item-label>
+                {{ item.itemName.replace("[null]", "") }}
+              </q-item-label>
+              <q-item-label caption :style="subtitleStyle">
+                {{ item.qty }} *
+                {{ item.unitPrice | money({ style: undefined }) }}
+                /
+                <template v-if="item.unitName">
+                  {{ item.unitName }}
+                </template>
+                <template v-else>
+                  {{ getUnitName(item.unitId) }}
+                </template>
+                <template v-if="item.hasDiscount">
+                  <span v-if="item.percentDiscount" class="text-bold">
+                    - {{ item.percentDiscount }}%</span
+                  >
+                  <span v-if="item.moneyDiscount" class="text-bold">
+                    - {{ item.moneyDiscount | money({ style: undefined }) }}
+                  </span>
+                </template>
+              </q-item-label>
+            </q-item-section>
+            <q-item-section
+              side
+              class="text-right text-bold"
+              style="color:black"
+            >
+              {{ item.rowTotal | money({ style: undefined }) }}
+            </q-item-section>
+          </q-item>
+        </span>
       </q-list>
     </q-card-section>
     <hr />
@@ -91,7 +103,7 @@
           </td>
         </tr>
         <tr v-if="model.cardSurcharge > 0">
-          <th style="width:60%;font-weight: unset" class="text-right">
+          <th style="width:60%;font-weight: unset" class="text-righttext-bold">
             Card surcharge
           </th>
           <td style="width:40%" class="text-right">
@@ -173,13 +185,12 @@
     </q-card-section>
     <q-card-section class="text-center">
       {{ model.note }}
+      <!-- 1234567890///---
+      <br />
+      abcdefghijklmnopqrstuvwxyz
+      {{ "abcdefghijklmnopqrstuvwxyz".toUpperCase() }} -->
     </q-card-section>
-    <q-card-section
-      class="text-italic text-center"
-      style="font-size:11px"
-      v-html="footNotes"
-    >
-    </q-card-section>
+    <q-card-section class="text-center" v-html="footNotes"> </q-card-section>
     <hr />
   </q-card>
 </template>
@@ -284,7 +295,8 @@ export default {
       try {
         var res = await this.$api.sales.getOne(this.id);
         this.model = new Sale(res.data);
-        this.printSalesProtocol(this.model.id);
+        window.PRINT_READY = true;
+        // this.printSalesProtocol(this.model.id);
       } catch (error) {
         alert(error);
       }
@@ -304,6 +316,7 @@ export default {
     }
   }
 };
+// 'Roboto', monospace
 </script>
 
 <style lang="sass" scoped>
@@ -318,6 +331,6 @@ table td
   padding-right: 0!important
 
 *
-  font-fontFamily: 'Roboto', monospace
+  font-family: system-ui, sans-serif
   font-weight: bold
 </style>

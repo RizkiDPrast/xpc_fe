@@ -15,6 +15,7 @@ export default class DepositTransaction extends UserTracker {
     salesManager,
 
     createdByName,
+    createdAt,
 
     ...params
   } = {}) {
@@ -32,5 +33,6 @@ export default class DepositTransaction extends UserTracker {
     this.salesManager = salesManager;
 
     this.createdByName = createdByName;
+    this.createdAt = createdAt;
   }
 }

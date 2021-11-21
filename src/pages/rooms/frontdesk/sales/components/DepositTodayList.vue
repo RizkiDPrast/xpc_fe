@@ -80,6 +80,7 @@
                 </td>
                 <td>
                   <q-btn
+                    :disable="where !== 'fd'"
                     icon="las la-print"
                     size="sm"
                     round

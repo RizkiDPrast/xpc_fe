@@ -256,6 +256,9 @@ export const api = {
     put: model => axios.put("/onsites", model),
     delete: id => axios.delete(`/onsites/${id}`)
   },
+  reports: {
+    getVisit: params => axios.get("/reports/visit", { params })
+  },
   categories: {
     get: async pager => {
       const model = store.state.list.categories;

@@ -77,9 +77,11 @@
                 class="mouse-pointer"
                 :class="{ selected: selectedSales.id === scoped.row.id }"
                 @click.native="getSalesDetails(scoped.row.id, scoped.row)"
+                :key="scoped.row.id"
               >
                 <td>
                   <q-btn
+                    :disable="where !== 'fd'"
                     icon="las la-print"
                     size="sm"
                     round

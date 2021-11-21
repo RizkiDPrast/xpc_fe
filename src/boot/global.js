@@ -123,6 +123,12 @@ export default async (
           store.state.auth.role.toLowerCase() == "paramedic"
         );
       },
+      where() {
+        return (
+          this.$store.state.app.selectedRoom &&
+          this.$store.state.app.selectedRoom.id
+        );
+      },
       isGroomer() {
         return (
           store.state.auth.userName &&
@@ -309,7 +315,9 @@ export default async (
         protocol = protocol || "posprinter://";
         var n = window.open(`${protocol}${url}`, "__blank");
         setTimeout(() => {
-          n.close();
+          if (n) {
+            n.close();
+          }
         }, 1000);
       }
     },

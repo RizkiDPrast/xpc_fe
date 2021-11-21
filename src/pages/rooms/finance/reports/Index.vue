@@ -7,27 +7,19 @@
       </q-tab>
     </q-tabs>
     <q-tab-panels v-model="tab">
-      <!-- <q-tab-panel v-for="t in options" :name="t" :key="t">
+      <q-tab-panel v-for="t in options" :name="t" :key="t">
         <component :is="t" :name="t" />
-      </q-tab-panel> -->
-      <component v-for="t in options" :is="t" :name="t" :key="t" />
-
-      <!-- <VisitsTab name="VisitsTab" key="VisitsTab" />
-      <VisitsTab name="ProfitsTab" key="ProfitsTab" /> -->
-
-      <!-- <ProfitsTab name="ProfitsTab" /> -->
-      <!-- <component :is="'visits-tab'" :name="tab" /> -->
+      </q-tab-panel>
     </q-tab-panels>
   </q-page>
 </template>
 <script>
 import VisitsTab from "./components/VisitsTab.vue";
-import ProfitsTab from "./components/ProfitsTab.vue";
 export default {
   name: "reports",
   components: {
     VisitsTab,
-    ProfitsTab
+    ProfitsTab: () => import("./components/ProfitsTab.vue")
   },
   data() {
     return {
