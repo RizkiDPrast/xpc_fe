@@ -80,7 +80,7 @@
                 </td>
                 <td>
                   <q-btn
-                    :disable="where !== 'fd'"
+                    :disable="false"
                     icon="las la-print"
                     size="sm"
                     round
@@ -221,12 +221,12 @@ export default {
     },
     printDeposit(id, row) {
       this.selectedDeposit = row;
-      this.printDepositProtocol(this.selectedDeposit.id);
-      // this.$router.push({
-      //   name: "printDeposit",
-      //   params: { id: this.selectedDeposit.id }
-      //   // params: { depositTransaction: this.selectedDeposit }
-      // });
+      // this.printDepositProtocol(this.selectedDeposit.id);
+      this.$router.push({
+        name: "printDeposit",
+        // params: { id: this.selectedDeposit.id }
+        params: { depositTransaction: this.selectedDeposit }
+      });
     }
   }
 };

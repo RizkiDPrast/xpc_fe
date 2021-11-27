@@ -81,7 +81,7 @@
               >
                 <td>
                   <q-btn
-                    :disable="where !== 'fd'"
+                    :disable="false"
                     icon="las la-print"
                     size="sm"
                     round
@@ -327,12 +327,12 @@ export default {
 
         sales.saleLines = data;
         this.selectedSales = sales;
-        this.printSalesProtocol(this.selectedSales.id);
-        // this.$router.push({
-        //   name: "printSales",
-        //   params: { id: this.selectedSales.id }
-        //   // params: { sales: this.selectedSales,}
-        // });
+        // this.printSalesProtocol(this.selectedSales.id);
+        this.$router.push({
+          name: "printSales",
+          // params: { id: this.selectedSales.id }
+          params: { sales: this.selectedSales }
+        });
       } catch (e) {
         this.$toastr.error(this.$util.err(e));
       }

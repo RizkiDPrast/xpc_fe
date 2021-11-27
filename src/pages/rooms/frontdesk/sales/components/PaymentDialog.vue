@@ -472,13 +472,12 @@ export default {
         if (postModel.clientId < 1) {
           postModel.clientId = undefined;
         }
-        console.log("postModel", postModel);
+        // console.log("postModel", postModel);
         var res = await this.$api.sales.post(postModel);
         if (res.status < 300) {
           this.$emit("sales-saved", new Sale(res.data));
           this.model = false;
           this.tempValue = 0;
-          this.prin;
         } else {
           this.$$toastr.error(this.$util.err(res));
           if (this.ccSurcharge > 0) {
