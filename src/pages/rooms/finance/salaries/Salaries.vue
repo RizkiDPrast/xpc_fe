@@ -2,13 +2,6 @@
   <q-page>
     <page-header>
       <template #actions>
-        <LockMonthlyCommissionBtn
-          icon="las la-lock"
-          text-color="negative"
-          flat
-          rounded
-          no-caps
-        />
         <user-default-salary-lines-btn />
       </template>
     </page-header>
@@ -255,12 +248,10 @@
 <script>
 import SalaryLineBtn from "./components/SalaryLineBtn.vue";
 import UserDefaultSalaryLinesBtn from "./components/UserDefaultSalaryLinesBtn.vue";
-import LockMonthlyCommissionBtn from "../components/LockMonthlyCommissionBtn.vue";
 export default {
   components: {
     SalaryLineBtn,
-    UserDefaultSalaryLinesBtn,
-    LockMonthlyCommissionBtn
+    UserDefaultSalaryLinesBtn
   },
   name: "Salaries",
   data() {

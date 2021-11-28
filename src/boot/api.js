@@ -599,6 +599,12 @@ export const api = {
   finance: {
     lockMonthlyCommissions(date) {
       return axios.post("finances/LockMonthlyCommissions", date);
+    },
+    getLocks() {
+      return axios.get("finances/Locks");
+    },
+    deleteLock(id) {
+      return axios.delete(`finances/Locks/${id}`);
     }
   },
   dashboard: {

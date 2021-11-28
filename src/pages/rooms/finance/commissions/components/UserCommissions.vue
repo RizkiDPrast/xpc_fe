@@ -134,7 +134,15 @@
                   }, 0)
                 }}
               </td>
-              <td class="text-right">{{ item.moneyPerValue | money }}</td>
+              <td class="text-right">
+                <span v-if="item.moneyPerValueArr">
+                  {{
+                    item.moneyPerValueArr
+                      .map(x => x.toLocaleString("id"))
+                      .join(" | ")
+                  }}
+                </span>
+              </td>
               <td class="text-right">
                 {{
                   values.reduce((a, b) => {
@@ -239,12 +247,17 @@ export default {
         let types = [];
         if (this.values.length) {
           types = this.values.reduce((a, b) => {
-            if (a.find(x => x.code === b.type)) {
+            var exists = a.find(x => x.code === b.type);
+            if (exists) {
+              let mpv = b.moneyPerValue;
+              if (exists.moneyPerValueArr.indexOf(mpv) === -1) {
+                exists.moneyPerValueArr.push(mpv);
+              }
               return a;
             }
             a.push({
               code: b.type,
-              moneyPerValue: b.moneyPerValue,
+              moneyPerValueArr: [b.moneyPerValue],
               description: ""
             });
             return a;
