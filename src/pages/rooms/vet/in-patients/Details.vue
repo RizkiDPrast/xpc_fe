@@ -176,9 +176,27 @@
             </q-tr>
           </thead>
           <tbody>
-            <q-tr v-for="(v, d) in treatment" :key="d">
+            <q-tr v-for="(v, d) in treatmentModel" :key="d">
               <q-td style="width:80px!important">
                 {{ new Date(d).toLocaleDateString() }}
+                <q-btn
+                  v-if="isAdmin"
+                  round
+                  flat
+                  icon="las la-edit"
+                  text-color="white"
+                  color="white"
+                  size="sm"
+                  @click="editDate(d)"
+                >
+                  <q-popup-edit v-model="date" @save="updateDate">
+                    <date-input
+                      v-model="date"
+                      label="Update treatment date"
+                      hint="Hit enter to save or Esc to cancel"
+                    />
+                  </q-popup-edit>
+                </q-btn>
               </q-td>
               <q-td style="width:25px!important">
                 {{ new Date(d).toDateString().split(" ")[0] }}
@@ -423,7 +441,9 @@ export default {
       generatingForm: false,
       tout: undefined,
       updating: false,
-      updatingCommission: false
+      updatingCommission: false,
+      date: undefined,
+      oriDate: undefined
     };
   },
   computed: {
@@ -433,6 +453,17 @@ export default {
         dt.push(sdt);
       }
       return dt;
+    },
+    treatmentModel() {
+      if (!this.treatment) return {};
+      var obj = {};
+      var keys = Object.keys(this.treatment).sort((d1, d2) =>
+        d2 > d1 ? -1 : 1
+      );
+      keys.forEach(k => {
+        obj[k] = JSON.parse(JSON.stringify(this.treatment[k]));
+      });
+      return obj;
     }
   },
   mounted() {
@@ -447,6 +478,21 @@ export default {
     }
   },
   methods: {
+    editDate(d) {
+      this.oriDate = d;
+      this.date = d;
+    },
+    updateDate() {
+      if (this.date === this.oriDate) return;
+      var tgt = this.clone(this.treatment);
+      if (!tgt[this.oriDate]) return;
+
+      tgt[this.date] = JSON.parse(JSON.stringify(tgt[this.oriDate]));
+      delete tgt[this.oriDate];
+
+      this.treatment = tgt;
+      this.saveForm();
+    },
     async _updateForm() {
       if (this.updating) {
         return;
@@ -499,7 +545,7 @@ export default {
       );
     },
     buildForm() {
-      const tasks = ["pagi", "siang", "sore"].map(x => ({
+      const tasks = ["pagi", "sore"].map(x => ({
         label: x,
         is_checklist: true,
         value: false,
