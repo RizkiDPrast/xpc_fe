@@ -135,12 +135,13 @@ export default {
     search(filter) {
       // this.$refs.table.requestServerInteraction({ filter: k });
 
-      let pager = this.$refs.table.pagination || {page:1, perPage: 10};
+      let pager = this.$refs.table.pagination || { page: 1, perPage: 10 };
       pager.filter = this.filter;
+      console.log("asd", pager);
       this.fetch({ pagination: pager });
     },
     refresh() {
-      let pager = this.$refs.table.pagination  || {page:1, perPage: 10};
+      let pager = this.$refs.table.pagination || { page: 1, perPage: 10 };
       pager.filter = this.filter;
       this.$emit("refresh", { pagination: pager });
       this.fetch({ pagination: pager });

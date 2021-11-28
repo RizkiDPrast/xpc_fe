@@ -6,22 +6,48 @@
       </template>
     </page-header>
     <my-table
-      title="Daily visits"
+      title="Daily client visits"
       :loading="loading"
       :data="data"
       row-key="id"
       :pagination.sync="pager"
       @refresh="fetch"
+      add-btn-class="hidden"
     >
       <template #actions>
-        sdf
+        <date-input v-model="date" dense label="Pick date" />
+        <div style="width:12px" />
+      </template>
+      <template #body-cell-signalements="props">
+        <q-td
+          align="left"
+          v-html="
+            props.row.signalements &&
+              props.row.signalements != null &&
+              props.row.signalements.replaceAll('\n', '<br>')
+          "
+        >
+        </q-td>
+      </template>
+      <template #body-cell-sales="props">
+        <q-td
+          align="left"
+          v-html="
+            props.row.sales &&
+              props.row.sales != null &&
+              props.row.sales.replaceAll('\n', '<br>')
+          "
+        >
+        </q-td>
       </template>
     </my-table>
   </div>
 </template>
 
 <script>
+import DateInput from "src/components/DateInput.vue";
 export default {
+  components: { DateInput },
   name: "DailyVisits",
   data() {
     return {
@@ -33,6 +59,11 @@ export default {
         page: 1
       }
     };
+  },
+  watch: {
+    date() {
+      this.fetch();
+    }
   },
   methods: {
     async fetch() {

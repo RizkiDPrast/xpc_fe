@@ -43,7 +43,7 @@
         </q-tabs>
         <q-tab-panels v-model="tab" animated keep-alive>
           <q-tab-panel name="sale-tab">
-            <sales-today-list ref="sales" :deposits="deposits" />
+            <sales-list ref="sales" :deposits="deposits" />
           </q-tab-panel>
           <q-tab-panel name="deposit-tab">
             <deposit-today-list
@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import SalesTodayList from "./components/SalesTodayList";
+import SalesList from "./components/SalesList";
 import DepositTodayList from "./components/DepositTodayList";
 import CashInOutList from "./components/CashInOutList";
 import AddSales from "./components/AddSales";
@@ -176,7 +176,7 @@ export default {
     }
   },
   components: {
-    SalesTodayList,
+    SalesList,
     DepositTodayList,
     CashInOutList,
     AddSales,
