@@ -181,5 +181,4 @@ table td
   padding-right: 0!important
 *
   font-family: system-ui, sans-serif
-  font-weight: bold
 </style>

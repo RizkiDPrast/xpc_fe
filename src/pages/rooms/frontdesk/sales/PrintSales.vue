@@ -51,11 +51,7 @@
                 </template>
               </q-item-label>
             </q-item-section>
-            <q-item-section
-              side
-              class="text-right text-bold"
-              style="color:black"
-            >
+            <q-item-section side class="text-right" style="color:black">
               {{ item.rowTotal | money({ style: undefined }) }}
             </q-item-section>
           </q-item>
@@ -224,7 +220,12 @@ export default {
         fontSize: "12px!important",
         color: "black"
       },
-      footNotes: "--Terima kasih--",
+      footNotes:
+        "--Terima kasih--<br>" +
+        "<p style='text-left'>Transfer ke<br>" +
+        "BCA: 166 3157 063<br>" +
+        "MANDIRI: 1570 0045 75081<br>" +
+        "a.n Fochi Stelladayef</p>",
       animalTypes: [],
       to: undefined,
       toTime: 3000,
@@ -332,5 +333,4 @@ table td
 
 *
   font-family: system-ui, sans-serif
-  font-weight: bold
 </style>
