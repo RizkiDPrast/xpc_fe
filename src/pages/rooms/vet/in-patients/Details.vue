@@ -126,6 +126,8 @@
           </q-markup-table>
         </div>
       </div>
+      <q-btn flat rounded no-caps label="Create new form" @click="createForm" />
+
       <q-card flat bordered v-if="!plans.length">
         <q-card-section>
           Please add treatment plan
@@ -391,6 +393,8 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+    <new-default-task ref="taskGen" />
   </q-page>
 </template>
 
@@ -400,12 +404,14 @@ import ItemUsageBtn from "../components/ItemUsageBtn";
 import TreatmentPlanBtn from "./components/TreatmentPlanBtn";
 import { QSpinnerGears } from "quasar";
 import AddPlanBtn from "./components/AddPlanBtn";
+import NewDefaultTask from "./components/NewDefaultTask.vue";
 export default {
   name: "FormDetails",
   components: {
     TreatmentPlanBtn,
     AddPlanBtn,
-    ItemUsageBtn
+    ItemUsageBtn,
+    NewDefaultTask
   },
   props: {
     id: {
@@ -544,8 +550,10 @@ export default {
           .replaceAll("-", "/")
       );
     },
-    buildForm() {
-      const tasks = ["pagi", "sore"].map(x => ({
+    async buildForm() {
+      let tasks = await this.$refs.taskGen.getDefaultTasks();
+      // console.log("tasks", tasks);
+      tasks = tasks.map(x => ({
         label: x,
         is_checklist: true,
         value: false,
@@ -590,7 +598,7 @@ export default {
       if (this.generatingForm) return;
       this.generatingForm = true;
       try {
-        let data = this.buildForm();
+        let data = await this.buildForm();
         let form = {
           id: Number(this.id),
           patientId: 0,

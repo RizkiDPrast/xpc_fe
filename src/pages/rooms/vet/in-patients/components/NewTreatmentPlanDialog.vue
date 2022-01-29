@@ -62,7 +62,8 @@
                   outlined
                   input-debounce="50"
                   label="Animal types"
-                  v-validate="''"
+                  v-validate="'required'"
+                  data-vv-scope="details"
                   :error="errors.has('animalTypeId')"
                   :error-message="errors.first('animalTypeId')"
                 >
@@ -75,7 +76,8 @@
                   label="Name"
                   autocomplete="off"
                   dense
-                  v-validate="''"
+                  v-validate="'required'"
+                  data-vv-scope="details"
                   :error="errors.has('name')"
                   :error-message="errors.first('name')"
                 />
@@ -84,7 +86,9 @@
                   dense
                   outlined
                   label="Sex"
-                  v-validate="''"
+                  name="sex"
+                  v-validate="'required'"
+                  data-vv-scope="details"
                   :error="errors.has('sex')"
                   :error-message="errors.first('sex')"
                 />
@@ -96,6 +100,7 @@
                   label="DoB"
                   name="dob"
                   v-validate="''"
+                  data-vv-scope="details"
                   :error="errors.has('dob')"
                   :error-message="errors.first('dob')"
                 />
@@ -342,6 +347,10 @@ export default {
     },
     async next() {
       if (this.step === 1) {
+        if (!(await this.$validator.validateAll("details"))) {
+          this.$toastr.error("Please complete pet details fields");
+          return;
+        }
         this.$refs.stepper.next();
       } else if (this.step === 2) {
         if (!(await this.$validator.validateAll("signalement"))) {
@@ -400,21 +409,18 @@ export default {
         );
       }
 
-
-
       try {
         let res = await this.$api.inPatientTreatmentPlans.postBulk(fd);
 
         this.$emit("update:form", res.data);
 
-
         //auto add to boarding room
         try {
-          await this.$api.onSites.postBoarding(model.patient.id)
-          this.$toastr.success('Patient was added to boarding room')
-          this.countBoarding()
-        } catch(error){
-          this.$toastr.error(error)
+          await this.$api.onSites.postBoarding(model.patient.id);
+          this.$toastr.success("Patient was added to boarding room");
+          this.countBoarding();
+        } catch (error) {
+          this.$toastr.error(error);
         }
 
         this.model = false;

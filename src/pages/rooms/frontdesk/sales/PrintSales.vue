@@ -222,7 +222,7 @@ export default {
       },
       footNotes:
         "--Terima kasih--<br>" +
-        "<p style='text-left'>Transfer ke<br>" +
+        "<p class='text-left q-mt-md text-caption'>Transfer ke<br>" +
         "BCA: 166 3157 063<br>" +
         "MANDIRI: 1570 0045 75081<br>" +
         "a.n Fochi Stelladayef</p>",

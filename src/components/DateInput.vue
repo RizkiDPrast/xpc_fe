@@ -8,6 +8,14 @@
     v-on="$listeners"
   >
     <template #append>
+      <!-- <q-btn
+        dense
+        size="xs"
+        flat
+        icon="las la-times"
+        @click="model = undefined"
+      > -->
+      <!-- </q-btn> -->
       <q-icon name="las la-calendar-day" class="cursor-pointer">
         <q-popup-proxy
           ref="qDateProxy"

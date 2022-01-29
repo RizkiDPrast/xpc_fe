@@ -257,7 +257,9 @@ export const api = {
     delete: id => axios.delete(`/onsites/${id}`)
   },
   reports: {
-    getVisit: date => axios.get(`/reports/visit`, { params: { date } })
+    getVisit: date => axios.get(`/reports/visit`, { params: { date } }),
+    getSalesMonth: date =>
+      axios.get(`/reports/monthly-sales`, { params: { date } })
   },
   categories: {
     get: async pager => {

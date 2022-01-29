@@ -1,10 +1,5 @@
 <template>
   <div>
-    <page-header>
-      <template #actions>
-        <animal-types-btn flat round />
-      </template>
-    </page-header>
     <my-table
       title="Daily client visits"
       :loading="loading"

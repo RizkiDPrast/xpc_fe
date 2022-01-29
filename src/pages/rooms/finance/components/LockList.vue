@@ -36,12 +36,21 @@
     <q-table :data="data" :columns="columns" flat :loading="loading">
       <template #body-cell-action="scope">
         <q-td>
-          <q-btn
+          <!-- <q-btn
             v-if="data.length && data.indexOf(scope.row) === 0"
             round
             size="sm"
             icon="las la-trash-alt"
             text-color="negative"
+            @click="del(scope.row.id)"
+          /> -->
+          <q-btn
+            round
+            size="sm"
+            icon="las la-trash-alt"
+            :text-color="
+              data.length && data.indexOf(scope.row) === 0 ? 'negative' : ''
+            "
             @click="del(scope.row.id)"
           />
         </q-td>
@@ -96,7 +105,9 @@ export default {
     },
     async del(id) {
       if (
-        await this.confirm(`Do you want to delete the record? <br>Continue?`)
+        await this.confirm(
+          `You are going to delete <strong>the Lock record</strong>? <br>Continue?`
+        )
       ) {
         try {
           await this.$api.finance.deleteLock(id);
@@ -125,9 +136,9 @@ export default {
       d.setSeconds(cr.getSeconds());
       d.setMilliseconds(cr.getMilliseconds());
 
-      if (d.getDate() < 10) {
-        d.setMonth(d.getMonth() - 1);
-      }
+      // if (d.getDate() < 10) {
+      //   d.setMonth(d.getMonth() - 1);
+      // }
       var f = this.$util.formatDate(d, "DD MMMM YYYY HH:mm:ss") + " WIB";
       if (
         await this

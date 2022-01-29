@@ -1,10 +1,5 @@
 <template>
   <div>
-    <page-header>
-      <template #actions>
-        <animal-types-btn flat round />
-      </template>
-    </page-header>
     <sales-list all add-btn-class="hidden" />
   </div>
 </template>
