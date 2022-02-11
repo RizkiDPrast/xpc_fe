@@ -363,7 +363,6 @@ export default {
     toggleEdit() {
       this.isEditing = !this.isEditing;
       if (this.isEditing) {
-        // TODO:ref  focus not working
         this.$refs.inpAnamnesa.focus();
       } else {
         this.model = JSON.parse(JSON.stringify(this.ori));
