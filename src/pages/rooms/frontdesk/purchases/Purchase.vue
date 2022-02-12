@@ -108,7 +108,24 @@
           class="col-12"
         />
 
-        <div class="col-12 q-gutter-sm column items-end">
+        <div class="col-6">
+          <q-card bordered>
+            <div>
+              <q-badge :color="model.isPaid ? 'positive' : 'negative'">
+                Status
+              </q-badge>
+            </div>
+            <q-toggle
+              :readonly="submitting"
+              v-model="model.isPaid"
+              :label="model.isPaid ? 'PAID' : 'UNPAID'"
+              :color="model.isPaid ? 'positive' : ''"
+              :class="model.isPaid ? 'text-positive' : 'text-negative'"
+            />
+          </q-card>
+        </div>
+
+        <div class="col-6 q-gutter-sm column items-end">
           <q-input
             type="number"
             label="Total item"
@@ -173,7 +190,8 @@ export default {
       isLoading: false,
       reloading: false,
       showSuppliers: false,
-      model: new Purchase(this.value)
+      model: new Purchase(this.value),
+      submitting: false
     };
   },
   watch: {
@@ -185,6 +203,11 @@ export default {
     id(val) {
       if (Number(val) > 0) {
         this.reloadPurchase();
+      }
+    },
+    "model.isPaid"(val) {
+      if (!this.formEnabled) {
+        this.updateStatus();
       }
     }
   },
@@ -216,6 +239,20 @@ export default {
         // this.$toastr.error(this.$util.err(e))
       }
       this.reloading = false;
+    },
+    async updateStatus() {
+      if (this.submitting) return;
+      this.submitting = true;
+      try {
+        await this.$api.purchases.updateStatus(
+          this.model.id,
+          this.model.isPaid || false
+        );
+        this.$toastr.success("Status berhasil diupdate");
+      } catch (error) {
+        this.$toastr.error(error);
+      }
+      this.submitting = false;
     },
     async onSubmit() {
       if (this.isLoading) {

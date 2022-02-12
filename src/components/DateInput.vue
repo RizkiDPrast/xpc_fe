@@ -2,20 +2,20 @@
   <q-input
     outlined
     readonly
-    :value="$util.formatDate(value, 'YYYY/MM/DD')"
+    :value="model"
     mask="date"
     v-bind="$attrs"
     v-on="$listeners"
   >
     <template #append>
-      <!-- <q-btn
+      <q-btn
+        v-if="model"
         dense
         size="xs"
         flat
         icon="las la-times"
-        @click="model = undefined"
-      > -->
-      <!-- </q-btn> -->
+        @click="model = null"
+      />
       <q-icon name="las la-calendar-day" class="cursor-pointer">
         <q-popup-proxy
           ref="qDateProxy"

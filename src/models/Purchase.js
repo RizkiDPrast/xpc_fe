@@ -1,10 +1,11 @@
 import UserTracker from "./UserTracker";
 import PurchaseLine from "./PurchaseLine";
+import { utility } from "src/boot/utility";
 
 export default class Purchase extends UserTracker {
   constructor({
     id = 0,
-    purchaseDate = new Date(),
+    purchaseDate = utility.formatDate(new Date(), "YYYY-MM-DD"),
     invoiceNumber,
     supplierId,
     supplier,
@@ -12,6 +13,7 @@ export default class Purchase extends UserTracker {
     // totalCost = 0,
 
     realCost,
+    isPaid = false,
     purchaseLines = [],
     ...params
   } = {}) {
@@ -22,6 +24,7 @@ export default class Purchase extends UserTracker {
     this.supplierId = supplierId;
     this.supplier = supplier;
 
+    this.isPaid = isPaid;
     this.realCost = realCost;
     this.purchaseLines = purchaseLines.map(x => new PurchaseLine(x));
   }
