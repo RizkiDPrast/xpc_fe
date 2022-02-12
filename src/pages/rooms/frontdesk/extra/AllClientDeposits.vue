@@ -4,7 +4,7 @@
       <template #actions> </template>
     </page-header>
     <my-table
-      :title="`All client deposits`"
+      :title="`All client deposits ${$options.filters.money(total)}`"
       :loading="loading"
       :data="data"
       :columns="columns"
@@ -12,15 +12,28 @@
       :pagination.sync="pager"
       :filter="filter"
       @refresh="fetch"
-      addBtnClass="hidden"
+      @add="add"
     >
+      <template #actions>
+        <deposit-list-dialog-btn
+          label="Semua transaksi"
+          icon="las la-dialog"
+          no-caps
+          flat
+          color="secondary"
+        />
+      </template>
     </my-table>
   </div>
 </template>
 
 <script>
+import DepositListDialogBtn from "./DepositListDialogBtn.vue";
 export default {
   name: "AllClientDeposits",
+  components: {
+    DepositListDialogBtn
+  },
   data() {
     return {
       loading: false,
@@ -57,7 +70,8 @@ export default {
         rowsPerPage: 25
         // rowsNumber: 0
       },
-      filter: undefined
+      filter: undefined,
+      total: null
     };
   },
   mounted() {
@@ -65,6 +79,9 @@ export default {
   },
   watch: {},
   methods: {
+    add() {
+      this.$router.push("/app/rooms/sales");
+    },
     async fetch() {
       if (this.loading) return;
       this.loading = true;
@@ -73,6 +90,8 @@ export default {
         var res = await this.$api.deposits.getAllClients();
         var dt = res.data.sort((a, b) => (a.code > b.code ? -1 : 1));
         this.data = dt.map(x => x);
+
+        this.total = dt.reduce((a, b) => a + Number(b.balance) || 0, 0);
       } catch (e) {
         this.$toastr.error(e);
       }
