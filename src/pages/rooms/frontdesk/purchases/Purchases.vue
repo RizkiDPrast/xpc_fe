@@ -29,6 +29,25 @@
       @edit="edit"
       @delete="del"
     >
+      <template #actions>
+        <date-input label="Date filter" v-model="purchaseAt" dense />
+        <q-select
+          outlined
+          style="min-width:100px"
+          dense
+          label="Paid filter"
+          :options="['-', 'UNPAID', 'PAID']"
+          v-model="filterSelect"
+        />
+      </template>
+      <template #body-cell-isPaid="props">
+        <q-td align="center">
+          <q-badge
+            :color="props.row.isPaid ? 'positive' : 'grey'"
+            :label="props.row.isPaid ? 'PAID' : 'UNPAID'"
+          />
+        </q-td>
+      </template>
       <template #body-cell-actions2="props">
         <q-td class="text-center">
           <q-btn
@@ -65,12 +84,12 @@ export default {
         page: 1,
         rowsPerPage: 25,
         rowsNumber: 0,
-        sortBy: "purchaseDate",
+        sortBy: "purchasedate",
         descending: true
       },
       columns: [
         {
-          name: "id",
+          name: "num",
           field: "id",
           required: true,
           format: (val, row, c) => this.data.indexOf(row) + 1,
@@ -79,7 +98,7 @@ export default {
           sortable: true
         },
         {
-          name: "purchaseDate",
+          name: "purchasedate",
           align: "left",
           field: "purchaseDate",
           label: "Purchase date",
@@ -87,7 +106,7 @@ export default {
           format: val => this.$util.formatDate(val, "dddd, DD MMM YYYY")
         },
         {
-          name: "invoiceNumber",
+          name: "invoicenumber",
           align: "left",
           field: "invoiceNumber",
           label: "Invoice Num",
@@ -116,18 +135,42 @@ export default {
           format: val => this.$options.filters.money(val)
         },
         {
+          name: "isPaid",
+          align: "center",
+          field: "isPaid",
+          label: "Status",
+          sortable: true
+        },
+        {
           name: "actions2",
           align: "center",
           field: "actions",
           label: "Actions",
           style: "width:25px"
+        },
+        {
+          name: "id",
+          align: "center",
+          field: "id",
+          label: "ID",
+          style: "width:25px",
+          sortable: true
         }
       ],
-      data: []
+      data: [],
+      filterSelect: "-",
+      purchaseAt: undefined
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+    filterSelect() {
+      this.fetch();
+    },
+    purchaseAt() {
+      this.fetch();
+    }
+  },
   mounted() {
     this.fetch();
   },
@@ -138,6 +181,20 @@ export default {
       pager = pager?.pagination || this.pager;
 
       try {
+        if (this.filterSelect === "UNPAID") {
+          pager.isPaid = false;
+        } else if (this.filterSelect === "PAID") {
+          pager.isPaid = true;
+        } else {
+          pager.isPaid = null;
+        }
+
+        if (this.purchaseAt) {
+          pager.purchaseAt = this.purchaseAt;
+        } else {
+          pager.purchaseAt = null;
+        }
+
         var res = await this.$api.purchases.get(pager);
         var dt = res.data;
         this.data = dt.rows.map(x => new Purchase(x));

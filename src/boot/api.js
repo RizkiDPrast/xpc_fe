@@ -404,7 +404,9 @@ export const api = {
     getOne: id => axios.get(`/purchases/${id}`),
     post: params => axios.post("/purchases", { ...params }),
     put: (id, params) => axios.put(`/purchases/${id}`, { ...params }),
-    delete: id => axios.delete(`/purchases/${id}`)
+    delete: id => axios.delete(`/purchases/${id}`),
+    updateStatus: (id, isPaid) =>
+      axios.put(`/purchases/${id}/status`, isPaid || "false")
   },
   purchaseLines: {
     getPurchaseCode: id => axios.get(`/purchaseLines/${id}/PurchaseCode`)
