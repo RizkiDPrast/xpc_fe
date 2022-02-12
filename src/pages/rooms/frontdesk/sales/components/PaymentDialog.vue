@@ -141,12 +141,6 @@
           class="bg-white text-black"
         >
           <q-popup-edit v-model="discPopup">
-            <money-field
-              label="Discount Rp"
-              stack-label
-              v-model="salesModel.moneyDiscount"
-              autofocus
-            />
             <q-input
               label="Discount %"
               class="percent-field"
@@ -157,6 +151,16 @@
                 %
               </template>
             </q-input>
+            <money-field
+              label="Discount Rp"
+              stack-label
+              v-model="salesModel.moneyDiscount"
+              autofocus
+            />
+            <q-item-label caption>
+              Discount Rp diterapkan
+              <b>setelah</b> Discount %
+            </q-item-label>
           </q-popup-edit>
         </q-btn>
         <q-btn
@@ -456,7 +460,6 @@ export default {
         if (this.isLoading) return;
         this.isLoading = true;
 
-        // console.log('sales', this.sales)
         let postModel = Object.assign({}, this.sales, this.payment);
         if (this.ccSurcharge > 0) {
           postModel.creditCard =

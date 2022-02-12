@@ -132,10 +132,10 @@ export default {
     }
   },
   mounted() {
-    this.initListeners();
+    // this.initListeners();
   },
   destroyed() {
-    this.removeListeners();
+    // this.removeListeners();
   },
   methods: {
     keyup(e) {

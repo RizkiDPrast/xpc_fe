@@ -74,15 +74,15 @@
             {{ model.subTotal | money }}
           </td>
         </tr>
-        <tr v-if="model.discountPercent > 0">
+        <tr v-if="model.percentDiscount > 0">
           <th style="width:60%;font-weight: unset" class="text-right">
-            % Discount {{ model.discountPercent }} %
+            {{ model.percentDiscount }}% Discount
           </th>
           <td style="width:40%" class="text-right">
             {{ model.discountPercentMoneyValue | money }}
           </td>
         </tr>
-        <tr v-if="model.discount > 0">
+        <tr v-if="model.moneyDiscount > 0">
           <th style="width:60%;font-weight: unset" class="text-right">
             Discount
           </th>

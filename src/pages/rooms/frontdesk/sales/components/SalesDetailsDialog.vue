@@ -90,8 +90,7 @@
             <th style="width:30%" class="text-right">
               <span v-if="sales.percentDiscount > 0">
                 {{ sales.percentDiscount }}</span
-              >
-              % discount
+              >% discount
             </th>
             <td style="width:30%" class="text-right">
               {{ sales.discountPercentMoneyValue | money }}
@@ -230,7 +229,6 @@ export default {
       return t.label;
     }
   },
-  mounted() {
-  }
+  mounted() {}
 };
 </script>

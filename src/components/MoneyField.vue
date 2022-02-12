@@ -6,6 +6,7 @@
         class="q-field__native q-placeholder text-right"
         :value="value"
         @input="emitValue"
+        v-bind="percentToggle && toggleModel ? { prefix: '' } : {}"
       />
     </template>
     <template v-if="percentToggle" #after>
@@ -39,7 +40,7 @@ export default {
     return {
       toggleOptions: [
         { label: "%", value: true },
-        { label: "B$", value: false }
+        { label: "Rp", value: false }
       ]
     };
   },

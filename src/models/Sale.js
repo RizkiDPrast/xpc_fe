@@ -140,4 +140,8 @@ export default class Sale extends UserTracker {
   get taxMoneyValue() {
     return (Number(this.tax) * this.total) / 100;
   }
+
+  get hasDiscount() {
+    return Number(this.moneyDiscount) > 0 || Number(this.percentDiscount) > 0;
+  }
 }
