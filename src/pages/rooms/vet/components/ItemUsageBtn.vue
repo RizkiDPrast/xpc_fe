@@ -364,9 +364,10 @@ export default {
           this.modelInput.maxUnit = this.modelInput.product.qty;
           this.modelInput.qty = 1;
 
-          this.modelInput.unitPrice = this.modelInput.product.sellingPriceWithoutDisc;
-          this.modelInput.moneyDiscount = this.modelInput.product.discount;
-          this.modelInput.percentDiscount = this.modelInput.product.discountPercent;
+          this.modelInput.unitPrice = this.modelInput.product.sellingPrice;
+          // this.modelInput.unitPrice = this.modelInput.product.sellingPriceWithoutDisc;
+          // this.modelInput.moneyDiscount = this.modelInput.product.discount;
+          // this.modelInput.percentDiscount = this.modelInput.product.discountPercent;
 
           this.modelInput.unitId = this.modelInput.product.unitId;
           this.modelInput.unitName = this.modelInput.product.unitName;
@@ -390,8 +391,8 @@ export default {
             );
             this.modelInput.qty = 1;
             this.modelInput.unitPrice = subunit.unitPrice;
-            this.modelInput.moneyDiscount = 0;
-            this.modelInput.percentDiscount = 0;
+            // this.modelInput.moneyDiscount = 0;
+            // this.modelInput.percentDiscount = 0;
 
             this.modelInput.unitId = subunit.unitId;
             this.modelInput.unitName = subunit.unitName;

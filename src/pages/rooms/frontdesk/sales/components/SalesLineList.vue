@@ -19,7 +19,11 @@
         :key="ix"
         :clickable="!item.itemUsageIds.length && !item.debtSaleId"
         @click.native="
-          item.itemUsageIds.length || item.debtSaleId
+          item.itemUsageIds.length ||
+          item.debtSaleId ||
+          (item.product &&
+            item.product.productUnits &&
+            item.product.productUnits.length)
             ? () => {}
             : itemClick(item)
         "

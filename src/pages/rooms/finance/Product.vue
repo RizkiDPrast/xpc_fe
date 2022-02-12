@@ -202,7 +202,7 @@
           <div class="row q-col-gutter-sm">
             <q-input
               ref="qty"
-              :disable="!createMode && !model.trackInventory"
+              :disable="lockStock"
               outlined
               dense
               type="number"
@@ -293,7 +293,8 @@ export default {
       model: new Product(this.value),
       configs: this.$root.$options.moneyConfigs,
       showUnits: false,
-      showCategories: false
+      showCategories: false,
+      lockStock: false
     };
   },
   watch: {
@@ -337,6 +338,10 @@ export default {
       try {
         var res = await this.$api.products.getOne(this.id);
         this.model = new Product(res.data);
+
+        if (this.model.trackInventory) {
+          this.lockStock = true;
+        }
       } catch (e) {
         this.$toastr.error(e);
       }
