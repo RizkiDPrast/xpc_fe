@@ -51,7 +51,25 @@
             minimum quantity
           </q-tooltip>
         </q-btn>
-        <q-radio
+        <q-select
+          label="Filter status"
+          dense
+          outlined
+          v-model="statusFilter"
+          :options="['Active', 'Discontinued']"
+          style="min-width:120px;"
+        />
+
+        <product-group-select
+          label="Filter group"
+          v-model="groupFilter"
+          clearable
+          outlined
+          dense
+          style="min-width:130px;"
+        />
+
+        <!-- <q-radio
           size="sm"
           v-model="discontinued"
           :val="false"
@@ -62,7 +80,7 @@
           v-model="discontinued"
           :val="true"
           label="Discontinued products"
-        />
+        /> -->
       </template>
       <template #body-cell-qty="props">
         <q-td class="text-center">
@@ -138,13 +156,17 @@
 
 <script>
 import Product from "src/models/Product";
+import ProductGroupSelect from "src/components/ProductGroupSelect.vue";
 export default {
+  components: { ProductGroupSelect },
   data() {
     return {
       loading: false,
       submitting: false,
       discontinued: false,
       outOfStock: false,
+      statusFilter: "Active",
+      groupFilter: null,
       newStock: 0,
       showCategories: false,
       showUnits: false,
@@ -162,6 +184,13 @@ export default {
           format: (val, row, c) => this.data.indexOf(row) + 1,
           style: "width: 25px",
           label: "#",
+          sortable: true
+        },
+        {
+          name: "productgroup",
+          align: "left",
+          field: "productGroup",
+          label: "Group",
           sortable: true
         },
         {
@@ -241,6 +270,10 @@ export default {
           field: "modifiedAt",
           align: "left",
           format: val => this.$util.toDateString(val)
+        },
+        {
+          name: "ID",
+          field: "id"
         }
       ],
       pager: {
@@ -252,10 +285,16 @@ export default {
     };
   },
   watch: {
-    discontinued() {
+    // discontinued() {
+    //   this.fetch();
+    // },
+    outOfStock() {
       this.fetch();
     },
-    outOfStock() {
+    statusFilter() {
+      this.fetch();
+    },
+    groupFilter() {
       this.fetch();
     }
   },
@@ -275,7 +314,15 @@ export default {
           pager.outOfStock = undefined;
         }
 
-        var res = await this.$api.products.get(this.discontinued, pager);
+        if (this.groupFilter) {
+          pager.group = this.groupFilter;
+        } else {
+          pager.group = undefined;
+        }
+
+        const discontinued = this.statusFilter !== "Active";
+
+        var res = await this.$api.products.get(discontinued, pager);
         var dt = res.data;
         this.data = dt.rows.map(x => new Product(x));
 

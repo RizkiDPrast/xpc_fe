@@ -227,6 +227,16 @@
               :error="errors.has('minimumQty')"
               :error-message="errors.first('minimumQty')"
             />
+
+            <product-group-select
+              class="col-12"
+              outlined
+              dense
+              v-model="model.productGroup"
+              label="Group"
+              hint="Digunakan dalam laporan"
+            />
+
             <q-toggle
               @input="trackInput"
               v-model="model.trackInventory"
@@ -235,13 +245,14 @@
               class="col-4"
               color="positive"
             />
-            <q-toggle
+            <!-- <q-toggle
               v-model="model.petShopProduct"
               name="pethop"
               label="Pet Shop Product?"
               class="col-4"
               color="positive"
-            />
+            /> -->
+
             <q-toggle
               v-model="model.discontinued"
               name="discontinued"
@@ -271,6 +282,7 @@
 <script>
 import Product from "src/models/Product";
 import ProductUnits from "./components/ProductUnits";
+import ProductGroupSelect from "src/components/ProductGroupSelect.vue";
 
 export default {
   description: "Product",
@@ -285,7 +297,8 @@ export default {
     }
   },
   components: {
-    ProductUnits
+    ProductUnits,
+    ProductGroupSelect
   },
   data() {
     return {
