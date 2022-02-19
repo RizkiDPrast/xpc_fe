@@ -63,6 +63,13 @@
                   Description
                 </td>
                 <td>
+                  Group
+                </td>
+                <td>
+                  Payment type
+                </td>
+
+                <td>
                   Actions
                 </td>
               </tr>
@@ -86,6 +93,19 @@
                 </td>
                 <td>
                   {{ scoped.row.note }}
+                </td>
+                <td>
+                  <span v-if="scoped.row.isForBoarding">
+                    BOARDING
+                  </span>
+                </td>
+                <td>
+                  <payment-type-select
+                    :value="scoped.row.paymentType"
+                    readonly
+                    dense
+                    outlined
+                  />
                 </td>
                 <td>
                   <q-btn
@@ -130,10 +150,12 @@
 <script>
 import DepositTransaction from "src/models/DepositTransaction";
 import AddDepositDialog from "./AddDepositDialog";
+import PaymentTypeSelect from "src/components/PaymentTypeSelect.vue";
 export default {
   name: "DepositTodayList",
   components: {
-    AddDepositDialog
+    AddDepositDialog,
+    PaymentTypeSelect
   },
   data() {
     return {

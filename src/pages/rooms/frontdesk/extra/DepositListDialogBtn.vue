@@ -21,6 +21,16 @@
             <template #actions>
               <date-input dense label="Date filter" v-model="createdAt" />
             </template>
+            <template #body-cell-paymentType="props">
+              <q-td align="center">
+                <payment-type-select
+                  outlined
+                  dense
+                  :value="props.row.paymentType"
+                  readonly
+                />
+              </q-td>
+            </template>
           </my-table>
         </q-card-section>
       </q-card>
@@ -30,8 +40,9 @@
 <script>
 import DialogHeader from "src/components/DialogHeader.vue";
 import DateInput from "src/components/DateInput.vue";
+import PaymentTypeSelect from "src/components/PaymentTypeSelect.vue";
 export default {
-  components: { DialogHeader, DateInput },
+  components: { DialogHeader, DateInput, PaymentTypeSelect },
   name: "DepositListDialogBtn",
   data() {
     return {
@@ -75,6 +86,18 @@ export default {
           name: "note",
           label: "Notes",
           field: "note",
+          align: "left"
+        },
+        {
+          name: "group",
+          label: "Group",
+          field: "isForBoarding",
+          format: val => (val ? "BOARDING" : "")
+        },
+        {
+          name: "paymentType",
+          label: "Payment type",
+          field: "paymentType",
           align: "left"
         },
         {
