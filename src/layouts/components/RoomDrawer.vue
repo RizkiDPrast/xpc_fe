@@ -179,6 +179,14 @@ export default {
           icon: "las la-coins",
           caption: "Remaining deposits from all clients"
         },
+        { separator: 1 },
+        { label: "General Ledger" },
+        {
+          to: "/app/rooms/finance/accounts",
+          label: "Accounts",
+          icon: "las la-award",
+          caption: "Bookkeeping accounts"
+        },
 
         // // following is not used
         // {

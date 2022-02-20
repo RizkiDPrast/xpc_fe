@@ -623,6 +623,14 @@ export const api = {
       return axios.delete(`finances/Locks/${id}`);
     }
   },
+  gl: {
+    getAccounts() {
+      return axios.get("accounts");
+    },
+    postAccount: data => axios.post("accounts", data),
+    putAccount: data => axios.put("accounts", data),
+    deleteAccount: id => axios.delete(`accounts/${id}`)
+  },
   dashboard: {
     getSalesData: year =>
       axios.get("dashboard/SalesData", { params: { year } }),
