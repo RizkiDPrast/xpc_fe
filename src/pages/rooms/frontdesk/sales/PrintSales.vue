@@ -223,9 +223,10 @@ export default {
       footNotes:
         "--Terima kasih--<br>" +
         "<p class='text-left q-mt-md text-caption'>Transfer ke<br>" +
-        "BCA: 166 3157 063<br>" +
-        "MANDIRI: 1570 0045 75081<br>" +
-        "a.n Fochi Stelladayef</p>",
+        "BCA: 166 3157 063 <br>" +
+        "a.n Fochi Stelladayef<br>" +
+        "MANDIRI: 157-00-0794990-3<br>" +
+        "a.n PT PRIMA SATWA SEJAHTERA<br>",
       animalTypes: [],
       to: undefined,
       toTime: 3000,
