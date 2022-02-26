@@ -23,6 +23,7 @@
                 <date-input
                   label="Visit date"
                   v-model="model.visitDate"
+                  @input="input"
                   style="min-width:157px;"
                   name="visitDate"
                   maxToday
@@ -135,6 +136,9 @@ export default {
     }
   },
   methods: {
+    input(dt) {
+      console.log("dt", dt);
+    },
     async saveModel() {
       let isEditing = this.model.id;
       if (!(await this.$validator.validate())) {

@@ -1,12 +1,5 @@
 <template>
-  <q-input
-    outlined
-    readonly
-    :value="model"
-    mask="date"
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
+  <q-input outlined readonly :value="model" mask="date" v-bind="$attrs">
     <template #append>
       <q-btn
         v-if="model"
@@ -28,6 +21,7 @@
             @input="closePopup('qDateProxy')"
             today-btn
             :readonly="readonly"
+            v-on="$listeners"
           />
         </q-popup-proxy>
       </q-icon>
@@ -45,7 +39,7 @@ export default {
   computed: {
     model: {
       get() {
-        return this.value;
+        return this.$util.formatDate(this.value, "YYYY-MM-DD");
       },
       set(val) {
         this.$emit("input", val);
