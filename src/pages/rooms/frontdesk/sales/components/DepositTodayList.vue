@@ -2,7 +2,16 @@
   <div>
     <q-card-section title class="text-h6" style="padding-bottom:0">
       <q-toolbar v-if="allCurrentDeposit">
-        Total deposit from all clients: {{ allCurrentDeposit | money }}
+        <q-toolbar-title>
+          Total deposit from all clients: {{ allCurrentDeposit | money }}
+        </q-toolbar-title>
+        <q-btn
+          flat
+          color="primary"
+          icon="las la-eye"
+          title="Lihat daftar"
+          to="/app/rooms/all-client-deposits"
+        />
       </q-toolbar>
       <q-toolbar>
         <q-toolbar-title>
@@ -54,6 +63,13 @@
                   Description
                 </td>
                 <td>
+                  Group
+                </td>
+                <td>
+                  Payment type
+                </td>
+
+                <td>
                   Actions
                 </td>
               </tr>
@@ -77,6 +93,19 @@
                 </td>
                 <td>
                   {{ scoped.row.note }}
+                </td>
+                <td>
+                  <span v-if="scoped.row.isForBoarding">
+                    BOARDING
+                  </span>
+                </td>
+                <td>
+                  <payment-type-select
+                    :value="scoped.row.paymentType"
+                    readonly
+                    dense
+                    outlined
+                  />
                 </td>
                 <td>
                   <q-btn
@@ -121,10 +150,12 @@
 <script>
 import DepositTransaction from "src/models/DepositTransaction";
 import AddDepositDialog from "./AddDepositDialog";
+import PaymentTypeSelect from "src/components/PaymentTypeSelect.vue";
 export default {
   name: "DepositTodayList",
   components: {
-    AddDepositDialog
+    AddDepositDialog,
+    PaymentTypeSelect
   },
   data() {
     return {

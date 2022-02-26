@@ -202,7 +202,7 @@
           <div class="row q-col-gutter-sm">
             <q-input
               ref="qty"
-              :disable="!createMode && !model.trackInventory"
+              :disable="lockStock"
               outlined
               dense
               type="number"
@@ -227,6 +227,16 @@
               :error="errors.has('minimumQty')"
               :error-message="errors.first('minimumQty')"
             />
+
+            <product-group-select
+              class="col-12"
+              outlined
+              dense
+              v-model="model.productGroup"
+              label="Group"
+              hint="Digunakan dalam laporan"
+            />
+
             <q-toggle
               @input="trackInput"
               v-model="model.trackInventory"
@@ -235,13 +245,14 @@
               class="col-4"
               color="positive"
             />
-            <q-toggle
+            <!-- <q-toggle
               v-model="model.petShopProduct"
               name="pethop"
               label="Pet Shop Product?"
               class="col-4"
               color="positive"
-            />
+            /> -->
+
             <q-toggle
               v-model="model.discontinued"
               name="discontinued"
@@ -271,6 +282,7 @@
 <script>
 import Product from "src/models/Product";
 import ProductUnits from "./components/ProductUnits";
+import ProductGroupSelect from "src/components/ProductGroupSelect.vue";
 
 export default {
   description: "Product",
@@ -285,7 +297,8 @@ export default {
     }
   },
   components: {
-    ProductUnits
+    ProductUnits,
+    ProductGroupSelect
   },
   data() {
     return {
@@ -293,7 +306,8 @@ export default {
       model: new Product(this.value),
       configs: this.$root.$options.moneyConfigs,
       showUnits: false,
-      showCategories: false
+      showCategories: false,
+      lockStock: false
     };
   },
   watch: {
@@ -337,6 +351,10 @@ export default {
       try {
         var res = await this.$api.products.getOne(this.id);
         this.model = new Product(res.data);
+
+        if (this.model.trackInventory) {
+          this.lockStock = true;
+        }
       } catch (e) {
         this.$toastr.error(e);
       }

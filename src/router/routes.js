@@ -191,6 +191,15 @@ const routes = [
             }
           },
 
+          //gl
+          {
+            path: "finance/accounts",
+            component: () => import("pages/rooms/finance/GL/Accounts.vue"),
+            meta: {
+              title: "Accounts"
+            }
+          },
+
           //vet
           {
             path: "vet/clients",

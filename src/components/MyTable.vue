@@ -34,6 +34,7 @@
         placeholder="search..."
         autofocus
         :disable="loadingModel"
+        ref="search"
       >
         <template #after>
           <q-icon name="las la-search" />
@@ -137,7 +138,6 @@ export default {
 
       let pager = this.$refs.table.pagination || { page: 1, perPage: 10 };
       pager.filter = this.filter;
-      console.log("asd", pager);
       this.fetch({ pagination: pager });
     },
     refresh() {
@@ -148,6 +148,13 @@ export default {
     },
     fetch(props) {
       this.$emit("request", props);
+      let self = this;
+      // this.$nextTick(() => {
+      //   self.$refs.search.focus();
+      // });
+      setTimeout(() => {
+        self.$refs.search.focus();
+      }, 800);
     }
   }
 };

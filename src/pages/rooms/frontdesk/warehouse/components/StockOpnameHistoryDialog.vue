@@ -19,7 +19,7 @@
         >
           <template #title> </template>
           <template #actions>
-            <q-select
+            <!-- <q-select
               :options="['All', 'Pet shop products', 'Medical products']"
               :disable="loading"
               v-model="petShopOnly"
@@ -28,6 +28,15 @@
               outlined
               debounce="500"
               style="min-width:100px"
+            /> -->
+            <product-group-select
+              label="Filter group"
+              v-model="group"
+              debounce="500"
+              style="min-width:150px"
+              outlined
+              dense
+              :disable="loading"
             />
           </template>
 
@@ -62,7 +71,9 @@
 </template>
 
 <script>
+import ProductGroupSelect from "src/components/ProductGroupSelect.vue";
 export default {
+  components: { ProductGroupSelect },
   props: {
     value: {
       type: Boolean,
@@ -84,7 +95,8 @@ export default {
           width: "12px",
           align: "center"
         },
-        ,{
+        ,
+        {
           name: "#",
           label: "#",
           width: "12px",
@@ -96,7 +108,7 @@ export default {
           label: "Purchasing ref",
           width: "25px",
           align: "center",
-          field: 'purchaseRef'
+          field: "purchaseRef"
         },
         {
           name: "product.categoryId",
@@ -104,6 +116,13 @@ export default {
           field: row => row.product.categoryId,
           align: "left",
           format: val => this.getCategoryName(val)
+        },
+        {
+          name: "product.productGroup",
+          label: "Group",
+          field: row => row.product.productGroup,
+          align: "left",
+          format: val => val?.replaceAll("_", " ")
         },
         {
           name: "product.sku",
@@ -122,14 +141,17 @@ export default {
           label: "Product Qty",
           field: row => row.product.qty,
           align: "center",
-          classes: (row) => row.product.qty < row.product.minimumQty ?  "text-negative" : "text-bold"
-        },    
+          classes: row =>
+            row.product.qty < row.product.minimumQty
+              ? "text-negative"
+              : "text-bold"
+        },
         {
           name: "product.minimumQty",
           label: "Min Qty",
           field: row => row.product.minimumQty,
           align: "center",
-          classes: 'text-green'
+          classes: "text-green"
         },
         {
           name: "unitId",
@@ -175,7 +197,7 @@ export default {
           field: "unitCost",
           align: "right",
           format: val => this.$options.filters.money(val)
-        },    
+        },
         {
           name: "note",
           label: "Note",
@@ -202,7 +224,8 @@ export default {
         rowsNumber: 0
       },
       filter: undefined,
-      petShopOnly: "All"
+      petShopOnly: "All",
+      group: null
     };
   },
   mounted() {
@@ -219,7 +242,10 @@ export default {
     }
   },
   watch: {
-    petShopOnly() {
+    // petShopOnly() {
+    //   this.fetch();
+    // },
+    group() {
       this.fetch();
     },
     "stockOpname.id"(val) {
@@ -236,13 +262,19 @@ export default {
       this.loading = true;
       pager = pager?.pagination || this.pager;
 
-      if (this.petShopOnly !== "All") {
-        if (this.petShopOnly === "Pet shop products") {
-          pager.petShopOnly = true;
-        } else {
-          pager.petShopOnly = false;
-        }
+      // if (this.petShopOnly !== "All") {
+      //   if (this.petShopOnly === "Pet shop products") {
+      //     pager.petShopOnly = true;
+      //   } else {
+      //     pager.petShopOnly = false;
+      //   }
+      // }
+      if (this.group) {
+        pager.group = this.group;
+      } else {
+        pager.group = null;
       }
+
       pager.stockOpnameId = this.stockOpname.id;
       try {
         var res = await this.$api.stocks.getHistoryData(pager);

@@ -19,7 +19,20 @@
             outlined
             dense
           />
+          <q-checkbox
+            left-label
+            label="Deposit Boarding?"
+            v-model="depositModel.isForBoarding"
+          />
+
+          <payment-type-select
+            v-model="depositModel.paymentType"
+            outlined
+            dense
+            label="Pembayaran dengan"
+          />
           <money-field
+            class="q-mt-md"
             label="In"
             v-model="depositModel.credit"
             name="credit"
@@ -61,7 +74,9 @@
 
 <script>
 import DepositTransaction from "src/models/DepositTransaction";
+import PaymentTypeSelect from "src/components/PaymentTypeSelect.vue";
 export default {
+  components: { PaymentTypeSelect },
   name: "AddDepositDialog",
   props: {
     value: {

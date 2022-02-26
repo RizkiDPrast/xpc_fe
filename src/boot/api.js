@@ -4,6 +4,7 @@ import AnimalType from "src/models/AnimalType";
 import Category from "src/models/Category";
 import Unit from "src/models/Unit";
 import AppointmentType from "src/models/AppointmentType";
+import { LocalStorage } from "quasar";
 
 // "async" is optional
 export default async ({ Vue, store }) => {
@@ -364,7 +365,17 @@ export const api = {
     putUnit: model => axios.put("/productUnits", model),
     deleteUnit: id => axios.delete("/productUnits", { params: { id } }),
     updateInvStatus: model =>
-      axios.post("/products/updateTrackInvStatus", model)
+      axios.post("/products/updateTrackInvStatus", model),
+    getProductGroups: async () => {
+      const key = "PRODUCT_GROUPS";
+      const groups = LocalStorage.getItem(key);
+      if (groups && groups.length) {
+        return response(groups);
+      }
+      const res = await axios.get("/products/GetProductGroups");
+      LocalStorage.set(key, res.data);
+      return res;
+    }
   },
   users: {
     get: params => {
@@ -431,7 +442,8 @@ export const api = {
     getUnpaidSaleLine: () => axios.get("UnfinishedItems/unpaidSaleLine")
   },
   salesManagers: {
-    get: params => axios.get("/salesmanagers", { params }),
+    get: () => axios.get("/salesmanagers", {}),
+    getSelectData: () => axios.get("/salesmanagers/select-data", {}),
     getDetails: id => axios.get(`/salesmanagers/${id}`)
   },
   saleLines: {
@@ -610,6 +622,14 @@ export const api = {
     deleteLock(id) {
       return axios.delete(`finances/Locks/${id}`);
     }
+  },
+  gl: {
+    getAccounts() {
+      return axios.get("accounts");
+    },
+    postAccount: data => axios.post("accounts", data),
+    putAccount: data => axios.put("accounts", data),
+    deleteAccount: id => axios.delete(`accounts/${id}`)
   },
   dashboard: {
     getSalesData: year =>

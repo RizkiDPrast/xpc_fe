@@ -46,7 +46,7 @@ export default {
   name: "DailyVisits",
   data() {
     return {
-      date: new Date(),
+      date: this.$util.formatDate(new Date(), "YYYY-MM-DD"),
       loading: false,
       data: [],
       pager: {

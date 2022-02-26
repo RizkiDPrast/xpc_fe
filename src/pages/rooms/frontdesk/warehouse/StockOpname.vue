@@ -18,7 +18,7 @@
           @add="add"
           @edit="edit"
           addBtnIcon="las la-save"
-          :addBtnClass="(isAdmin || isFinance) ? 'text-secondary' : 'hidden'"
+          :addBtnClass="isAdmin || isFinance ? 'text-secondary' : 'hidden'"
         >
           <template #title>
             <q-toolbar-title style="flex:auto;" class="col-8">
@@ -26,12 +26,25 @@
             </q-toolbar-title>
           </template>
           <template #actions>
-            <q-checkbox v-model="expireSoon" label="Near to Expiry" style="width:200px" >
+            <q-checkbox
+              v-model="expireSoon"
+              label="Near to Expiry"
+              style="width:200px"
+            >
               <q-tooltip content-class="bg-secondary">
                 Show available stocks that almost expire (in 7 days)
               </q-tooltip>
             </q-checkbox>
-            <q-select
+            <product-group-select
+              label="Filter group"
+              v-model="group"
+              debounce="500"
+              style="min-width:150px"
+              outlined
+              dense
+              :disable="loading"
+            />
+            <!-- <q-select
               :options="['All', 'Pet shop products', 'Medical products']"
               :disable="loading"
               v-model="petShopOnly"
@@ -40,12 +53,18 @@
               outlined
               debounce="500"
               style="min-width:100px"
-            />
+            /> -->
           </template>
 
           <template #body-cell-action="props">
             <q-td>
-              <q-btn icon="las la-ellipsis-v" flat round size="sm"  v-if="isAdmin || isFinance" >
+              <q-btn
+                icon="las la-ellipsis-v"
+                flat
+                round
+                size="sm"
+                v-if="isAdmin || isFinance"
+              >
                 <q-menu>
                   <q-list>
                     <q-item
@@ -97,10 +116,12 @@
 <script>
 import UpdateStockDialogItem from "./components/UpdateStockDialogItem";
 import StockOpnameHistoryDialog from "./components/StockOpnameHistoryDialog";
+import ProductGroupSelect from "src/components/ProductGroupSelect.vue";
 export default {
   components: {
     UpdateStockDialogItem,
-    StockOpnameHistoryDialog
+    StockOpnameHistoryDialog,
+    ProductGroupSelect
   },
   data() {
     return {
@@ -120,12 +141,12 @@ export default {
           align: "center",
           format: (val, row) => this.data.indexOf(row) + 1
         },
-         {
+        {
           name: "purchaseref",
           label: "Purchasing ref",
           width: "25px",
           align: "center",
-          field: 'purchaseRef'
+          field: "purchaseRef"
         },
         {
           name: "product.categoryId",
@@ -133,6 +154,13 @@ export default {
           field: row => row.product.categoryId,
           align: "left",
           format: val => this.getCategoryName(val)
+        },
+        {
+          name: "product.productGroup",
+          label: "Group",
+          field: row => row.product.productGroup,
+          align: "left",
+          format: val => val?.replaceAll("_", " ")
         },
         {
           name: "product.sku",
@@ -149,11 +177,14 @@ export default {
         {
           name: "product.qty",
           label: "Product Qty",
-          classes: 'text-bold',
+          classes: "text-bold",
           field: row => row.product.qty,
           align: "center",
-          classes: (row) => row.product.qty < row.product.minimumQty ?  "text-negative" : "text-bold"
-        }, 
+          classes: row =>
+            row.product.qty < row.product.minimumQty
+              ? "text-negative"
+              : "text-bold"
+        },
         {
           name: "product.minimumQty",
           label: "Min Qty",
@@ -206,7 +237,7 @@ export default {
           align: "right",
           format: val => this.$options.filters.money(val)
         },
-       
+
         {
           name: "note",
           label: "Note",
@@ -233,7 +264,8 @@ export default {
         rowsNumber: 0
       },
       filter: undefined,
-      petShopOnly: "All",
+      // petShopOnly: "All",
+      group: null,
       expireSoon: false,
       savingOpname: false,
       loading2: false,
@@ -274,11 +306,14 @@ export default {
     this.fetch2();
   },
   watch: {
-    petShopOnly() {
+    // petShopOnly() {
+    //   this.fetch();
+    // },
+    group() {
       this.fetch();
     },
-    expireSoon(){
-      this.fetch()
+    expireSoon() {
+      this.fetch();
     }
   },
   methods: {
@@ -318,15 +353,20 @@ export default {
       this.loading = true;
       pager = pager?.pagination || this.pager;
 
-      if (this.petShopOnly !== "All") {
-        if (this.petShopOnly === "Pet shop products") {
-          pager.petShopOnly = true;
-        } else {
-          pager.petShopOnly = false;
-        }
+      // if (this.petShopOnly !== "All") {
+      //   if (this.petShopOnly === "Pet shop products") {
+      //     pager.petShopOnly = true;
+      //   } else {
+      //     pager.petShopOnly = false;
+      //   }
+      // }
+      if (this.group) {
+        pager.group = this.group;
+      } else {
+        pager.group = null;
       }
 
-      if(this.expireSoon){
+      if (this.expireSoon) {
         pager.expireSoon = true;
       } else {
         pager.expireSoon = undefined;

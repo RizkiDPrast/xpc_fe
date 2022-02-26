@@ -12,6 +12,8 @@ export default class DepositTransaction extends UserTracker {
     saleId,
 
     clientName,
+    isForBoarding = true,
+    paymentType = 0,
     salesManager,
 
     createdByName,
@@ -31,6 +33,9 @@ export default class DepositTransaction extends UserTracker {
     this.saleId = saleId;
     this.clientName = clientName;
     this.salesManager = salesManager;
+
+    this.isForBoarding = isForBoarding;
+    this.paymentType = paymentType;
 
     this.createdByName = createdByName;
     this.createdAt = createdAt;

@@ -224,10 +224,10 @@ export default {
       sl.unitCost = item.purchasingPrice;
       sl.qty = 1;
 
-      //sl.unitPrice = item.sellingPrice;
-      sl.unitPrice = item.sellingPriceWithoutDisc;
-      sl.moneyDiscount = item.discount;
-      sl.percentDiscount = item.discountPercent;
+      sl.unitPrice = item.sellingPrice;
+      // sl.unitPrice = item.sellingPriceWithoutDisc;
+      // sl.moneyDiscount = item.discount;
+      // sl.percentDiscount = item.discountPercent;
 
       item.unitName = this.getUnitName(item.unitId);
       sl.maxUnit = item.qty;

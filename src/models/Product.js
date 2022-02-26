@@ -22,6 +22,7 @@ export default class Product extends UserTracker {
     trackInventory = false,
     minimumQty = 0,
     petShopProduct = false,
+    productGroup = null,
     discontinued = false,
 
     qty = 0,
@@ -43,6 +44,7 @@ export default class Product extends UserTracker {
     this.markupPercent = markupPercent;
     this.discount = discount;
     this.petShopProduct = petShopProduct;
+    this.productGroup = productGroup;
     this.discountPercent = discountPercent;
     this.productionCost = productionCost;
 
