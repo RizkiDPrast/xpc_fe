@@ -1,5 +1,5 @@
 <template>
-  <q-input outlined readonly :value="model" mask="date" v-bind="$attrs">
+  <q-input outlined readonly v-model="model" v-bind="$attrs">
     <template #append>
       <q-btn
         v-if="model"
