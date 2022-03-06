@@ -14,6 +14,9 @@
       @row-click="rowClick"
       delete-btn-class="hidden"
     >
+      <template #actions>
+        <date-input dense v-model="date" label="Filter date" />
+      </template>
       <template #body-cell-attachments="scoped">
         <q-td align="left">
           <div style="width:100px">
@@ -51,11 +54,12 @@
 
 <script>
 import CashBookEntry from "src/models/CashBookEntry";
+import DateInput from "src/components/DateInput.vue";
 // import CashBookEntryLine from "src/models/CashBookEntryLine";
 
 export default {
   name: "BookEntryList",
-  components: {},
+  components: { DateInput },
   props: {},
   data() {
     return {
@@ -130,11 +134,17 @@ export default {
       isLoadingSalesLines: false,
       printSalesDialog: false,
       updateSalesDialogModel: false,
-      pagination: { sortBy: "id", descending: true }
+      pagination: { sortBy: "id", descending: true },
+      date: null
     };
   },
   mounted() {
     this.onRequest();
+  },
+  watch: {
+    date() {
+      this.onRequest();
+    }
   },
   methods: {
     async search(filter, showIncomplete) {
@@ -147,6 +157,13 @@ export default {
       this.isLoading = true;
       try {
         const pagination = (props && props.pagination) || this.pagination;
+
+        if (this.date) {
+          pagination.date = this.date;
+        } else {
+          pagination.date = null;
+        }
+
         const res = await this.$api.gl.bookEntries.get(pagination);
         const data = res.data;
         const model = data.rows.map(x => new CashBookEntry(x));
