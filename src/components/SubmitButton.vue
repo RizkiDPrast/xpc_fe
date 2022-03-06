@@ -6,11 +6,8 @@
     style="width: 150px"
     @click.stop="$emit('click')"
     v-bind="$attrs"
+    :label="$attrs.label && $attrs.label.length ? $attrs.label : 'Submit'"
   >
-    <slot>
-      Submit
-    </slot>
-
     <template #loading>
       <slot name="loading">
         <q-spinner-ios class="on-left" />
