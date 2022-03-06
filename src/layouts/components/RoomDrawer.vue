@@ -193,6 +193,12 @@ export default {
           icon: "las la-book",
           caption: "Book Entry"
         },
+        {
+          to: "/app/rooms/finance/journal",
+          label: "Journal",
+          icon: "las la-book-reader",
+          caption: "All list"
+        },
 
         // // following is not used
         // {

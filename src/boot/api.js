@@ -637,6 +637,9 @@ export const api = {
       deleteFile: (id, fileId) =>
         axios.delete(`BookEntries/${id}/files/${fileId}`),
       postFiles: (id, files) => axios.post(`BookEntries/${id}/files`, files)
+    },
+    journal: {
+      get: params => axios.get("generaljournal", { params })
     }
   },
   dashboard: {

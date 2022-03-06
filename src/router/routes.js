@@ -215,6 +215,14 @@ const routes = [
             },
             props: true
           },
+          {
+            path: "finance/journal",
+            component: () => import("src/pages/rooms/finance/GL/Journal.vue"),
+            meta: {
+              title: "Journal"
+            },
+            props: true
+          },
 
           //vet
           {
