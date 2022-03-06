@@ -629,7 +629,15 @@ export const api = {
     },
     postAccount: data => axios.post("accounts", data),
     putAccount: data => axios.put("accounts", data),
-    deleteAccount: id => axios.delete(`accounts/${id}`)
+    deleteAccount: id => axios.delete(`accounts/${id}`),
+    bookEntries: {
+      get: params => axios.get("BookEntries", { params }),
+      getOne: id => axios.get(`BookEntries/${id}`),
+      post: model => axios.post("BookEntries", model),
+      deleteFile: (id, fileId) =>
+        axios.delete(`BookEntries/${id}/files/${fileId}`),
+      postFiles: (id, files) => axios.post(`BookEntries/${id}/files`, files)
+    }
   },
   dashboard: {
     getSalesData: year =>

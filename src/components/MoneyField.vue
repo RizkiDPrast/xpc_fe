@@ -3,10 +3,13 @@
     <template v-slot:control="{ id, value }">
       <money
         :id="id"
-        class="q-field__native q-placeholder text-right"
+        class="text-right"
+        borderless
         :value="value"
         @input="emitValue"
-        v-bind="percentToggle && toggleModel ? { prefix: '' } : {}"
+        v-bind="
+          percentToggle && toggleModel ? { prefix: '', ...$attrs } : $attrs
+        "
       />
     </template>
     <template v-if="percentToggle" #after>
