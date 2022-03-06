@@ -187,6 +187,12 @@ export default {
           icon: "las la-award",
           caption: "Bookkeeping accounts"
         },
+        {
+          to: "/app/rooms/finance/book-entry",
+          label: "Book Entry",
+          icon: "las la-book",
+          caption: "Book Entry"
+        },
 
         // // following is not used
         // {

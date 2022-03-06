@@ -199,6 +199,22 @@ const routes = [
               title: "Accounts"
             }
           },
+          {
+            path: "finance/book-entry",
+            component: () => import("pages/rooms/finance/GL/CashBookEntry.vue"),
+            meta: {
+              title: "Book Entry"
+            }
+          },
+          {
+            path: "finance/book-entries/:id?",
+            component: () =>
+              import("pages/rooms/finance/GL/CashBookEntryDetails.vue"),
+            meta: {
+              title: "Book Entry Details"
+            },
+            props: true
+          },
 
           //vet
           {

@@ -17,3 +17,10 @@ body {
     display: none !important;
   }
 }
+
+input.v-money,
+input.v-money:active,
+input.v-money:focus {
+  border: none;
+  outline: none;
+}
