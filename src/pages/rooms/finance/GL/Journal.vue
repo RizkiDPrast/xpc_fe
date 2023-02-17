@@ -20,16 +20,19 @@
       <template #body-cell-attachments="scoped">
         <q-td align="left">
           <div style="width:100px">
-            <q-item v-if="scoped.row.attachmentCount">
+            <q-item v-if="scoped.row.cashBookEntry.attachmentCount">
               <q-item-section>
-                {{ scoped.row.attachmentCount }} file{{
-                  scoped.row.attachmentCount > 1 ? "s" : ""
+                {{ scoped.row.cashBookEntry.attachmentCount }} file{{
+                  scoped.row.cashBookEntry.attachmentCount > 1 ? "s" : ""
                 }}
               </q-item-section>
               <q-item-section side>
                 <q-btn icon="las la-ellipsis-v" flat dense>
                   <q-menu>
-                    <q-item v-for="item in scoped.row.appFiles" :key="item.id">
+                    <q-item
+                      v-for="item in scoped.row.cashBookEntry.appFiles"
+                      :key="item.id"
+                    >
                       <q-item-section>
                         <a
                           style="text-decoration:none"
