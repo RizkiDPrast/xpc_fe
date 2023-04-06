@@ -9,7 +9,7 @@ import { LocalStorage } from "quasar";
 // "async" is optional
 export default async ({ Vue, store }) => {
   axios.interceptors.request.use(
-    function(config) {
+    function (config) {
       let selected = store.state.app.selectedRoom.id;
       if (selected) {
         config.headers["X-Room"] = selected;
@@ -17,7 +17,7 @@ export default async ({ Vue, store }) => {
       }
       return config;
     },
-    function(error) {
+    function (error) {
       // Do something with request error
       return Promise.reject(error);
     }
@@ -260,7 +260,15 @@ export const api = {
   reports: {
     getVisit: date => axios.get(`/reports/visit`, { params: { date } }),
     getSalesMonth: date =>
-      axios.get(`/reports/monthly-sales`, { params: { date } })
+      axios.get(`/reports/monthly-sales`, { params: { date } }),
+    getRevenue: (date, group) => axios.get(`/reports/revenue`, { params: { date, group } }),
+    getSummary: (startDate, endDate) => axios.get('/reports/summary', { params: { startDate, endDate } }),
+    getPenerimaanUsaha: params => axios.get("/reports/penerimaan-usaha", { params }),
+    getPenerimaanLain: params => axios.get("/reports/penerimaan-lain", { params }),
+    getBebanUsaha: params => axios.get("/reports/beban-usaha", { params }),
+    getBebanLain: params => axios.get("/reports/beban-lain", { params }),
+    getBiayaBiaya: params => axios.get("/reports/biaya-biaya", { params }),
+    getHpp: params => axios.get("/reports/hpp", { params }),
   },
   categories: {
     get: async pager => {
@@ -416,8 +424,8 @@ export const api = {
     post: params => axios.post("/purchases", { ...params }),
     put: (id, params) => axios.put(`/purchases/${id}`, { ...params }),
     delete: id => axios.delete(`/purchases/${id}`),
-    updateStatus: (id, isPaid) =>
-      axios.put(`/purchases/${id}/status`, isPaid || "false")
+    updateStatus: (id, accountCode) =>
+      axios.put(`/purchases/${id}/status`, { accountCode })
   },
   purchaseLines: {
     getPurchaseCode: id => axios.get(`/purchaseLines/${id}/PurchaseCode`)
@@ -444,6 +452,7 @@ export const api = {
   salesManagers: {
     get: () => axios.get("/salesmanagers", {}),
     getSelectData: () => axios.get("/salesmanagers/select-data", {}),
+    getSelectDataSimple: () => axios.get("/salesmanagers/select-data-simple", {}),
     getDetails: id => axios.get(`/salesmanagers/${id}`)
   },
   saleLines: {
@@ -486,6 +495,10 @@ export const api = {
     get: params => axios.get("/cashInOuts", { params }),
     getToday: () => {
       let res = axios.get("/cashInOuts/today");
+      return res;
+    },
+    getTotal: () => {
+      let res = axios.get("/CashInOUts/TotalPettyCash");
       return res;
     },
     post: model => axios.post("/cashInOuts", model)
@@ -624,8 +637,8 @@ export const api = {
     }
   },
   gl: {
-    getAccounts() {
-      return axios.get("accounts");
+    getAccounts(startWith) {
+      return axios.get("accounts", { params: { startWith } });
     },
     postAccount: data => axios.post("accounts", data),
     putAccount: data => axios.put("accounts", data),

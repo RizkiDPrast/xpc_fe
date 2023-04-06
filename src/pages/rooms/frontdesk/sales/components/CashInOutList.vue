@@ -1,12 +1,12 @@
 <template>
   <div>
     <q-card-section title class="text-h6" style="padding-bottom:0">
-      <q-toolbar v-if="cashInHand > -1">
-        Total Cash in hand: {{ cashInHand | money }}
+      <q-toolbar v-if="totalPettyCash > -1">
+        Total Cash in hand: {{ totalPettyCash | money }}
       </q-toolbar>
-      <q-banner class="bg-grey-3">
+      <!-- <q-banner class="bg-grey-3">
         Cash payment from Sale will also be added
-      </q-banner>
+      </q-banner> -->
       <q-toolbar>
         <q-toolbar-title>
           Cash in out
@@ -18,7 +18,7 @@
           @click="addDialog = true"
           flat
         />
-         <q-btn
+        <q-btn
           size="sm"
           icon="las la-plus"
           label="KASBON"
@@ -108,13 +108,17 @@
       </q-list>
     </q-card-section>
     <add-cash-in-out-dialog v-model="addDialog" @added="cashInOutAddedHandle" />
-    <add-cash-advance-dialog v-model="addCashAdvanceDialog" @added="cashInOutAddedHandle" />
+    <add-cash-advance-dialog
+      v-model="addCashAdvanceDialog"
+      @added="cashInOutAddedHandle"
+    />
   </div>
 </template>
 
 <script>
 import AddCashInOutDialog from "./AddCashInOutDialog";
-import AddCashAdvanceDialog from './AddCashAdvanceDialog'
+import AddCashAdvanceDialog from "./AddCashAdvanceDialog";
+import M from "minimatch";
 export default {
   name: "CashInOutList",
   components: {
@@ -126,7 +130,7 @@ export default {
       allCurrentDeposit: undefined,
       isLoading: false,
       addDialog: false,
-      addCashAdvanceDialog:false,
+      addCashAdvanceDialog: false,
       columns: [
         {
           name: "id",
@@ -173,7 +177,8 @@ export default {
         }
       ],
       data: [],
-      selectedDeposit: undefined
+      selectedDeposit: undefined,
+      totalPettyCash: 0
     };
   },
   mounted() {
@@ -187,9 +192,6 @@ export default {
   computed: {
     hasItem() {
       return this.data.length;
-    },
-    cashInHand() {
-      return this.data.reduce((a, b) => a + b.cashIn - b.cashOut, 0);
     }
   },
   methods: {
@@ -200,6 +202,10 @@ export default {
         this.isLoading = true;
         let res = await this.$api.cashInOuts.getToday();
         this.data = res.data.map(x => x);
+
+        // get Total pettycash
+        res = await this.$api.cashInOuts.getTotal();
+        this.totalPettyCash = res.data;
       } catch (e) {
         this.$toastr.error(e.message);
       }

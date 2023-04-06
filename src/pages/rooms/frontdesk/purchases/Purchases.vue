@@ -41,11 +41,17 @@
         />
       </template>
       <template #body-cell-isPaid="props">
-        <q-td align="center">
+        <q-td class="text-center">
           <q-badge
             :color="props.row.isPaid ? 'positive' : 'grey'"
             :label="props.row.isPaid ? 'PAID' : 'UNPAID'"
-          />
+          >
+          </q-badge>
+
+          <q-tooltip v-if="props.row.isPaid" content-class="bg-green">
+            @ {{ props.row.paidAt }} <br />
+            Account: {{ props.row.accountCode }}
+          </q-tooltip>
         </q-td>
       </template>
       <template #body-cell-actions2="props">

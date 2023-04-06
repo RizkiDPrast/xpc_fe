@@ -122,7 +122,7 @@ export default class Sale extends UserTracker {
   }
 
   get revenue() {
-    const unpaid = Number(this.change);
+    const unpaid = Number(this.unaid);
     return unpaid > 0 ? this.grandTotal - unpaid : this.totalPayment;
     // return this.totalPayment > this.grandTotal
     //   ? this.grandTotal - this.deposit

@@ -110,18 +110,50 @@
 
         <div class="col-6">
           <q-card bordered>
-            <div>
-              <q-badge :color="model.isPaid ? 'positive' : 'negative'">
-                Status
-              </q-badge>
-            </div>
-            <q-toggle
-              :readonly="submitting"
-              v-model="model.isPaid"
-              :label="model.isPaid ? 'PAID' : 'UNPAID'"
-              :color="model.isPaid ? 'positive' : ''"
-              :class="model.isPaid ? 'text-positive' : 'text-negative'"
-            />
+            <q-card-section>
+              <div>
+                <q-badge :color="model.isPaid ? 'positive' : 'negative'">
+                  Status
+                </q-badge>
+              </div>
+              <q-toggle
+                :readonly="
+                  submitting || (model.paidAt && model.paidAt !== null)
+                "
+                v-model="model.isPaid"
+                :label="model.isPaid ? 'PAID' : 'UNPAID'"
+                :color="model.isPaid ? 'positive' : ''"
+                :class="model.isPaid ? 'text-positive' : 'text-negative'"
+              />
+              <small v-if="model.paidAt"> @ {{ model.createdAt }} </small>
+              <account-select
+                :readonly="
+                  submitting || (model.paidAt && model.paidAt !== null)
+                "
+                v-if="model.isPaid"
+                dense
+                outlined
+                autocomplete="off"
+                v-model="model.accountCode"
+                label="Credit Account Code"
+                hint="Bank / Cash account used to purchase"
+                name="accountCode"
+                class="text-capitalize account"
+                startWith="1100"
+                v-validate="'required'"
+                :error="errors.has('accountCode')"
+                :error-message="errors.first('accountCode')"
+              />
+              <q-btn
+                class="float-right"
+                color="secondary"
+                style="margin-top:12px;"
+                size="sm"
+                v-if="model.isPaid && model.paidAt == null"
+                @click="updateStatus"
+                label="Update Status"
+              />
+            </q-card-section>
           </q-card>
         </div>
 
@@ -169,12 +201,14 @@ import PurchaseLine from "src/models/PurchaseLine";
 import PurchaseLinesList from "./components/PurchaseLinesList";
 import SupplierSelect from "./components/SupplierSelect";
 import SupplierDialog from "./components/SupplierDialog";
+import AccountSelect from "../../finance/GL/components/AccountSelect.vue";
 export default {
   name: "Purchase",
   components: {
     PurchaseLinesList,
     SupplierSelect,
-    SupplierDialog
+    SupplierDialog,
+    AccountSelect
   },
   props: {
     value: {
@@ -204,12 +238,12 @@ export default {
       if (Number(val) > 0) {
         this.reloadPurchase();
       }
-    },
-    "model.isPaid"(val) {
-      if (!this.formEnabled) {
-        this.updateStatus();
-      }
     }
+    // "model.isPaid"(val) {
+    //   if (!this.formEnabled) {
+    //     this.updateStatus();
+    //   }
+    // }
   },
   mounted() {
     if (Number(this.id) > 0) {
@@ -241,14 +275,21 @@ export default {
       this.reloading = false;
     },
     async updateStatus() {
+      if (!this.model.accountCode || this.model.accountCode === null) {
+        this.$toastr.error("Credit Account Code is required");
+        return;
+      }
+
       if (this.submitting) return;
       this.submitting = true;
       try {
         await this.$api.purchases.updateStatus(
           this.model.id,
-          this.model.isPaid || false
+          // this.model.isPaid || false,
+          this.model.accountCode
         );
         this.$toastr.success("Status berhasil diupdate");
+        this.$router.go(-1);
       } catch (error) {
         this.$toastr.error(error);
       }

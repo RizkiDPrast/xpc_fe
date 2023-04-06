@@ -24,6 +24,10 @@ export default {
     accountTypes: {
       type: Array,
       default: () => []
+    },
+    startWith: {
+      type: String,
+      default: () => null
     }
   },
   data() {
@@ -61,7 +65,7 @@ export default {
       }
       this.isLoading = true;
       try {
-        var res = await this.$api.gl.getAccounts();
+        var res = await this.$api.gl.getAccounts(this.startWith);
         this.selectData = res.data.map(x => ({
           id: x.id,
           value: x.code,

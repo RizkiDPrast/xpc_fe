@@ -326,7 +326,8 @@ export default {
       },
       filter: undefined,
       mid: 0,
-      loadingPreSalaryLines: false
+      loadingPreSalaryLines: false,
+      displayOnly: false
     };
   },
   mounted() {
@@ -352,16 +353,17 @@ export default {
   },
   watch: {
     "modelInput.userId"(val) {
-      this.modelInput.salaryLines = [];
-      this.mid = 0;
       this.fetchPreSalaryLines();
     }
   },
   methods: {
     async fetchPreSalaryLines() {
+      if (this.displayOnly) return;
       if (!this.modelInput.userId) return;
       if (this.loadingPreSalaryLines) return;
       this.loadingPreSalaryLines = true;
+      this.modelInput.salaryLines = [];
+      this.mid = 0;
       try {
         let res = await this.$api.salaries.getPreSalaryLines(
           this.modelInput.userId
@@ -472,6 +474,7 @@ export default {
       this.$refs.code.focus();
     },
     add() {
+      this.displayOnly = false;
       this.modelInput = { id: 0, createdAt: new Date(), salaryLines: [] };
       this.focus();
     },
@@ -480,8 +483,10 @@ export default {
       if (!t) {
         throw "Could not find details record. Please refresh table";
       }
-      this.modelInput = Object.assign({}, t);
+      this.displayOnly = true;
+      this.modelInput = JSON.parse(JSON.stringify(t));
       this.focus();
+      console.log("this.displayOnly", this.displayOnly);
     },
     edit(id) {
       // let t = this.data.find(x => x.id === id);

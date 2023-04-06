@@ -30,6 +30,8 @@
           :selected.sync="selected"
         >
           <template #default-header="props">
+            <q-icon v-if="props.node.systemUsed" name="las la-lock" />
+            <q-badge color="grey" :label="props.node.normalSign[0]" /> &nbsp;
             {{ props.node.label }}
             <q-btn
               color="primary"
@@ -88,6 +90,9 @@
           <q-btn flat size="xs" icon="las la-times" v-close-popup />
         </q-toolbar>
         <q-card-section>
+          <label
+            >Normal Sign : {{ node.isDebitType ? "Debit" : "Credit" }}</label
+          >
           <q-input
             label="Code"
             dense
@@ -107,6 +112,29 @@
             v-validate="'required|max:255'"
             :error="errors.has('name')"
             :error-message="errors.first('name')"
+          />
+          <q-checkbox
+            label="Is Debit Type?"
+            dense
+            outlined
+            v-model="node.isDebitType"
+            name="isDebitType"
+            v-validate="'required'"
+            :error="errors.has('isDebitType')"
+            :error-message="errors.first('isDebitType')"
+          />
+          <q-space />
+          <br />
+          <q-input
+            v-if="node.id"
+            label="Parent Code"
+            dense
+            outlined
+            v-model="node.parentCode"
+            name="name"
+            v-validate="'required|max:25'"
+            :error="errors.has('parentCode')"
+            :error-message="errors.first('parentCode')"
           />
           <submit-button :isLoading="isSubmitting" @click="submit" />
         </q-card-section>
@@ -143,18 +171,38 @@ export default {
         label: `${x.code} ${x.name}`,
         selectable: true,
         parentCode: x.parentCode,
+        isDebitType: x.isDebitType,
+        systemUsed: x.systemUsed,
+        normalSign: x.normalSign,
         children: this.getChildren(x.code)
       }));
       return root;
     }
   },
   methods: {
+    getChildren(code) {
+      if (!this.data || !this.data.length) return [];
+      return this.data
+        .filter(x => x.parentCode === code)
+        .map(x => ({
+          code: x.code,
+          name: x.name,
+          label: `${x.code} ${x.name}`,
+          icon: "las la-building",
+          selectable: true,
+          parentCode: x.parentCode,
+          isDebitType: x.isDebitType,
+          systemUsed: x.systemUsed,
+          normalSign: x.normalSign,
+          children: this.getChildren(x.code)
+        }));
+    },
     updateNode(node) {
       this.node = { ...node, id: node.code };
       this.modalState = true;
     },
     addNode(node) {
-      this.node = { parentCode: node.code };
+      this.node = { parentCode: node.code, isDebitType: false };
       this.modalState = true;
     },
     deleteNode(node) {
@@ -208,20 +256,6 @@ export default {
       } catch (e) {
         this.$toastr.error(this.$util.err(e));
       }
-    },
-    getChildren(code) {
-      if (!this.data || !this.data.length) return [];
-      return this.data
-        .filter(x => x.parentCode === code)
-        .map(x => ({
-          code: x.code,
-          name: x.name,
-          label: `${x.code} ${x.name}`,
-          icon: "las la-building",
-          selectable: true,
-          parentCode: x.parentCode,
-          children: this.getChildren(x.code)
-        }));
     }
   }
 };

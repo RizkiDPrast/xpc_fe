@@ -9,15 +9,7 @@
 
       <SaleSummaryBtn />
 
-      <q-btn
-        flat
-        bordered
-        class="q-ml-sm"
-        label="Closing"
-        @click="dailyClosing"
-        text-color="negative"
-        :loading="closing"
-      />
+      <closing-button @salesClosed="salesClosed" />
     </q-toolbar>
     <div class="row">
       <div class="col-sm-12 col-md-4 q-pa-sm">
@@ -77,29 +69,6 @@
         <add-sales @sales-saved="salesSaved" :clientId="clientId" />
       </div>
     </div> -->
-    <q-dialog persistent v-model="closingDialog">
-      <q-card>
-        <q-card-section>
-          <q-banner>
-            Please input remaining balance for petty cash
-            <money-field
-              autofocus
-              name="pettycash"
-              v-model="pettycash"
-              v-validate="'required|min_value:0'"
-              :error="errors.has('pettycash')"
-              :error-message="errors.first('pettycash')"
-              outlined
-              dense
-            />
-          </q-banner>
-        </q-card-section>
-        <q-card-section class="row">
-          <q-space /> <q-btn flat label="Cancel" @click="cancel" />
-          <q-btn @click="save" flat color="primary" label="Submit" />
-        </q-card-section>
-      </q-card>
-    </q-dialog>
   </q-page>
 </template>
 
@@ -109,6 +78,7 @@ import DepositTodayList from "./components/DepositTodayList";
 import CashInOutList from "./components/CashInOutList";
 import AddSales from "./components/AddSales";
 import SaleSummaryBtn from "./components/SaleSummaryBtn";
+import ClosingButton from "src/components/ClosingButton.vue";
 export default {
   name: "SalesToday",
   props: {
@@ -121,44 +91,12 @@ export default {
     return {
       deposits: [],
       cashInOuts: [],
-      tab: "sale-tab",
-      closing: false,
-      closingDialog: false,
-      pettycash: 0
+      tab: "sale-tab"
     };
   },
   computed: {},
   watch: {},
   methods: {
-    dailyClosing() {
-      if (!confirm("You are going to close current Sales. Continue?", "Ok")) {
-        return;
-      }
-      this.pettycash = this.$store.state.config.defaultPettyCash || 0;
-      this.closingDialog = true;
-    },
-    cancel() {
-      this.closingDialog = false;
-    },
-    async save() {
-      if (!(await this.$validator.validateAll())) {
-        this.$toastr.error("Please input value greater than 0");
-        return;
-      }
-      if (this.closing) return;
-      this.closing = true;
-      this.closingDialog = false;
-
-      try {
-        await this.$api.sales.closing({ pettycash: this.pettycash });
-        this.salesClosed();
-
-        this.$toastr.success("Daily Sale has been closed");
-      } catch (e) {
-        this.$toastr.error(e);
-      }
-      this.closing = false;
-    },
     salesSaved(model) {
       this.$refs.sales.add(model);
       this.$refs.cashInOutList.fetch();
@@ -180,7 +118,8 @@ export default {
     DepositTodayList,
     CashInOutList,
     AddSales,
-    SaleSummaryBtn
+    SaleSummaryBtn,
+    ClosingButton
   }
 };
 </script>

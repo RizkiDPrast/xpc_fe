@@ -34,7 +34,13 @@
               <th style="text-align:right!important">Total</th>
             </tr>
             <tr>
-              <th>Cash</th>
+              <th>
+                Cash
+                <span
+                  class="las la-exclamation-circle"
+                  title="Change has been deducted"
+                ></span>
+              </th>
               <td>
                 {{
                   details.sales.reduce((a, b) => a + b.cash - b.change, 0)
@@ -59,7 +65,7 @@
               <td>
                 {{
                   details.sales.reduce(
-                    (a, b) => (b.ccEdcType === item.id ? a + b.creditCard : 0),
+                    (a, b) => (b.ccEdcType === item.id ? a + b.creditCard : a),
                     0
                   ) | money
                 }}
@@ -70,9 +76,17 @@
               <td>
                 {{
                   details.sales.reduce(
-                    (a, b) => (b.dcEdcType === item.id ? a + b.debitCard : 0),
+                    (a, b) => (b.dcEdcType === item.id ? a + b.debitCard : a),
                     0
                   ) | money
+                }}
+              </td>
+            </tr>
+            <tr>
+              <th class="text-warning">Tax</th>
+              <td>
+                {{
+                  details.sales.reduce((a, b) => a + b.taxMoneyValue, 0) | money
                 }}
               </td>
             </tr>
@@ -80,16 +94,12 @@
 
           <q-markup-table class="table col-4" bordered dense flat>
             <tr class="text-positive">
-              <th>Expenditure</th>
+              <th>Petty cash transactions</th>
               <th style="text-align:right!important">Total</th>
             </tr>
             <tr
               v-for="item in details.cashInOuts.filter(
-                x =>
-                  x.saleId === null &&
-                  !x.transferToSales &&
-                  x.cashOut > 0 &&
-                  x.cashOut > x.cashIn
+                x => x.saleId === null && !x.transferToSales
               )"
               :key="item.id"
             >
@@ -117,10 +127,24 @@
 
           <q-markup-table class="col-4">
             <tr class="bg-grey-3">
-              <th class="text-bold">Total</th>
+              <th class="text-bold">
+                Total
+              </th>
               <td class=" text-right">
                 {{
-                  details.sales.reduce((a, b) => a + b.totalPayment, 0) | money
+                  (details.sales.reduce((a, b) => a + b.totalPayment, 0) +
+                    details.sales.reduce((a, b) => a + b.taxMoneyValue, 0))
+                    | money
+                }}
+              </td>
+            </tr>
+            <tr
+              v-if="details.sales.reduce((a, b) => a + b.cardSurcharge, 0) > 0"
+            >
+              <th>Card Surcharge</th>
+              <td class=" text-right">
+                {{
+                  details.sales.reduce((a, b) => a + b.cardSurcharge, 0) | money
                 }}
               </td>
             </tr>
@@ -137,16 +161,10 @@
           <q-markup-table class="col-4">
             <tr class="bg-grey-3">
               <th class="text-bold">Total</th>
-              <td class="text-negative text-right">
+              <td class="text-right">
                 {{
                   details.cashInOuts
-                    .filter(
-                      x =>
-                        x.saleId === null &&
-                        x.cashOut > 0 &&
-                        !x.transferToSales &&
-                        x.cashOut > x.cashIn
-                    )
+                    .filter(x => x.saleId === null && !x.transferToSales)
                     .reduce((a, b) => a + b.cashIn - b.cashOut, 0) | money
                 }}
               </td>

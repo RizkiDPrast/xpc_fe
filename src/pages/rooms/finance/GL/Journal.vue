@@ -20,7 +20,12 @@
       <template #body-cell-attachments="scoped">
         <q-td align="left">
           <div style="width:100px">
-            <q-item v-if="scoped.row.cashBookEntry.attachmentCount">
+            <q-item
+              v-if="
+                scoped.row.cashBookEntry &&
+                  scoped.row.cashBookEntry.attachmentCount
+              "
+            >
               <q-item-section>
                 {{ scoped.row.cashBookEntry.attachmentCount }} file{{
                   scoped.row.cashBookEntry.attachmentCount > 1 ? "s" : ""
@@ -149,7 +154,13 @@ export default {
       isLoadingSalesLines: false,
       printSalesDialog: false,
       updateSalesDialogModel: false,
-      pagination: { sortBy: "id", descending: true },
+      pagination: {
+        sortBy: "id",
+        descending: true,
+        page: 1,
+        rowsPerPage: 10,
+        rowsNumber: 0
+      },
       date: null,
       customData: {}
     };
@@ -169,27 +180,27 @@ export default {
       this.pagination.showIncompleteReceipt = showIncomplete;
       await this.onRequest();
     },
-    async onRequest(props) {
+    async onRequest(pager) {
       this.isLoading = true;
       try {
-        const pagination = (props && props.pagination) || this.pagination;
+        pager = pager?.pagination || this.pagination;
 
         if (this.date) {
-          pagination.date = this.date;
+          pager.date = this.date;
         } else {
-          pagination.date = null;
+          pager.date = null;
         }
 
-        const res = await this.$api.gl.journal.get(pagination);
+        const res = await this.$api.gl.journal.get(pager);
         const data = res.data;
 
         this.customData = data.customData;
         const model = data.rows.map(x => x);
+        this.pagination.rowsNumber = data.rowsNumber;
         this.pagination.page = data.page;
         this.pagination.rowsPerPage = data.rowsPerPage;
         this.pagination.sortBy = data.sortBy;
         this.pagination.descending = data.descending;
-        this.pagination.rowsNumber = data.rowsNumber;
 
         this.data.splice(0, this.data.length, ...model);
       } catch (e) {

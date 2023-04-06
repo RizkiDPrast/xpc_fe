@@ -18,6 +18,7 @@
           {{ title || $route.meta.title }}
         </q-toolbar-title>
 
+        <!-- <closing-button /> -->
         <calendar-btn />
         <slot name="actions">
           <!-- <q-btn flat round dense icon="las la-ellipsis-v" /> -->
@@ -31,13 +32,18 @@
   </div>
 </template>
 <script>
+// import ClosingButton from "./ClosingButton.vue";
 export default {
+  // components: { ClosingButton },
   name: "page-header",
   props: {
     title: {
       type: String,
       default: () => undefined
     }
+  },
+  data() {
+    return {};
   },
   methods: {
     toggleDrawer() {

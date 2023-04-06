@@ -1,5 +1,25 @@
 <template>
-  <q-select v-bind="$attrs" :options="options" v-model="model" />
+  <div class="">
+    <q-select
+      dense
+      outlined
+      v-bind="$attrs"
+      :options="options"
+      v-model="model"
+      label="Closing Id"
+      class="text-caption"
+    >
+      <q-tooltip
+        content-class="bg-positive"
+        anchor="top middle"
+        self="bottom middle"
+        :offset="[10, 10]"
+      >
+        Closing date - count of Sales | count of Cash In Outs | count of
+        Deposits
+      </q-tooltip>
+    </q-select>
+  </div>
 </template>
 
 <script>
@@ -33,12 +53,20 @@ export default {
     }
   },
   methods: {
+    reset() {
+      this.model = {};
+    },
     async fetch() {
       if (this.loading) return;
       this.loading = true;
       try {
-        const res = await this.$api.salesManagers.getSelectData();
-        this.options = res.data;
+        const res = await this.$api.salesManagers.getSelectDataSimple();
+        this.options = res.data.map(x => ({
+          label: `${this.$util.toDateString(x.closingDate)} - ${
+            x.countSales
+          } | ${x.countCashInOuts} | ${x.countDeposits}`,
+          id: x.id
+        }));
       } catch (error) {
         this.$toastr.error(error);
       }

@@ -14,6 +14,8 @@ export default class Purchase extends UserTracker {
 
     realCost,
     isPaid = false,
+    paidAt,
+    accountCode,
     purchaseLines = [],
     ...params
   } = {}) {
@@ -25,6 +27,8 @@ export default class Purchase extends UserTracker {
     this.supplier = supplier;
 
     this.isPaid = isPaid;
+    this.paidAt = paidAt;
+    this.accountCode = accountCode;
     this.realCost = realCost;
     this.purchaseLines = purchaseLines.map(x => new PurchaseLine(x));
   }

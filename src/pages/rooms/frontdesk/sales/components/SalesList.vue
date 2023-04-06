@@ -78,7 +78,14 @@
               </tr>
             </template>
             <template #actions v-if="all">
-              <date-range-input dense v-model="dates" />
+              <date-range-input
+                dense
+                v-model="dates"
+                includeSalesManagerList
+                @salesManagerIdUpdate="salesManagerIdUpdate"
+                ref="dri"
+              />
+              <q-btn flat label="Reset" no-caps @click="reset" />
             </template>
             <template #body="scoped">
               <q-tr
@@ -171,6 +178,17 @@
                   :key="`vdc${item.id}`"
                 >
                   {{
+                    (scoped.row.ccEdcType === item.id
+                      ? scoped.row.creditCard
+                      : 0) | money
+                  }}
+                </td>
+                <td
+                  class="text-right"
+                  v-for="item in edcTypes"
+                  :key="`vcc${item.id}`"
+                >
+                  {{
                     (scoped.row.dcEdcType === item.id
                       ? scoped.row.debitCard
                       : 0) | money
@@ -184,17 +202,6 @@
                   :class="{ 'text-negative': scoped.row.totalUnpaid > 0 }"
                 >
                   {{ scoped.row.revenue | money }}
-                </td>
-                <td
-                  class="text-right"
-                  v-for="item in edcTypes"
-                  :key="`vcc${item.id}`"
-                >
-                  {{
-                    (scoped.row.ccEdcType === item.id
-                      ? scoped.row.creditCard
-                      : 0) | money
-                  }}
                 </td>
               </q-tr>
             </template>
@@ -294,13 +301,25 @@ export default {
         rowsNumber: this.all ? 0 : undefined
       },
       filter: undefined,
-      dates: []
+      dates: [],
+      salesManagerId: null
     };
   },
   mounted() {
     this.fetchSales();
   },
   methods: {
+    reset() {
+      this.pager.page = 1;
+      this.salesManagerId = null;
+      this.dates = [];
+      this.$refs.dri.reset();
+      // this.fetchSales();
+    },
+    salesManagerIdUpdate(id) {
+      this.salesManagerId = id;
+      this.fetchSales();
+    },
     close() {
       this.data = [];
     },
@@ -309,6 +328,8 @@ export default {
       try {
         this.isLoading = true;
         pager = pager?.pagination || this.pager;
+
+        pager.salesManagerId = this.salesManagerId;
 
         if (this.dates.length) {
           pager.date1 = this.dates[0];
@@ -326,6 +347,7 @@ export default {
         if (!this.all) {
           res = await this.$api.sales.getToday();
           this.data = res.data.map(x => new Sale(x));
+          console.log("this.data", this.data);
         } else {
           res = await this.$api.sales.get(pager);
           let dt = res.data;

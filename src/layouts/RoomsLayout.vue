@@ -12,7 +12,6 @@
     </q-page-container>
 
     <RoomDrawer :mini.sync="mini" class="my-page-drawer" />
-
     <xpc-footer />
   </q-layout>
 </template>
@@ -30,7 +29,9 @@ export default {
     RoomDrawer
   },
   data() {
-    return {};
+    return {
+      fab1: false
+    };
   },
   computed: {
     selectedClass() {
@@ -49,7 +50,8 @@ export default {
   methods: {
     async initHub() {
       await this.$hub.init();
-    }
+    },
+    onClick() {}
   },
   mounted() {
     this.$api.animalTypes.get();

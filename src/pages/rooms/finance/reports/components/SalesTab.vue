@@ -1,11 +1,13 @@
 <template>
   <div>
+    <div class="row justify-end">
+      <!-- <q-btn-toggle unelevated v-model="mode" :options="modes" /> -->
+    </div>
     <sales-list all add-btn-class="hidden" />
   </div>
 </template>
 
 <script>
-import DateInput from "src/components/DateInput.vue";
 import SalesList from "src/pages/rooms/frontdesk/sales/components/SalesList.vue";
 export default {
   components: { SalesList },
@@ -18,7 +20,12 @@ export default {
       pager: {
         rowsPerPage: 100,
         page: 1
-      }
+      },
+      modes: [
+        { label: "Daily", value: 1 },
+        { label: "Monthly", value: 2 }
+      ],
+      mode: 1
     };
   },
   watch: {

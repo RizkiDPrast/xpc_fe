@@ -8,7 +8,7 @@
 /* eslint-env node */
 const ESLintPlugin = require("eslint-webpack-plugin");
 
-module.exports = function(/* ctx */) {
+module.exports = function (/* ctx */) {
   return {
     // https://v1.quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -80,7 +80,7 @@ module.exports = function(/* ctx */) {
     // Full list of options: https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       https: false,
-      port: 8080,
+      port: 8081,
       open: true, // opens browser window automatically
       proxy: {
         // proxy all requests starting with /api to jsonplaceholder

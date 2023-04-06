@@ -4,9 +4,9 @@
     <q-dialog v-model="model">
       <q-card>
         <dialog-header :title="title" class="bg-secondary text-white" />
-        <q-card-section>      
+        <q-card-section>
           <q-input
-            :readonly="modelInput.forCashAdvance"
+            :readonly="modelInput.forCashAdvance || modelInput.forSalary"
             v-model="modelInput.description"
             name="description"
             v-validate="'required'"
@@ -21,8 +21,8 @@
             v-model="modelInput.value"
             name="value"
             v-validate="{
-              required:true,
-              min_value:0,
+              required: true,
+              min_value: 0,
               max_value: maxValue()
             }"
             :error="errors.has('value')"
@@ -47,9 +47,9 @@
 export default {
   name: "SalaryLineBtn",
   props: {
-    deduction:{
+    deduction: {
       type: Boolean,
-      default: ()=> false
+      default: () => false
     },
     line: {
       type: Object,
@@ -57,6 +57,7 @@ export default {
         id: 0,
         description: undefined,
         value: undefined,
+        forSalary: false,
         forCashAdvance: false
       })
     },
@@ -68,21 +69,21 @@ export default {
   data() {
     return {
       model: false,
-      modelInput: Object.assign({},this.line || {}, {value: this.line.value * (this.deduction ? -1 : 1) })
+      modelInput: Object.assign({}, this.line || {}, {
+        value: this.line.value * (this.deduction ? -1 : 1)
+      })
     };
   },
-  computed:{
-    
-  },
+  computed: {},
 
   watch: {
-    'line.id'(val) {
+    "line.id"(val) {
       if (!val) {
         this.modelInput = {};
         return;
       }
       this.modelInput = JSON.parse(JSON.stringify(this.line));
-      if(this.deduction){
+      if (this.deduction) {
         this.modelInput.value *= -1;
       }
       console.log(this.modelInput);
@@ -97,10 +98,12 @@ export default {
       this.$emit("save", this.modelInput);
       this.model = false;
     },
-    maxValue(){
-      if(!this.modelInput) return undefined;
-      return this.modelInput.forCashAdvance ? this.modelInput.value : 1000000000
-    },
+    maxValue() {
+      if (!this.modelInput) return undefined;
+      return this.modelInput.forCashAdvance
+        ? this.modelInput.value
+        : 1000000000;
+    }
   }
 };
 </script>
