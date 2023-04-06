@@ -1,66 +1,69 @@
 <template>
-  <div class="row full-width full-height">
-    <div class="col-9 row">
-      <q-btn
-        :disable="disable"
-        v-for="(item, i) in nums"
-        :key="item"
-        @click="addNum(item)"
-        class="col-md-4"
-        style="width:calc(100% / 3); font-size:2em"
-        flat
-      >
-        <u v-if="i < nums.length - 2">{{ item }}</u>
-        <span v-else> {{ item }}</span>
-      </q-btn>
-    </div>
-    <div class="col-3 row">
-      <q-btn
-        :disable="disable"
-        no-caps
-        :icon="item.icon"
-        v-for="item in sides"
-        :color="item.color"
-        :key="item.id"
-        @click="item.click(item)"
-        flat
-        class="text-center"
-        style="width:100%;font-size:1.5em"
-      >
-        <span v-html="item.label"></span>
-      </q-btn>
-    </div>
+  <span>
+    Shortcut mode: <q-btn-toggle v-model="mode" :options="modes" />
+    <div class="row full-width full-height q-mt-sm">
+      <div class="col-9 row">
+        <q-btn
+          :disable="disable"
+          v-for="(item, i) in nums"
+          :key="item"
+          @click="addNum(item)"
+          class="col-md-4"
+          style="width:calc(100% / 3); font-size:2em"
+          flat
+        >
+          <u v-if="i < nums.length - 2 && mode">{{ item }}</u>
+          <span v-else> {{ item }}</span>
+        </q-btn>
+      </div>
+      <div class="col-3 row">
+        <q-btn
+          :disable="disable"
+          no-caps
+          :icon="item.icon"
+          v-for="item in sides"
+          :color="item.color"
+          :key="item.id"
+          @click="item.click(item)"
+          flat
+          class="text-center"
+          style="width:100%;font-size:1.5em"
+        >
+          <span v-html="item.label"></span>
+        </q-btn>
+      </div>
 
-    <q-dialog v-model="chooseMoneyDialogOpen" full-width>
-      <q-card>
-        <q-card-section class="text-bold">
-          Choose money
-        </q-card-section>
-        <q-card-section>
-          <div class="row">
-            <q-item
-              class="col-sm-2 "
-              v-for="item in indonesianMoneys"
-              clickable
-              :key="item"
-              @click="useMoney(item)"
-            >
-              <q-card class="bg-blue-2 text-center" style="width:105px">
-                <q-card-section>
-                  <template v-if="typeof item === 'string'">
-                    {{ item }}
-                  </template>
-                  <template v-else>
-                    {{ item | money }}
-                  </template>
-                </q-card-section>
-              </q-card>
-            </q-item>
-          </div>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
-  </div>
+      <q-dialog v-model="chooseMoneyDialogOpen" full-width>
+        <q-card>
+          <q-card-section class="text-bold">
+            Choose money
+          </q-card-section>
+          <q-card-section>
+            <div class="row">
+              <q-item
+                class="col-sm-2 "
+                v-for="item in indonesianMoneys"
+                clickable
+                :key="item"
+                @click="useMoney(item)"
+              >
+                <q-card class="bg-blue-2 text-center" style="width:105px">
+                  <q-card-section>
+                    <template v-if="typeof item === 'string'">
+                      {{ item }}
+                    </template>
+                    <template v-else>
+                      {{ item | money }}
+                    </template>
+                  </q-card-section>
+                </q-card>
+              </q-item>
+            </div>
+          </q-card-section>
+        </q-card>
+      </q-dialog>
+    </div>
+  </span>
 </template>
 
 <script>
@@ -118,7 +121,12 @@ export default {
       ],
       indonesianMoneys: ["Exact amount", 5000, 10000, 50000, 100000],
       chooseMoneyDialogOpen: false,
-      useComma: false
+      useComma: false,
+      modes: [
+        { value: 0, label: "Off" },
+        { value: 1, label: "On" }
+      ],
+      mode: 1
     };
   },
   computed: {
@@ -131,11 +139,20 @@ export default {
       }
     }
   },
+  watch: {
+    mode(nval) {
+      if (nval) {
+        this.initListeners();
+      } else {
+        this.removeListeners();
+      }
+    }
+  },
   mounted() {
-    // this.initListeners();
+    this.initListeners();
   },
   destroyed() {
-    // this.removeListeners();
+    this.removeListeners();
   },
   methods: {
     keyup(e) {
