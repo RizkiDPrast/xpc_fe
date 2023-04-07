@@ -335,7 +335,7 @@ export default {
         descending: true
       },
       filter: undefined,
-      transferred: "All",
+      transferred: "Not transferred only",
       availUnits: [],
       loadingClient: false,
       client: {},
@@ -356,7 +356,7 @@ export default {
   },
   methods: {
     unitInput(unitId) {
-      console.log("this.modelInput.product", unitId, this.modelInput?.product);
+      // console.log("this.modelInput.product", unitId, this.modelInput?.product);
 
       if (this.modelInput.product && this.modelInput.product !== null) {
         if (unitId === this.modelInput.product.unitId) {
