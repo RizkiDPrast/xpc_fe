@@ -11,6 +11,12 @@
       />
       <month-btn v-model="date" :defaultView="defaultView" />
     </q-toolbar>
+    <q-banner class="bg-warning">
+      <q-icon class="las la-exclamation-circle"></q-icon> Only sale and deposit
+      transactions from
+      <router-link to="/app/rooms/sales">POS Sales menu</router-link> will be
+      counted.
+    </q-banner>
     <div class="full-width full-height">
       <q-tabs v-model="tab" class="text-teal">
         <q-tab
@@ -57,7 +63,6 @@ export default {
   },
   methods: {
     setLoading(val) {
-      console.log(setLoading, val);
       this.loading = val;
     },
     refresh() {

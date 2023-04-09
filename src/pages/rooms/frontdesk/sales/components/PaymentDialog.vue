@@ -246,6 +246,7 @@
           :disable="isLoading"
           :requiredMoney="sales.grandTotal"
           @ok="saveRecord"
+          ref="mk"
         />
       </q-card-section>
     </q-card>
@@ -408,6 +409,20 @@ export default {
         this.tempValue = this.payment.debitCard;
       } else {
         this.tempValue = this.payment.deposit;
+      }
+    },
+    discPopup(val) {
+      if (val) {
+        this.$ref.mk.removeListeners;
+      } else {
+        this.$ref.mk.initListeners;
+      }
+    },
+    taxPopup(val) {
+      if (val) {
+        this.$ref.mk.removeListeners;
+      } else {
+        this.$ref.mk.initListeners;
       }
     }
   },

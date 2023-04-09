@@ -54,6 +54,8 @@ export default class SalesReport {
     total_Transfer = 0,
     total_Kredit = 0,
 
+    receiptCodes = [],
+
   } = {}) {
     this.date = tanggal;
     this.vets = drhYangBertugas;
@@ -107,6 +109,8 @@ export default class SalesReport {
     this.totalDebit = total_Debit;
     this.totalTransfer = total_Transfer;
     this.totalCredit = total_Kredit;
+
+    this.receiptCodes = receiptCodes;
   }
 
   // get totalCash() {

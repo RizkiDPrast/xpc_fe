@@ -39,6 +39,7 @@ export default {
       this.isLoading = true;
       try {
         const res = await this.$api.products.getProductGroups();
+        console.log(res.data, this.value);
         this.options = res.data.map(x => ({
           label: x.replaceAll("_", " "),
           value: x

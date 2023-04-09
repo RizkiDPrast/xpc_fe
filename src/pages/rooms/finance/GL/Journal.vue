@@ -1,5 +1,6 @@
 <template>
   <div>
+    <page-header></page-header>
     <my-table
       title="Journal"
       :data="data"
@@ -15,6 +16,12 @@
       delete-btn-class="hidden"
     >
       <template #actions>
+        <account-select
+          dense
+          outlined
+          v-model="accountCode"
+          placeholder="Akun"
+        />
         <date-input dense v-model="date" label="Filter date" />
       </template>
       <template #body-cell-attachments="scoped">
@@ -75,11 +82,13 @@
 <script>
 import CashBookEntry from "src/models/CashBookEntry";
 import DateInput from "src/components/DateInput.vue";
+import PageHeader from "src/components/PageHeader.vue";
+import AccountSelect from "./components/AccountSelect.vue";
 // import CashBookEntryLine from "src/models/CashBookEntryLine";
 
 export default {
   name: "BookEntryList",
-  components: { DateInput },
+  components: { DateInput, PageHeader, AccountSelect },
   props: {},
   data() {
     return {
@@ -162,7 +171,8 @@ export default {
         rowsNumber: 0
       },
       date: null,
-      customData: {}
+      customData: {},
+      accountCode: null
     };
   },
   mounted() {
@@ -170,6 +180,9 @@ export default {
   },
   watch: {
     date() {
+      this.onRequest();
+    },
+    accountCode() {
       this.onRequest();
     }
   },
@@ -190,6 +203,8 @@ export default {
         } else {
           pager.date = null;
         }
+
+        pager.accountCode = this.accountCode;
 
         const res = await this.$api.gl.journal.get(pager);
         const data = res.data;

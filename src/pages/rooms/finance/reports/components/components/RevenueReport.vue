@@ -189,10 +189,38 @@
           <td>
             {{ row.totalCredit | money({ prefix: "" }) }}
           </td>
-          <td class="f"></td>
+          <td class="f">
+            <q-btn
+              no-caps
+              text-color="info"
+              v-if="row.receiptCodes && row.receiptCodes !== null"
+              flat
+              @click="openReceiptCodes(row.receiptCodes, row.date)"
+            >
+              {{ row.receiptCodes.length }} receipts
+            </q-btn>
+          </td>
         </tr>
       </tbody>
     </q-markup-table>
+
+    <q-dialog v-model="rcDialog">
+      <q-card>
+        <q-toolbar>
+          <q-toolbar-title> Receipt Codes for {{ rcDate }} </q-toolbar-title>
+          <q-btn flat icon="las la-close" v-close-popup></q-btn>
+        </q-toolbar>
+        <q-card-section>
+          <q-list>
+            <q-item v-for="(k, i) in rcs" :key="i">
+              <q-item-label>
+                {{ k }}
+              </q-item-label>
+            </q-item>
+          </q-list>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -214,7 +242,10 @@ export default {
   data() {
     return {
       loading: false,
-      data: []
+      data: [],
+      rcDialog: false,
+      rcDate: null,
+      rcs: []
     };
   },
   computed: {
@@ -297,6 +328,11 @@ export default {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+    },
+    openReceiptCodes(codes, key) {
+      this.rcDate = key;
+      this.rcs = codes;
+      this.rcDialog = true;
     }
   },
   mounted() {
