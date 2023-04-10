@@ -190,6 +190,10 @@
             {{ row.totalCredit | money({ prefix: "" }) }}
           </td>
           <td class="f">
+            <span class="text-negative" v-if="row.unpaid > 0"
+              >Unpaid: {{ row.unpaid | money({ prefix: "" }) }}
+            </span>
+            <q-separator v-if="row.unpaid" />
             <q-btn
               no-caps
               text-color="info"

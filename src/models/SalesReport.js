@@ -54,6 +54,7 @@ export default class SalesReport {
     total_Transfer = 0,
     total_Kredit = 0,
 
+    unpaid = 0,
     receiptCodes = [],
 
   } = {}) {
@@ -110,6 +111,8 @@ export default class SalesReport {
     this.totalTransfer = total_Transfer;
     this.totalCredit = total_Kredit;
 
+
+    this.unpaid = unpaid;
     this.receiptCodes = receiptCodes;
   }
 
